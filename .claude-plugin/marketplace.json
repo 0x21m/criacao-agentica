@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "criacao-agentica",
+  "description": "Metodologia de criação agêntica para o Claude Code.",
+  "owner": {
+    "name": "0x21m",
+    "url": "https://github.com/0x21m"
+  },
+  "plugins": [
+    {
+      "name": "criacao-agentica",
+      "description": "Da intenção do produto à entrega verificável: documentos-contrato, rastreabilidade, auditoria, verificação independente e estado entre sessões.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
