@@ -69,17 +69,17 @@ O que fazer quando uma skill não está instalada está na última coluna da tab
 
 ## O time (subagentes do plugin)
 
-Um subagente só se paga quando isola saída volumosa, precisa de independência imposta pela ferramenta ou de outro modelo. Entrevista, decisões e ESTADO ficam na sessão principal: subagente não fala com a pessoa.
+Um subagente só se paga quando isola saída volumosa, precisa de independência imposta pela ferramenta ou de outro modelo. Entrevista, decisões e ESTADO ficam na sessão principal: subagente não fala com a pessoa. Antes de delegar, leia `orquestracao.md`: o degrau certo da escada, o modelo e o esforço, e o briefing, porque o agente só vê a mensagem que você escreve.
 
-| Agente | Modo | Faz | Ferramentas | Modelo |
+| Agente | Modo | Faz | Ferramentas | Modelo e esforço |
 |---|---|---|---|---|
-| `ca-arqueologo` | Adotar | Extrai do código as regras `[OBSERVADO]` como RN e CA, com arquivo:linha e confiança | só leitura | sonnet |
-| `ca-auditor` | Auditar | `checar.py` + cruzamento dos documentos; devolve só as LAC | só leitura | sonnet |
-| `ca-revisor-plano` | Executar, risco alto | TAR contra o repositório, antes de codar | leitura + busca de fontes | sonnet |
-| `ca-construtor` | Executar | Uma TAR num worktree, `tdd` pré-carregada, fontes oficiais antes de editar | tudo, menos criar subagentes | sonnet; opus na chamada em risco alto |
-| `ca-revisor` | Executar, toda TAR | `ponytail-review` + `REVIEW.md` em contexto limpo | só leitura | sonnet |
-| `ca-verificador` | Executar, risco alto | Cego: CA, mutação, isolamento, num worktree | leitura + Edit no worktree | inherit |
-| `ca-rodador` | qualquer | Roda suíte, build ou comando longo; devolve só as falhas | Bash, Read | haiku |
+| `ca-arqueologo` | Adotar | Extrai do código as regras `[OBSERVADO]` como RN e CA, com arquivo:linha e confiança | só leitura | sonnet, medium |
+| `ca-auditor` | Auditar | `checar.py` + cruzamento dos documentos; devolve só as LAC | só leitura | sonnet, medium |
+| `ca-revisor-plano` | Executar, risco alto | TAR contra o repositório, antes de codar | leitura + busca de fontes | sonnet, high |
+| `ca-construtor` | Executar | Uma TAR num worktree, `tdd` pré-carregada, fontes oficiais antes de editar | tudo, menos criar subagentes | sonnet, medium; opus e high na chamada em risco alto |
+| `ca-revisor` | Executar, toda TAR | `ponytail-review` + `REVIEW.md` em contexto limpo | só leitura | sonnet, high |
+| `ca-verificador` | Executar, risco alto | Cego: CA, mutação, isolamento, num worktree | leitura + Edit no worktree | opus, high |
+| `ca-rodador` | qualquer | Roda suíte, build ou comando longo; devolve só as falhas | Bash, Read | haiku, low |
 
 As definições vivem na pasta `agents/` do plugin `criacao-agentica`. Instalados pelo plugin, os agentes aparecem com o prefixo do plugin (`criacao-agentica:ca-construtor`); se alguém copiar os arquivos para `~/.claude/agents/`, aparecem sem prefixo. Use o nome que estiver na lista de agentes disponíveis. A `implement-spec` pode usar o `ca-construtor` como seu implementador. Especialistas externos, só quando o projeto pedir: `claude-security` (auditoria de segurança profunda), `code-modernization` (legado pesado), `pr-review-toolkit` (falhas silenciosas e testes fracos que apareçam em "Já escapou").
 

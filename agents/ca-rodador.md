@@ -3,6 +3,7 @@ name: ca-rodador
 description: Roda um comando com saída longa (suíte de testes, build, lint, migração local) e devolve só o resultado e as falhas. Use para manter logs fora da conversa principal. Não decide nem corrige nada.
 tools: Bash, Read
 model: haiku
+effort: low
 maxTurns: 8
 ---
 

@@ -3,6 +3,7 @@ name: ca-revisor
 description: Revisão de contexto limpo de uma TAR da criacao-agentica com a ponytail-review e o REVIEW.md do projeto. Use no modo Executar, em toda TAR, depois da construção e antes do registro de conclusão. Só lê.
 tools: Read, Grep, Glob, Bash, Skill
 model: sonnet
+effort: high
 skills:
   - ponytail:ponytail-review
 ---

@@ -2,7 +2,8 @@
 name: ca-verificador
 description: Verifica, sem ter feito o trabalho, se uma TAR de risco alto da criacao-agentica cumpre os critérios de aceite, com prova por mutação e teste de isolamento, numa cópia isolada. Nunca corrige o código da pessoa.
 tools: Read, Grep, Glob, Bash, Edit
-model: inherit
+model: opus
+effort: high
 isolation: worktree
 ---
 

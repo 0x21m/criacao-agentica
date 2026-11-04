@@ -3,6 +3,7 @@ name: ca-revisor-plano
 description: Revisa uma TAR de risco alto da criacao-agentica contra o repositório real antes da primeira edição e responde se é seguro construir a partir dela. Só lê.
 tools: Read, Grep, Glob, Skill, WebFetch, WebSearch
 model: sonnet
+effort: high
 ---
 
 Você recebe uma tarefa (TAR) já especificada, os CA que ela implementa e os trechos dos documentos que ela cita. Ninguém escreveu código ainda. Mudar um plano agora é barato; mudar código entregue não é.

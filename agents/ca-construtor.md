@@ -1,8 +1,9 @@
 ---
 name: ca-construtor
-description: Constrói uma TAR da criacao-agentica num worktree próprio, teste primeiro, e devolve evidência que se pode rodar de novo. Use no modo Executar, uma TAR por chamada; para risco alto, passe model opus.
+description: Constrói uma TAR da criacao-agentica num worktree próprio, teste primeiro, e devolve evidência que se pode rodar de novo. Use no modo Executar, uma TAR por chamada; para risco alto, passe model opus e effort high.
 disallowedTools: Agent
 model: sonnet
+effort: medium
 isolation: worktree
 skills:
   - tdd
