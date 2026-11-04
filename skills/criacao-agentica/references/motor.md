@@ -42,7 +42,7 @@ O que fazer quando uma skill não está instalada está na última coluna da tab
 | Especificar | (nossos modelos) + `research`, `prototype`, `to-questionnaire` | Fontes primárias; protótipo descartável para dúvida de comportamento ou aparência; questionário para quem não está no chat | Consulte a documentação e registre fonte e data |
 | Especificar → plano | `to-tickets` | Fatiar a entrega em TAR bala traçadora, com `Bloqueada por:` e expand–contract | Use a seção "Fatiamento" do plano |
 | Executar (uma TAR) | `implement` → `tdd` → revisão | Construir pela costura combinada, teste vermelho primeiro, revisão em dois eixos | Siga o modo Executar do SKILL.md |
-| Executar (fronteira inteira) | `implement-spec` | Subagentes em worktrees, um por TAR da fronteira, integrando num branch | Uma TAR por vez |
+| Executar (fronteira inteira) | Loop da entrega (`loop.md`), com o `/goal` nativo; em paralelo, `implement-spec` | Uma TAR por vez até a entrega fechar ou bater num freio; o `implement-spec` põe subagentes em worktrees, um por TAR, integrando num branch | Uma TAR por vez, pelo Próxima |
 | Corrigir bug | `diagnosing-bugs` | Loop que fica vermelho antes de qualquer hipótese; teste de regressão antes do fix | `references/falhas.md` |
 | Revisar | `ponytail-review`, rodada pelo agente `ca-revisor` | Correção, segurança, carga real, teste do que é arriscado, velocidade e o que cortar; um caso concreto por achado e um veredito | `ca-verificador` |
 | Conformidade com a TAR (risco alto) | agente `ca-verificador` | Cego: CA contra o diff, prova por mutação, isolamento entre usuários | — |

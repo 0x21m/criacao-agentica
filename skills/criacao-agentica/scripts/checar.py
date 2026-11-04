@@ -183,7 +183,7 @@ def main():
 
     if not (raiz / "docs" / "ESTADO.md").exists():
         problemas.append("docs/ESTADO.md não existe; a próxima sessão não terá ponto de retomada")
-    if not (raiz / "docs" / "agents" / "issue-tracker.md").exists():
+    if (raiz / "docs" / "agents").is_dir() and not (raiz / "docs" / "agents" / "issue-tracker.md").exists():
         problemas.append("docs/agents/issue-tracker.md não existe; as skills do motor não sabem onde gravar")
 
     for i, arq, n, antigo in duplicados:

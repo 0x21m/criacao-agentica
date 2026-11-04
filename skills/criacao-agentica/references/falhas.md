@@ -4,6 +4,7 @@ Classifique a falha antes de tentar de novo. Repetir o mesmo comando sem uma hip
 
 | Falha | Resposta |
 |---|---|
+| Transitória (rede, serviço fora do ar, limite de uso) | Tente de novo no máximo 2 vezes, com espera. Depois, trate como falta de ferramenta |
 | O pedido foi mal entendido | Volte a perguntar; atualize PRD ou CA |
 | O plano estava errado | Replaneje a TAR e registre o desvio |
 | Faltava algo para começar (credencial, dado, decisão) | Abra uma LAC `bloqueia-tarefa` e siga com o trabalho independente |

@@ -21,6 +21,14 @@ Quem constrói avalia o próprio trabalho com boa vontade: sabe o que quis fazer
 5. **Olhe.** O que tem tela é capturado em cada estado afetado, em largura de celular e de desktop, e lido como a pessoa leria. Procure `undefined`, `null`, `NaN`, `[object Object]` e `Invalid Date` no texto visível. O navegador é compartilhado entre sessões e agentes: abra uma aba própria, confira a origem (endereço e porta) antes de digitar ou clicar, e comece com o armazenamento do site limpo. Use dados de teste que você mesmo criou.
 6. **Teste que pode derrubar ou travar o processo** (o vermelho de "o servidor cai") roda com tempo limite (`timeout 60 …`) ou em processo filho, para não pendurar a sessão.
 
+## Checagem que se repete vira verificador do projeto
+
+Na segunda vez que você repetir a mesma checagem à mão, transforme-a em verificador. Exemplos: abrir a tela, clicar no controle novo, ler o console, medir o tempo. Proponha à pessoa em uma linha e crie no "sim". Na ordem da escada:
+1. **Teste ou script** (`scripts/verificar-<assunto>`), quando a checagem é determinística. É o mais barato de rodar e o único que um loop roda sem julgamento.
+2. **Skill do projeto** (`.claude/skills/verificar-<assunto>/SKILL.md`), quando a checagem precisa de olho: passos numerados, o que capturar e o que conta como falha.
+
+O verificador passa a ser citado nos CA que ele cobre. Uma regra vale para os dois formatos: se um passo falha, corrija e rode tudo de novo **desde o passo 1**. Verificação pela metade não se entrega.
+
 ## Revisão pelo nível de risco
 
 O risco vem da mudança, não de quem a escreveu, e fica no campo `Risco:` da TAR. Na dúvida, o nível de cima. Caminhos listados em "Caminhos que sempre pedem uma pessoa" do `REVIEW.md` são `alto`, qualquer que seja o tamanho da mudança.

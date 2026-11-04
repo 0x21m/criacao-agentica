@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "shell": "bash",
+            "command": "if command -v python >/dev/null 2>&1; then exec python \"${CLAUDE_PLUGIN_ROOT}/hooks/guarda.py\"; else exec python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/guarda.py\"; fi",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "bash",
+            "command": "if command -v python >/dev/null 2>&1; then exec python \"${CLAUDE_PLUGIN_ROOT}/hooks/guarda.py\"; else exec python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/guarda.py\"; fi",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

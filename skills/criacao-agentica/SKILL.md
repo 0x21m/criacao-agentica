@@ -2,7 +2,7 @@
 name: criacao-agentica
 description: Metodologia de criação agêntica que leva uma intenção de produto a entregas verificáveis — seis documentos-contrato (PRD, TRD, fluxo do app, briefing de UI/UX, schema do backend, plano de implementação), glossário, IDs rastreáveis (REQ, RN, CA, FLX, DEC, ADR, TAR, LAC), auditoria de consistência antes de codar, verificação por quem não fez o trabalho e estado registrado entre sessões, usando as skills do Matt Pocock como motor de execução. Use quando a pessoa quiser começar um app ou produto ("quero construir X", "tenho uma ideia de app"), especificar uma funcionalidade antes de implementá-la, perguntar "e agora?" ou "o que falta?" num projeto que tenha docs/ESTADO.md ou docs/01-prd.md, adotar o método num projeto existente, retomar o trabalho de outra sessão ou encerrar uma sessão deixando o estado registrado, mesmo que ela não diga "metodologia". Não use para uma edição pontual, revisão de diff ou dúvida técnica isolada num projeto que não adota o método.
 metadata:
-  version: "0.6.0"
+  version: "0.7.0"
 ---
 
 # Criação agêntica
@@ -19,7 +19,7 @@ Os documentos são contratos vivos: não precisam cobrir o produto inteiro antes
 
 ## Ao entrar, sempre
 
-1. Se existir `docs/ESTADO.md`, leia-o primeiro: nível do projeto, tarefa ativa, o que espera o responsável, próxima ação. Ele é o ponto de retomada; a memória da conversa não é.
+1. Se existir `docs/ESTADO.md`, leia-o primeiro: nível do projeto, tarefa ativa, o que espera o responsável, próxima ação. Ele é o ponto de retomada; a memória da conversa não é. Mas é uma pista, não a verdade: confronte-o com o `git log` e com a saída do passo 2. Se divergirem, valem o git e os documentos, e você corrige o ESTADO antes de seguir.
 2. Rode `python <esta-skill>/scripts/checar.py` na raiz do projeto. Ele lê `docs/` e o `GLOSSARY.md` e devolve problemas de rastreabilidade, a **fronteira** (tarefas prontas para começar) e um bloco **PENDENTE** com o que o estado pede agora. Use essa saída para escolher o modo.
 3. Confira data, branch, commit e o que está alterado e não commitado. Preserve trabalho existente. O git é automático (ver "Git automático" abaixo): se a pasta ainda não é repositório, inicie-o sem perguntar.
 4. Leia só os trechos dos documentos que governam o que você vai tocar.
@@ -33,6 +33,7 @@ A pessoa não precisa lembrar de comandos. Quatro frases cobrem quase tudo; o re
 | "quero construir X", "tenho uma ideia" | **Iniciar** | Nível confirmado, PRD com a jornada prioritária e aceite observável, ESTADO criado |
 | "quero fazer a funcionalidade Y" | **Especificar entrega** | Documentos suficientes para Y, auditoria sem bloqueio, TAR criadas com seus bloqueios |
 | "e agora?", "o que falta?", "continua" | **Próxima** | Uma tarefa da fronteira escolhida, com o motivo |
+| "toca a entrega", "roda até acabar" | **Loop da entrega** | Todas as TAR da entrega concluídas, ou o loop parou num freio, com o relatório para ler |
 | "quebrou", "está dando erro" | **Corrigir** | Bug com loop vermelho, correção, teste de regressão e registro |
 | (derivado do estado) | **Auditar** | Lacunas registradas com impacto e tipo de resolução |
 | (derivado do estado) | **Executar tarefa** | TAR concluída, com registro de conclusão e evidência |
@@ -90,8 +91,12 @@ O registro depende do projeto:
 1. Parta da **fronteira** e do bloco PENDENTE do `checar.py`.
 2. Tire o que é de entrega posterior.
 3. Ordene e **diga o motivo da ordem**: o que desbloqueia outras vem antes; o risco mais provável de estar errado se aprende cedo; domínio sensível (login, pagamento, upload, dados pessoais) pede especificação antes. Se a fronteira está vazia por causa de LAC, ofereça a decisão que a destrava.
-4. Ofereça duas a quatro opções como decisões concretas, com a sua recomendação.
+4. Ofereça duas a quatro opções como decisões concretas, com a sua recomendação. Com duas ou mais TAR da mesma entrega prontas e com forma de loop, uma das opções é o **Loop da entrega**.
 5. Se não sobra nada no escopo da versão, diga isso: o próximo passo é integrar ou publicar, não inventar funcionalidade.
+
+### Loop da entrega
+
+Em vez de a pessoa dizer "e agora?" a cada TAR, um `/goal` gira o modo Executar sobre as TAR da entrega até todas concluírem ou o loop bater num freio. A pessoa decide; o loop executa. Siga `references/loop.md`: quando a entrega tem forma de loop, a condição a montar, os freios, o piloto na primeira vez e o relatório "Para ler" ao parar. O `/goal` é comando da pessoa: você monta a condição e a entrega pronta para ela colar.
 
 ### Encerrar
 
@@ -126,6 +131,7 @@ O git é a rede de segurança e a memória do método: desfazer, diff para revis
 - **Branch de trabalho:** cada entrega ganha um branch (`entrega-N-slug`) a partir da base, criado automaticamente. Cada TAR construída num worktree ganha o seu (`tar-NNN-slug`), juntado ao branch da entrega quando a TAR fica `concluída`.
 - **Commits:** automáticos, pequenos e com significado. Um ao fim de cada modo que grava documentos ("docs: especifica entrega 1 (REQ-001..004)"), um por fatia construída e um com o registro de conclusão e o ESTADO. A mensagem cita os IDs. Nunca um commit por edição: diff legível por tarefa é o que torna o git útil.
 - **O que espera a pessoa:** integrar na base (`main`), enviar para fora (`push`) e publicar seguem a autonomia de `docs/README.md` e o nível de risco. Sem autonomia registrada, perguntam.
+- **O plugin impõe, além de pedir.** Em projetos com `docs/ESTADO.md`, um hook pede a confirmação da pessoa antes de push e antes de commit ou merge na `main` ou `master`, e barra o commit enquanto houver TAR concluída sem registro completo (o mesmo problema que o `checar.py` acusa). Se o commit for barrado, complete o registro ou volte a TAR para `em execução`; não contorne o hook.
 
 ## Como relatar
 
@@ -151,6 +157,7 @@ Diga como cada coisa foi verificada: "rodei o teste", "conferi na tela", "é jul
 | `references/auditoria.md` | auditar consistência antes de implementar |
 | `references/verificacao.md` | verificar uma entrega, inclusive a verificação independente e o uso do navegador |
 | `references/falhas.md` | algo falhou e você vai tentar de novo |
+| `references/loop.md` | a pessoa quer que a entrega rode sem um prompt por TAR, ou o Próxima tem duas ou mais TAR prontas da mesma entrega |
 | `references/adocao.md` | o projeto já existe e não tem estes documentos |
 | `references/modelos/` | criar ou atualizar qualquer documento (índice em `modelos/README.md`) |
 | `references/fontes.md` | a tarefa toca uma stack, serviço ou ferramenta, ou você vai construir algo que talvez já exista |

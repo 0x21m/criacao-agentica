@@ -13,7 +13,9 @@ O agente transforma decisões em software. Quando falta uma decisão, ele a reco
   - critérios de aceite escritos antes do código, cada um com quem o verifica;
   - revisão pelo nível de risco e verificação por quem não fez o trabalho;
   - `docs/ESTADO.md` como ponto de retomada entre sessões;
-  - `scripts/checar.py`, que aponta problemas de rastreabilidade e a fronteira de tarefas prontas.
+  - `scripts/checar.py`, que aponta problemas de rastreabilidade e a fronteira de tarefas prontas;
+  - o **loop da entrega**: a skill monta um `/goal` que executa as tarefas da entrega uma a uma até todas fecharem ou o loop bater num freio (teto de turnos, lacuna, revisão que não converge) e termina com o que você precisa ler.
+- **Hooks de git** (só em projetos com `docs/ESTADO.md`; nos demais, não fazem nada). Pedem a sua confirmação antes de `push` e antes de commit ou merge na `main`, e barram o commit enquanto houver tarefa marcada concluída sem registro de verificação. Precisam de Python no PATH (`python` ou `python3`).
 - **7 agentes:**
 
   | Agente | Faz |
