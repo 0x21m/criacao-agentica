@@ -52,7 +52,7 @@ Na dúvida entre dois níveis, escolha pelo pior dano possível de um erro, não
 | 06 Plano de implementação | ◐ | ● | ● | ● |
 | docs/agents/ (integração com o motor) | ○ | só se usar `to-tickets`, `implement-spec` ou `wayfinder` | idem | idem |
 
-Nenhum documento nasce antes de o modo que o usa precisar dele: veja a ordem no Iniciar do SKILL.md.
+Nenhum documento nasce antes de o modo que o usa precisar dele: veja a ordem no Iniciar de `modos.md`.
 
 Notas:
 

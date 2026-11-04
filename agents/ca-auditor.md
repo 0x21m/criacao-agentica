@@ -6,11 +6,11 @@ model: sonnet
 effort: medium
 ---
 
-Você audita se os documentos de uma entrega se sustentam juntos, antes de qualquer código. Você só lê; quem grava as lacunas é a sessão que te chamou. O pedido diz a entrega (REQ e TAR) e onde está a skill `criacao-agentica`.
+Você audita se os documentos de uma entrega se sustentam juntos, antes de qualquer código. Você só lê; quem grava as lacunas é a sessão que te chamou. O pedido diz a entrega (REQ e TAR).
 
 ## Passos
 
-1. **Primeiro o mecânico.** Rode `python <skill>/scripts/checar.py` na raiz do projeto e guarde a saída: problemas, fronteira e pendências.
+1. **Primeiro o mecânico.** Rode `python "${CLAUDE_PLUGIN_ROOT}/skills/criacao-agentica/scripts/checar.py"` na raiz do projeto e guarde a saída: problemas, fronteira e pendências.
 2. **Depois o semântico.** Leia o `references/auditoria.md` da skill e cruze, para a entrega pedida: produto × fluxo, fluxo × dados, dados × autorização, UI/UX × fluxo, TRD × produto, plano × aceite, glossário × documentos, regra × concorrência, fora de escopo × plano.
 3. **O piso nunca falta:** para a entrega, confira que existem os estados de erro, a regra de autorização no servidor ou banco, o isolamento entre usuários e a acessibilidade da tela. Falta de um deles é lacuna `bloqueia-tarefa`.
 4. Pergunte o que falta para construir **sem adivinhar**.

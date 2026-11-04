@@ -13,6 +13,20 @@ O projeto já tem código e não tem estes documentos. O erro comum é tentar do
 6. **Contratos a preservar:** liste no TRD o que não pode quebrar (APIs públicas, formatos de dados, rotas, integrações) e como verificar que continua funcionando.
 7. Siga para o modo Especificar entrega.
 
+## Projeto grande ou monorepo
+
+Num código grande, o contexto se enche de instruções e leituras que não têm nada a ver com a tarefa. Isso custa tokens e piora o trabalho. No diagnóstico, ofereça à pessoa o que reduz o escopo. É configuração do projeto: cada item é uma decisão dela, e nenhum é imposto.
+
+| Problema | O que oferecer (documentação oficial: code.claude.com/docs/en/large-codebases) |
+|---|---|
+| Um CLAUDE.md na raiz cobrindo todos os subsistemas | Um `CLAUDE.md` por diretório (pacote ou subsistema), cada um com só as convenções daquela área, e a raiz com o que vale em todo lugar |
+| Leituras de código gerado, build ou de terceiros já versionado | Regras `Read(...)` em `permissions.deny` no `.claude/settings.json` |
+| Achar definições e chamadas varrendo arquivos | Um plugin de code intelligence (LSP) da linguagem, do marketplace oficial (`references/fontes.md`: ferramenta pronta primeiro) |
+| Worktree dos agentes copiando o repositório inteiro | `worktree.sparsePaths` com as pastas que a mudança toca, mais `.claude`, e `worktree.symlinkDirectories` para `node_modules` |
+| Trabalho concentrado num pacote | Abrir a sessão no diretório do pacote; um pacote vizinho entra com `--add-dir` |
+
+Uma mudança que atravessa pacotes fica numa sessão só e com o plano em arquivo: a TAR e o ESTADO sobrevivem à compactação, a conversa não.
+
 ## O que não fazer
 
 - Não introduza uma árvore de documentos concorrente: se o projeto já tem `docs/` ou ADRs, adapte os caminhos ao que existe e registre o mapeamento no README.

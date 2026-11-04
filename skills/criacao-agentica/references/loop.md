@@ -17,7 +17,7 @@ O que gira o loop é o `/goal` do Claude Code. Depois de cada turno, um modelo p
 
 ## A condição
 
-O avaliador **só lê a conversa**: não roda comando nem abre arquivo. Então toda prova precisa aparecer impressa, seja a saída dos verificadores, seja a do `checar.py`. Uma TAR concluída sem saída visível não conta. Monte a condição com a lista real de TAR e entregue-a pronta para a pessoa colar:
+O avaliador **só lê a conversa**: não roda comando nem abre arquivo. Então toda prova precisa aparecer impressa, seja a saída dos verificadores, seja a do `checar.py`. Uma TAR concluída sem saída visível não conta. Monte a condição com a lista real de TAR e o caminho real do `checar.py` no lugar de `<skill>`, e entregue-a pronta para a pessoa colar:
 
 ```
 /goal Entrega <N> da criacao-agentica: TAR-<a>, TAR-<b>, TAR-<c>. Uma TAR por vez, na ordem da fronteira, siga o modo Executar tarefa da skill criacao-agentica (construa, verifique cada CA mostrando a saída do verificador, revise, registre a conclusão, atualize o ESTADO e faça commit). Ao fim de cada TAR, rode python <skill>/scripts/checar.py e mostre a saída. Pronto quando a saída do checar.py mostrar todas essas TAR como concluídas, sem problema "TAR-… está concluída…". Pare antes, explicando o motivo, se surgir LAC que bloqueia, item em Esperando o responsável que bloqueie as demais, ou TAR sem convergir depois de 3 rodadas de revisão. Não altere critério, nem teste de CA já concluído, sem registrar uma DEC. Pare após <T> turnos.

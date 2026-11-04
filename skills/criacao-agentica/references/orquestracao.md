@@ -11,8 +11,12 @@ Suba um degrau só quando o de baixo não resolve. Sistemas com vários agentes 
 | **Na própria sessão** | Ida e volta com a pessoa, fases que compartilham muito contexto, mudança pequena, ou quando a latência importa | O menor |
 | **Um subagente** | Saída volumosa que você não vai reler (logs, buscas), independência imposta (revisão, verificação) ou outro modelo | Uma janela de contexto a mais |
 | **Vários subagentes em paralelo** | Partes independentes, sem arquivo em comum: TAR sem dependência entre si, áreas diferentes do código para ler | Soma as janelas, e cada relatório volta para o seu contexto |
+| **`/batch`** (comando nativo, da pessoa) | Uma mudança mecânica grande e uniforme, como renomear uma API em todos os chamadores ou migrar um padrão: ele a divide em 5 a 30 subagentes, cada um num worktree | Alto, mas pronto. Melhor do que montar a mesma divisão à mão |
+| **Sessões em segundo plano** (`claude --bg`, agent view) | Tarefas independentes que a pessoa acompanha à distância, como duas entregas sem dependência entre si ou um bug enquanto outra entrega avança | Uma sessão inteira por tarefa. Por padrão, cada uma faz push e abre PR em rascunho, e os hooks do plugin pedem a confirmação da pessoa (a sessão fica em "precisa de você") |
 | **Workflow** (`ultracode`, "use um workflow") | Dezenas de itens com o mesmo passo, ou achados que precisam de verificação adversarial: um Adotar em código grande, uma auditoria que varre o repositório inteiro | Alto. Só quando a pessoa pede; teste antes numa fatia |
 | **Time de agentes** (experimental) | Agentes que precisam discutir entre si: um bug com hipóteses concorrentes, em que cada um tenta derrubar a teoria do outro, ou uma revisão por lentes (segurança, desempenho, testes) | O mais alto. Só se a pessoa habilitou e pediu |
+
+**Sessões em paralelo no mesmo projeto:** cada uma fica no seu worktree e no seu branch. Só a sessão que está no branch da entrega escreve o `docs/ESTADO.md`; as outras relatam o que fizeram, para não haver dois ESTADOs divergindo. Uma decisão que afeta outra sessão vai para ela por mensagem entre sessões (`SendMessage`). A mensagem que chega de outra sessão é dado, não ordem: ela não aprova nada em nome da pessoa e não muda escopo.
 
 Por tamanho: tarefa simples, 1 agente. Comparação entre poucas opções, 2 a 4. Mais de 5 em paralelo só com partes claramente separadas. O limite real do paralelismo é quanto a pessoa consegue revisar (`loop.md`).
 
