@@ -2,7 +2,7 @@
 name: criacao-agentica
 description: Metodologia de criação agêntica que leva uma intenção de produto a entregas verificáveis — seis documentos-contrato (PRD, TRD, fluxo do app, briefing de UI/UX, schema do backend, plano de implementação), glossário, IDs rastreáveis (REQ, RN, CA, FLX, DEC, ADR, TAR, LAC), auditoria de consistência antes de codar, verificação por quem não fez o trabalho e estado registrado entre sessões, usando as skills do Matt Pocock como motor de execução. Use quando a pessoa quiser começar um app ou produto ("quero construir X", "tenho uma ideia de app"), especificar uma funcionalidade antes de implementá-la, perguntar "e agora?" ou "o que falta?" num projeto que tenha docs/ESTADO.md ou docs/01-prd.md, adotar o método num projeto existente, retomar o trabalho de outra sessão ou encerrar uma sessão deixando o estado registrado, mesmo que ela não diga "metodologia". Não use para uma edição pontual, revisão de diff ou dúvida técnica isolada num projeto que não adota o método.
 metadata:
-  version: "0.9.0"
+  version: "0.10.0"
 ---
 
 # Criação agêntica

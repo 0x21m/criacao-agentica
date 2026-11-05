@@ -41,6 +41,8 @@ O que fazer quando uma skill não está instalada está na última coluna da tab
 | Iniciar (esforço grande, com névoa) | `wayfinder` | Mapa de tickets de decisão em `docs/mapas/` até o caminho ficar claro; produz decisões, não entregas | Liste as LAC por tipo de resolução e resolva uma por sessão |
 | Especificar | (nossos modelos) + `research`, `prototype`, `to-questionnaire` | Fontes primárias; protótipo descartável para dúvida de comportamento ou aparência; questionário para quem não está no chat | Consulte a documentação e registre fonte e data |
 | Especificar → plano | `to-tickets` | Fatiar a entrega em TAR bala traçadora, com `Bloqueada por:` e expand–contract | Use a seção "Fatiamento" do plano |
+| Especificar (dados) | `ca-dados` (deste plugin) | Invariantes no registro INV, mecanismo no banco, testes adversariais | Catálogo em `ca-dados/references/invariantes.md` |
+| Especificar (módulos) | `ca-arquitetura` (deste plugin) | Manifesto, dono de cada objeto, pontos entre módulos, onde fica o que é novo | `ca-arquitetura/references/onde-vai.md` |
 | Executar (uma TAR) | `implement` → `tdd` → revisão | Construir pela costura combinada, teste vermelho primeiro, revisão em dois eixos | Siga o modo Executar de `modos.md` |
 | Executar (fronteira inteira) | Loop da entrega (`loop.md`), com o `/goal` nativo; em paralelo, `implement-spec` | Uma TAR por vez até a entrega fechar ou bater num freio; o `implement-spec` põe subagentes em worktrees, um por TAR, integrando num branch | Uma TAR por vez, pelo Próxima |
 | Corrigir bug | `diagnosing-bugs` | Loop que fica vermelho antes de qualquer hipótese; teste de regressão antes do fix | `references/falhas.md` |

@@ -24,6 +24,31 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "bash",
+            "command": "if command -v python >/dev/null 2>&1; then exec python \"${CLAUDE_PLUGIN_ROOT}/hooks/inicio.py\"; else exec python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/inicio.py\"; fi",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "bash",
+            "command": "if command -v python >/dev/null 2>&1; then exec python \"${CLAUDE_PLUGIN_ROOT}/hooks/inicio.py\"; else exec python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/inicio.py\"; fi",
+            "timeout": 15
+          }
+        ]
+      }
     ]
   }
 }

@@ -8,6 +8,8 @@ effort: high
 
 Você recebe uma tarefa (TAR) já especificada, os CA que ela implementa e os trechos dos documentos que ela cita. Ninguém escreveu código ainda. Mudar um plano agora é barato; mudar código entregue não é.
 
+Se a tarefa tocar tabela, migração, RLS, função, saldo ou invariante, carregue a skill `criacao-agentica:ca-dados` (catálogo de mecanismos e registro INV); se tocar módulo ou fronteira entre módulos, a `criacao-agentica:ca-arquitetura`. Recuse a TAR de risco alto que muda schema sem INV para as regras que ela toca.
+
 Responda a uma pergunta: **dá para construir esta TAR como está escrita, neste repositório, sem adivinhar?**
 
 ## O que conferir

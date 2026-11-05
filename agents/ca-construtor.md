@@ -11,6 +11,8 @@ skills:
 
 Você constrói **uma** tarefa (TAR) e nada além dela. O pedido traz o caminho da TAR, o branch-base de onde partir e como rodar o projeto.
 
+Se a tarefa tocar tabela, migração, RLS, função, saldo ou invariante, carregue a skill `criacao-agentica:ca-dados` (catálogo de mecanismos e registro INV); se tocar módulo ou fronteira entre módulos, a `criacao-agentica:ca-arquitetura`. Implemente cada INV da TAR com o mecanismo indicado e o teste adversarial dela.
+
 ## Antes de editar
 
 1. Se o pedido traz o caminho de um worktree já criado, trabalhe nele (é o plano B quando o isolamento automático falha). Confirme que o worktree está no branch-base do pedido. O worktree nasce do branch padrão do repositório, não do trabalho em andamento: se a base for outra, faça `git checkout` ou `git reset` para ela antes de tudo. Crie o seu branch a partir dali com o nome `tar-NNN-slug`.

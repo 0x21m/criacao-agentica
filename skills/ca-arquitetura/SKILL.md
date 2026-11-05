@@ -2,7 +2,7 @@
 name: ca-arquitetura
 description: Padrão de módulo para sistemas complexos e modulares construídos com IA (ERPs, mas também módulos de conversa, automação, IA que lê os outros módulos, integrações com o mundo físico). Define o núcleo soberano, o manifesto tipado de cada módulo, os estados de um módulo (ausente, ligado, desligado com dados, removido), a ponte entre dois módulos, a tabela satélite, os pontos entre módulos (invariante e reação), a instalação com backfill, a remoção que preserva dados e as fronteiras verificadas por máquina. Use ao criar, ligar, desligar, remover ou integrar um módulo, ao decidir onde fica um campo, regra, estado ou integração nova, ou quando um módulo precisar ler ou reagir a outro, mesmo que a pessoa não diga "módulo".
 metadata:
-  version: "0.9.0"
+  version: "0.10.0"
 ---
 
 # Arquitetura de sistemas modulares
@@ -30,6 +30,11 @@ Fontes: o padrão de módulo do PMD, comparado com Odoo, ERPNext, Tryton, iDempi
 - **Mudança que cruza módulos:** identifique o dono de cada objeto tocado. Se a mudança exige escrever em tabela de outro dono, ou ela vira uma porta do dono, ou o modelo está errado.
 - **Ligar sobre dados existentes:** o backfill é declarado no manifesto, idempotente e testado.
 - **Padrões distribuídos** (saga, CQRS com bancos separados, event sourcing, microserviço) só quando o degrau mais simples se esgotou. A escada está em `references/onde-vai.md`.
+
+## Família
+
+- **Chame a `ca-dados`** para cada tabela, porta e evento do manifesto: as invariantes do módulo (registro INV), o mecanismo no banco e os testes adversariais.
+- **Volte à `criacao-agentica`** para registrar: o manifesto e as decisões entram nos documentos e nas ADR, o módulo vira TAR e o estado vai para o ESTADO.
 
 ## Referências
 

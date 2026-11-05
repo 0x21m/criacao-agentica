@@ -293,6 +293,11 @@ def main():
         else:
             fronteira.append(t)
 
+    tem_schema = (raiz / "docs" / "05-schema-backend.md").exists() or any(
+        (raiz / p).is_dir() for p in ("supabase/migrations", "migrations", "db/migrations"))
+    if tem_schema and not ids("INV"):
+        pendente.append("Registrar as invariantes do schema no formato INV (skill ca-dados)")
+
     achados, avisos = termos_proibidos(raiz)
     problemas.extend(avisos + achados)
 

@@ -2,7 +2,7 @@
 name: ca-dados
 description: Garantias de dados no banco para sistemas transacionais complexos (ERPs, financeiro, estoque, fiscal, módulos de conversa, automação e IA) em PostgreSQL e Supabase. Ensina a declarar cada invariante uma vez e garanti-la no banco (constraint, trigger adiado, lock, RLS), a separar audit log, event log, ledger e diário, e a tratar dinheiro, tempo, numeração legal, períodos, idempotência, tenancy, segurança, migração e testes adversariais. Use ao desenhar ou mudar tabelas, colunas, constraints, funções, policies RLS, migrações, saldos, lançamentos, documentos com estado, multiempresa ou qualquer regra que precise valer mesmo quando alguém escreve SQL direto, mesmo que a pessoa não diga "invariante".
 metadata:
-  version: "0.9.0"
+  version: "0.10.0"
 ---
 
 # Dados com garantia
@@ -33,6 +33,11 @@ Num sistema construído por agentes de IA, quem escreve no banco não passa só 
 3. **Decisões que são da pessoa** viram pergunta, não suposição: modelo de tenancy, unidade monetária e moedas, retenção de dados, quem pode usar cada bypass.
 4. **Escreva a migração** e os testes adversariais juntos. Rode os testes com o papel real (não como `postgres`).
 5. **Use as skills oficiais quando existirem:** `supabase-postgres-best-practices` e `supabase` (instale com `npx skills add supabase/agent-skills`). Esta skill decide o que garantir; elas decidem como fazer bem em Postgres e Supabase.
+
+## Família
+
+- **Volte à `criacao-agentica`** para registrar: cada INV entra no `docs/05-schema-backend.md`, vira critério de aceite de uma TAR e aparece no ESTADO. Sem o método, a garantia fica sem dono nem verificação.
+- **Chame a `ca-arquitetura`** para saber de que módulo é cada tabela, onde fica um campo novo e como um módulo fala com outro antes de escrever a migração.
 
 ## Referências
 
