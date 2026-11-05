@@ -17,7 +17,9 @@
 - Eventos destinados a um módulo desligado ficam **retidos**, nunca descartados; ao religar, o consumidor retoma do cursor. Remover exige a fila vazia ou o descarte declarado e registrado.
 - Ao religar, o backfill roda de novo (é idempotente). Se a regra do negócio pede cobrir o período desligado (pontos de pedidos pagos nesse intervalo), isso é uma regra decidida pela pessoa, não um efeito colateral.
 - Desativar é recusado se outro módulo ligado depende deste.
-- Teste obrigatório: o fluxo crítico passa nos quatro estados de cada opcional que ele toca (teste T08 da `ca-dados`).
+- A resposta na ausência vale também para **reação com obrigação** (`pontos.md`): declare no manifesto quem cumpre a obrigação quando o módulo está desligado.
+- **Matriz de composição.** Gerada do registro de módulos: cada módulo em cada estado, e o fluxo crítico rodando em cada célula. Um módulo novo entra na matriz sozinho.
+- **Teste gêmeo.** A mesma operação do núcleo (a mesma venda) roda com e sem os opcionais; o resultado do núcleo é o mesmo. Se diferir, o núcleo depende de um opcional.
 
 ## Ponte
 

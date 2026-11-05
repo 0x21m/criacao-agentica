@@ -2,7 +2,7 @@
 name: ca-arquitetura
 description: Padrão de módulo para sistemas complexos e modulares construídos com IA (ERPs, mas também módulos de conversa, automação, IA que lê os outros módulos, integrações com o mundo físico). Define o núcleo soberano, o manifesto tipado de cada módulo, os estados de um módulo (ausente, ligado, desligado com dados, removido), a ponte entre dois módulos, a tabela satélite, os pontos entre módulos (invariante e reação), a instalação com backfill, a remoção que preserva dados e as fronteiras verificadas por máquina. Use ao criar, ligar, desligar, remover ou integrar um módulo, ao decidir onde fica um campo, regra, estado ou integração nova, ou quando um módulo precisar ler ou reagir a outro, mesmo que a pessoa não diga "módulo".
 metadata:
-  version: "0.10.0"
+  version: "0.11.0"
 ---
 
 # Arquitetura de sistemas modulares
@@ -20,9 +20,10 @@ Fontes: o padrão de módulo do PMD, comparado com Odoo, ERPNext, Tryton, iDempi
 5. **Módulo opcional só depende de módulo fixo.** Dependência entre dois opcionais mora numa **ponte**, um terceiro módulo que só existe quando os dois estão ligados.
 6. **Toda dependência declara a resposta na ausência:** política ausente devolve `null`; consulta ausente devolve "ausente", nunca um zero fingido; comando ausente devolve `MODULO_INDISPONIVEL`.
 7. **Quatro estados, e desligar não destrói dados** (`references/ciclo.md`): ausente, ligado, desligado com dados, removido. Remoção é recusada enquanto houver trabalho aberto.
-8. **Pontos entre módulos com modo** (`references/pontos.md`): **invariante** roda dentro da transação e pode vetar; **reação** roda depois do commit, por outbox, e sua falha não desfaz o fato.
-9. **Fronteira verificada por máquina** (`references/fronteiras.md`), com uma lista de violações conhecidas que só encolhe.
-10. **Na dúvida sobre onde algo mora, use a tabela "Onde vai o que é novo"** (`references/onde-vai.md`) antes de inventar.
+8. **Pontos entre módulos com modo** (`references/pontos.md`): **invariante** roda dentro da transação e pode vetar; **reação** roda depois do commit, por outbox, e sua falha não desfaz o fato; reação na mesma transação só sem efeito externo nem obrigação. **Reação com obrigação** declara quem a cumpre quando o módulo está desligado.
+9. **Fronteira verificada por máquina** (`references/fronteiras.md`), com uma lista de violações conhecidas que só encolhe, a suíte de conformidade de todo módulo, a matriz de composição e o teste gêmeo.
+10. **Um fluxo por tarefa.** Cada ação de negócio tem uma entrada só; atalho chama o fluxo existente. Rígido para dinheiro, estoque e dado pessoal.
+11. **Na dúvida sobre onde algo mora, use a tabela "Onde vai o que é novo"** (`references/onde-vai.md`) antes de inventar.
 
 ## Como trabalhar
 

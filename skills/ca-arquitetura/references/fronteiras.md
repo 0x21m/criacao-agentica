@@ -36,7 +36,13 @@ Cada uma roda no CI e falha o build. As marcadas [lista] usam a lista que só en
 12. Porta, ponto e evento têm contrato com tipo explícito.
 13. A documentação gerada dos módulos é igual ao código.
 14. Sem segredo no repositório, sem dado pessoal em log, só dependências aprovadas.
-15. O fluxo crítico passa com cada opcional nos quatro estados.
+15. O fluxo crítico passa com cada opcional nos quatro estados (matriz de composição e teste gêmeo, `ciclo.md`).
+16. **Um fluxo por tarefa.** Cada ação de negócio (devolver, cancelar, aceitar, concluir) tem uma única entrada que a executa; telas e atalhos chamam essa entrada, nunca uma porta paralela com outros passos. Rígida para o que move dinheiro, estoque ou dado pessoal: um segundo fluxo existente não entra na lista de conhecidas, é corrigido na própria entrega. Nos demais casos, exceção declarada numa lista que só diminui. No PMD, um atalho de devolução revisado e testado criou um segundo fluxo que pulava o caso, e oito fluxos duplicados foram achados no painel.
+17. **Campo declarado tem leitor.** Um campo do manifesto ou do contrato (`contract_version`, por exemplo) que nenhum código lê é pior que nenhum: passa por garantia. Um teste falha se um campo declarado não tiver leitor.
+
+## Suíte de conformidade do módulo
+
+Todo módulo passa pela mesma suíte, gerada do manifesto, e cada checagem é provada por um defeito plantado: manifesto válido; dono de cada objeto; dependências só declaradas; sem acesso a internos; tabelas com camada, classe e retenção; eventos declarados; portas com contrato; os quatro estados; resposta na ausência; obrigações cobertas quando desligado. Módulo novo nasce passando nela.
 
 ## Adoção
 

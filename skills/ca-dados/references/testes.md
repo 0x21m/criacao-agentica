@@ -10,6 +10,14 @@ Uma invariante só passa de `[DECLARADO]` para `[TESTADO]` quando um teste tenta
 - **Concorrência de verdade.** Duas conexões ao mesmo tempo, não duas chamadas em sequência. Em PGlite ou banco em memória a concorrência real não é provada: rode no Postgres.
 - **Mutação.** Desligue a garantia (remova o trigger, afrouxe o CHECK) e veja o teste falhar; restaure. Teste que sobrevive à remoção da garantia não prova nada.
 
+## Testes que o projeto gera, não escreve à mão
+
+- **Por classe, a partir dos registros.** Do catálogo de definições, do mapa de donos e da lista de tabelas brutas saem os testes: toda tabela bruta recusa UPDATE, toda função que muda estado grava evento, todo conceito do catálogo tem um só lugar que o calcula. Cada teste gerado é provado com um defeito plantado.
+- **Verificações vazias** (`invariantes.md`, terceiro tipo): cada consulta acende quando o defeito é forçado.
+- **Apagamento com marcador.** Um titular de teste recebe um valor marcador em todos os campos pessoais; depois do eraser, uma busca pelo marcador em todo o banco (inclusive índices, embeddings e cópias) precisa voltar vazia.
+- **Ensaio de atualização.** O banco de ontem, com dados, recebe as migrations de hoje e passa nos testes; o código de ontem contra o schema expandido continua funcionando.
+- **Backup ida e volta.** O backup é restaurado num ambiente isolado e as verificações vazias passam nele.
+
 ## Testes adversariais de referência
 
 Escolha os que se aplicam à entrega. Cada um define pré-condição, dados sintéticos, entrada, resultado esperado e limpeza.

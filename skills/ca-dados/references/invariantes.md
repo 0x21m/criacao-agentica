@@ -6,19 +6,44 @@ Toda invariante da entrega entra no `05-schema-backend.md` neste formato, antes 
 
 ```
 INV-NNN — <regra em uma frase, com termos do glossário>
-Mecanismo: <constraint, trigger adiado + lock, RLS, função, ...> (linha do catálogo abaixo)
+Tipo: linha (inclui imutável e só inserção) | entre linhas (A ou B) | consequência
+Mecanismo: <constraint, trigger adiado + lock, saldo materializado + porta, verificação vazia, RLS, ...> (linha do catálogo abaixo)
 Contorno possível: <quem ou o quê poderia furar: dono da tabela, service role, sessão replica, SQL direto, outra rota>
 Proteção do contorno: <REVOKE, FORCE RLS, ENABLE ALWAYS, papel sem privilégio, ou "aceito: motivo">
 Teste: <o teste adversarial que tenta violar, com o papel real>
-Evidência: [DECLARADO | GARANTIDO | TESTADO]
+Evidência: [DECLARADO | GARANTIDO | TESTADO | EM OPERAÇÃO]
 ```
 
 Nunca escreva "o sistema garante X" sem nomear o mecanismo e os caminhos que o contornam. Um README não prova isolamento; um CHECK não prova consistência entre tabelas; um teste verde não prova que não há outra rota.
 
-## Regra central
+## Os três tipos de invariante
 
-- **Uma linha:** CHECK, NOT NULL, UNIQUE, FK, coluna gerada.
-- **Várias linhas ou tabelas:** trigger de constraint `DEFERRABLE INITIALLY DEFERRED` que reconfere o agregado, **e** lock da linha-mestra (`SELECT ... FOR UPDATE` na conta, no documento, no período) por todos os escritores, **ou** isolamento `SERIALIZABLE` com retry do erro `40001`. Trigger sozinho, em `READ COMMITTED`, deixa duas transações concorrentes passarem.
+**1. De linha.** CHECK, NOT NULL, UNIQUE, FK, coluna gerada. Imediata e barata.
+
+**2. Entre linhas** (soma, saldo, balanceamento, período). Duas realizações, cada uma com a sua condição:
+
+| Realização | Como | Quando serve | O que garante |
+|---|---|---|---|
+| A. Trigger adiado | Trigger de constraint `DEFERRABLE INITIALLY DEFERRED` que reconfere o agregado, mais lock da linha-mestra por todos os escritores (ou SERIALIZABLE com retry de `40001`) | Sempre; obrigatória quando alguém escreve fora de uma porta | **Impede** a violação, venha de onde vier |
+| B. Saldo materializado | Coluna de saldo com CHECK, lock dentro da porta, nenhum grant de escrita para papéis da aplicação, e uma verificação que compara o saldo com o recalculado | Só quando **toda** escrita passa por uma porta | Impede pela porta e **detecta** quem escreve fora dela (dono da tabela, migração, sessão replica) |
+
+Trigger sozinho, em `READ COMMITTED`, deixa duas transações concorrentes passarem. A realização B é a do PMD e funciona, com a condição escrita.
+
+**3. De consequência entre entidades.** "Se a entidade A está assim, a B tem que estar assado": pedido cancelado com dinheiro recebido tem devolução ou caso aberto; caso fechado não tem dinheiro devido; pedido encerrado não segura estoque. Nenhum CHECK nem trigger pega isso de forma barata, porque a consequência depende de outro módulo e do tempo. Todos os erros de dinheiro do PMD em 04/11 foram deste tipo.
+
+A garantia é uma **verificação que precisa voltar vazia**: uma consulta SQL que lista as linhas que violam a consequência.
+- Mora num arquivo versionado (por exemplo `verificacoes.sql`), uma consulta por invariante, com o id `INV`.
+- Roda nos testes e no simulador sempre, e em produção só leitura (`operacao.md`).
+- É provada forçando o defeito: o teste cria o caso errado e a consulta precisa acender.
+- Quando as duas entidades são do mesmo módulo e mudam na mesma transação, **previna também**: trigger adiado (tipo 2) na transição, e a verificação fica como rede para o que escapar.
+- Cada módulo é dono das verificações sobre as suas tabelas, no seu arquivo; uma verificação que lê outro módulo usa a interface dele e só roda com ele presente.
+- Para achá-las, faça o mapa **estado → quem escreve → consequência esperada**. Para cada transição de cada máquina de estados, o que mais no sistema precisa mudar junto. Cada consequência sem mecanismo é uma INV deste tipo:
+
+| Transição | Quem escreve | Consequência esperada | INV |
+|---|---|---|---|
+| pedido pago → cancelado | `pedidos.cancelar` | devolução devida registrada | INV-… (entre linhas, mesma transação) + verificação |
+| devolução → concluída | `pagamentos.devolver` | a devolver do pedido = 0 | INV-… (consequência) |
+| caso de devolução → fechado | `pos_venda.fechar_caso` | a devolver do pedido = 0 | INV-… (consequência, no pós-venda) |
 
 ## Catálogo: invariante → mecanismo → armadilha
 

@@ -66,3 +66,4 @@ O ciclo de vida do documento é descrito na skill `ca-arquitetura`. No banco ele
 
 - Chamada externa com resultado desconhecido (timeout) **não é falha**: o estado fica "não confirmado", e só se resolve consultando o provedor ou recebendo o evento. Nunca reenviar sozinho sem a mesma chave.
 - Evento recebido é deduplicado pelo id do evento e processado na mesma transação do efeito.
+- **Comando enviado ao provedor** (estorno, cobrança): grave a intenção com a chave de idempotência **antes** da chamada (estado "solicitado"), mande a mesma chave ao provedor, e grave a resposta bruta e o efeito numa segunda transação. Timeout deixa "não confirmado", que se resolve consultando o provedor. Repetir usa a mesma chave; um segundo pedido para o mesmo fato é recusado pela referência de negócio.

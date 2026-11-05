@@ -24,14 +24,17 @@ instala_quando:                  # condição de contexto (opcional)
 
 tabelas:
   - nome: estoque.movimentos
+    camada: bruto                # bruto | estado | derivado | definicao (ca-dados, camadas.md)
     classe: operacional          # config | operacional | pessoal | financeiro | fiscal
                                  # valor monetizável (pontos, crédito, saldo) é financeiro
     so_insercao: true
     retencao: "enquanto existir o produto"
     eraser: null                 # função que apaga ou anonimiza por titular, se houver dado pessoal
   - nome: estoque.saldos
+    camada: derivado
     classe: operacional
     derivada_de: estoque.movimentos
+    recalcula: estoque.recalcular_saldos
 
 portas:                          # funções públicas de escrita e leitura
   - nome: estoque.reservar
@@ -53,6 +56,8 @@ pontos_oferecidos:               # perguntas, comandos e eventos que outros resp
 respostas:                       # pontos de outros módulos que este responde
   - ponto: vendas.antes_de_confirmar
     modo: invariante             # invariante | reacao | consulta (resposta a ponto do tipo pergunta)
+    realizacao: transacao        # reacao: outbox (padrão) | savepoint (só sem efeito externo nem obrigação)
+    obrigacao_sem_modulo: null   # reacao com obrigação: quem cumpre quando este módulo está desligado
 eventos_publicados:
   - id: estoque.movimento_registrado
     contrato: v1
@@ -78,6 +83,7 @@ migracoes: modulos/estoque/migracoes/
 - **Sem manifesto, sem módulo.** Objeto sem dono declarado falha a verificação de fronteira.
 - **Dependência só para módulo fixo ou núcleo.** Precisa de outro opcional? Crie uma ponte (`tipo: ponte`, `ponte_entre`).
 - **Toda dependência tem `na_ausencia`.** Não existe dependência "que sempre estará lá" para um opcional.
-- **Classe e retenção em toda tabela.** A retenção diz o prazo e o gatilho ("5 anos após o fim do exercício"), não só uma intenção. Tabela com dado pessoal tem `eraser`; num ledger só de inserção, o eraser troca a referência ao titular por um pseudônimo (a tabela de correspondência é que se apaga), sem editar o movimento.
+- **Camada, classe e retenção em toda tabela.** A retenção declara o gatilho ("após o fim do exercício", "após o último pedido"); o prazo e a base legal são decisão da pessoa e ficam em branco até ela decidir. Tabela com dado pessoal tem `eraser`; num ledger só de inserção, o eraser troca a referência ao titular por um pseudônimo (a tabela de correspondência é que se apaga), sem editar o movimento.
 - **Contrato versionado em toda porta, ponto e evento.** Mudar a forma exige versão nova; a porta lê a versão do chamador e serve a antiga ou recusa nomeando o campo, nunca muda em silêncio.
+- **Campo declarado tem leitor.** Declare só o que algum código lê e algum teste confere.
 - **Eventos projetam só as chaves declaradas.** Coluna nova na tabela não vaza para o evento por acidente.

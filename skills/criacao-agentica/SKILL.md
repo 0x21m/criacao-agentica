@@ -2,7 +2,7 @@
 name: criacao-agentica
 description: Metodologia de criação agêntica que leva uma intenção de produto a entregas verificáveis — seis documentos-contrato (PRD, TRD, fluxo do app, briefing de UI/UX, schema do backend, plano de implementação), glossário, IDs rastreáveis (REQ, RN, CA, FLX, DEC, ADR, TAR, LAC), auditoria de consistência antes de codar, verificação por quem não fez o trabalho e estado registrado entre sessões, usando as skills do Matt Pocock como motor de execução. Use quando a pessoa quiser começar um app ou produto ("quero construir X", "tenho uma ideia de app"), especificar uma funcionalidade antes de implementá-la, perguntar "e agora?" ou "o que falta?" num projeto que tenha docs/ESTADO.md ou docs/01-prd.md, adotar o método num projeto existente, retomar o trabalho de outra sessão ou encerrar uma sessão deixando o estado registrado, mesmo que ela não diga "metodologia". Não use para uma edição pontual, revisão de diff ou dúvida técnica isolada num projeto que não adota o método.
 metadata:
-  version: "0.10.0"
+  version: "0.11.0"
 ---
 
 # Criação agêntica
@@ -13,7 +13,7 @@ O agente transforma decisões em software. Quando falta uma decisão, ele a reco
 
 **Unidade de progresso:** uma capacidade utilizável (ou um pré-requisito técnico real) com escopo, critérios de aceite e evidência. Linhas de código e documentos escritos são medidas auxiliares.
 
-Os documentos são contratos vivos: não precisam cobrir o produto inteiro antes do primeiro código, precisam ser **suficientes e coerentes para a próxima entrega**. Descobertas da implementação podem mudar a especificação, desde que a mudança seja registrada e propagada.
+Os documentos são contratos vivos: não precisam cobrir o produto inteiro antes do primeiro código, precisam ser **suficientes e coerentes para a próxima entrega**. Descobertas da implementação podem mudar a especificação, desde que a mudança seja registrada e propagada. Eles são contrato **antes** do código; depois que o código existe, a frase que vira comportamento ganha um CA com verificador, e o que só descreve o código passa a ser gerado dele ou vai para o arquivo, para não envelhecer em silêncio.
 
 **Três camadas.** A **ponytail** é a filosofia de construção: a menor mudança completa, a escada de opções e o que nunca se corta, aplicadas ao código e aos documentos. Ela já está ativa em toda sessão e em todo subagente pelos hooks do plugin; as regras dela vivem só lá. Esta skill decide o **contrato e o estado**: o que fica registrado, onde, e o que conta como pronto. As skills do Matt Pocock (`grilling`, `to-tickets`, `implement`, `tdd`, `diagnosing-bugs` e outras) decidem o **processo**, como cada passo é bem feito, e gravam nos nossos documentos por meio de `docs/agents/issue-tracker.md`. Várias delas são só-usuário: a ferramenta Skill não as chama. Antes de usar uma, veja em `references/motor.md` como chamá-la; lá também estão o time de agentes, a tabela por modo, as tensões já resolvidas e o que fazer quando algo não está instalado.
 

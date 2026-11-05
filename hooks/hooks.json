@@ -23,6 +23,17 @@
             "timeout": 30
           }
         ]
+      },
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "bash",
+            "command": "if command -v python >/dev/null 2>&1; then exec python \"${CLAUDE_PLUGIN_ROOT}/hooks/delegacao.py\"; else exec python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/delegacao.py\"; fi",
+            "timeout": 15
+          }
+        ]
       }
     ],
     "SessionStart": [

@@ -28,6 +28,8 @@ Ligar um módulo sobre dados que já existem, ou criar coluna derivada, exige ba
 - em lotes quando a tabela é grande, sem segurar lock longo;
 - com teste que roda sobre um banco com dados de exemplo.
 
+Regularizar um fato antigo que ficou errado (um pedido cancelado sem a devolução) também é backfill: passa pela porta do dono, gera os registros que faltaram e nunca edita o fato.
+
 ## Identidade dos dados de módulo
 
 Dados que o módulo traz (plano de contas padrão, tabelas de domínio, papéis) têm chave natural estável (`modulo.codigo`), para atualizar sem duplicar e remover sem apagar o que é do usuário. Dado editado pelo usuário não é sobrescrito pela atualização.

@@ -2,7 +2,7 @@
 name: ca-dados
 description: Garantias de dados no banco para sistemas transacionais complexos (ERPs, financeiro, estoque, fiscal, módulos de conversa, automação e IA) em PostgreSQL e Supabase. Ensina a declarar cada invariante uma vez e garanti-la no banco (constraint, trigger adiado, lock, RLS), a separar audit log, event log, ledger e diário, e a tratar dinheiro, tempo, numeração legal, períodos, idempotência, tenancy, segurança, migração e testes adversariais. Use ao desenhar ou mudar tabelas, colunas, constraints, funções, policies RLS, migrações, saldos, lançamentos, documentos com estado, multiempresa ou qualquer regra que precise valer mesmo quando alguém escreve SQL direto, mesmo que a pessoa não diga "invariante".
 metadata:
-  version: "0.10.0"
+  version: "0.11.0"
 ---
 
 # Dados com garantia
@@ -13,18 +13,20 @@ Num sistema construído por agentes de IA, quem escreve no banco não passa só 
 
 ## As regras que valem sempre
 
-1. **Invariante de uma linha** é CHECK, NOT NULL, UNIQUE ou FK. **Invariante entre linhas** (soma, saldo, balanceamento, período) é trigger de constraint adiado **mais** lock da linha-mestra (ou SERIALIZABLE com retry). Só o trigger falha sob concorrência. O catálogo está em `references/invariantes.md`.
-2. **Quatro registros, nunca confundidos:** audit log (quem mudou o quê), event log (o que aconteceu, para outros módulos), ledger (movimentos que formam saldo) e diário contábil (lançamentos pelas regras contábeis). Ver `references/registros.md`.
-3. **O fato não se edita.** O que foi postado, emitido ou liquidado é terminal. A correção é um registro novo ligado ao original (estorno, espelho, evento). Saldo é derivado dos movimentos, nunca escrito à mão.
-4. **Dinheiro** em inteiro na menor unidade ou `numeric(p,s)` com escala declarada, sempre com a moeda ao lado. Nunca `float` nem `money`. Taxa de câmbio ausente falha, não vira 1. A política de arredondamento fica gravada no documento.
-5. **Tempo:** `timestamptz` para instantes, `date` para datas contábeis. Data do fato separada da data do registro quando corrigir o passado for possível. Vigência com range e `EXCLUDE`.
-6. **Número legal separado da chave técnica.** Sem lacuna por série, com tabela contadora na mesma transação. Sequence nunca é sem lacuna.
-7. **Idempotência em dois níveis:** a chave da tentativa (guarda o hash do pedido e a resposta) e a referência de negócio única (rejeita duplicata). Resultado desconhecido de uma chamada externa não é falha.
-8. **Tenant não é empresa.** O tenant é fronteira rígida; a empresa é dimensão de negócio. Sem decidir o modelo, não se gera schema: ver `references/tenancy.md`.
-9. **Negar por padrão, em duas camadas:** GRANT e RLS. Hooks e políticas extras só restringem, nunca ampliam. Escrita sensível só por função com permissão checada dentro. Ver `references/seguranca.md`.
-10. **Todo bypass tem nome, dono e trilha.** Service role, secret key, `BYPASSRLS`, `session_replication_role`, `DISABLE TRIGGER`: cada um listado, restrito e testado. Escotilha silenciosa é defeito.
-11. **Schema só muda por arquivo de migração**, em expand–contract, nunca editando migração aplicada. Ver `references/evolucao.md`.
-12. **Garantia sem teste adversarial é intenção.** Cada invariante tem um teste que tenta quebrá-la com o papel real, inclusive concorrência. Ver `references/testes.md`.
+1. **Três tipos de invariante.** De linha: CHECK, NOT NULL, UNIQUE, FK. Entre linhas: trigger adiado mais lock da linha-mestra, ou saldo materializado com CHECK quando toda escrita passa por porta (esta só detecta quem escreve fora). De consequência entre entidades ("pedido cancelado com dinheiro tem devolução"): uma **verificação que precisa voltar vazia**, rodada nos testes, no simulador e em produção só leitura. O catálogo e o mapa estado → consequência estão em `references/invariantes.md`.
+2. **Cada tabela declara a camada:** bruto (não se reescreve), estado (toda mudança grava evento), derivado (recalculável e conferido) ou definição (uma fórmula por conceito, que telas, relatórios e IA leem). O status que o usuário vê é um conceito com uma função. Ver `references/camadas.md`.
+3. **Quatro registros, nunca confundidos:** audit log (quem mudou o quê), event log (o que aconteceu, para outros módulos), ledger (movimentos que formam saldo) e diário contábil (lançamentos pelas regras contábeis). Ver `references/registros.md`.
+4. **O fato não se edita.** O que foi postado, emitido ou liquidado é terminal. A correção é um registro novo ligado ao original (estorno, espelho, evento). Saldo é derivado dos movimentos, nunca escrito à mão.
+5. **Dinheiro** em inteiro na menor unidade ou `numeric(p,s)` com escala declarada, sempre com a moeda ao lado. Nunca `float` nem `money`. Taxa de câmbio ausente falha, não vira 1. A política de arredondamento fica gravada no documento.
+6. **Tempo:** `timestamptz` para instantes, `date` para datas contábeis. Data do fato separada da data do registro quando corrigir o passado for possível. Vigência com range e `EXCLUDE`.
+7. **Número legal separado da chave técnica.** Sem lacuna por série, com tabela contadora na mesma transação. Sequence nunca é sem lacuna.
+8. **Idempotência em dois níveis:** a chave da tentativa (guarda o hash do pedido e a resposta) e a referência de negócio única (rejeita duplicata). Resultado desconhecido de uma chamada externa não é falha.
+9. **Tenant não é empresa.** O tenant é fronteira rígida; a empresa é dimensão de negócio. Sem decidir o modelo, não se gera schema: ver `references/tenancy.md`.
+10. **Negar por padrão, em duas camadas:** GRANT e RLS. Hooks e políticas extras só restringem, nunca ampliam. Escrita sensível só por função com permissão checada dentro. Ver `references/seguranca.md`.
+11. **Todo bypass tem nome, dono e trilha.** Service role, secret key, `BYPASSRLS`, `session_replication_role`, `DISABLE TRIGGER`: cada um listado, restrito e testado. Escotilha silenciosa é defeito.
+12. **Schema só muda por arquivo de migração**, em expand–contract, nunca editando migração aplicada. Ver `references/evolucao.md`.
+13. **Nada falha em silêncio:** job lê a resposta do que chamou, lote vai item a item, fila parada e dinheiro sem destino acendem alerta, e antes do primeiro cliente real vem a entrega 0 (backup restaurado, monitor, alertas). Ver `references/operacao.md`.
+14. **Garantia sem teste adversarial é intenção.** Cada invariante tem um teste que tenta quebrá-la com o papel real, inclusive concorrência. Ver `references/testes.md`.
 
 ## Como trabalhar
 
@@ -44,6 +46,8 @@ Num sistema construído por agentes de IA, quem escreve no banco não passa só 
 | Arquivo | Leia quando |
 |---|---|
 | `references/invariantes.md` | toda regra de negócio que precisa valer no banco; o catálogo invariante → mecanismo → armadilha |
+| `references/camadas.md` | camada de cada tabela, catálogo de definições, contrato de leitura, glossário, guardar o bruto, inventário de um sistema existente |
+| `references/operacao.md` | jobs, filas, alertas, credenciais, publicação e a entrega 0 antes do primeiro cliente real |
 | `references/registros.md` | ledger, saldo, documento com estado, estorno, dinheiro, tempo, numeração, período, idempotência |
 | `references/tenancy.md` | mais de um cliente, empresa ou filial; RLS por tenant |
 | `references/seguranca.md` | GRANT, RLS, funções, chaves, MFA, bypass, dado pessoal, leitura por IA |

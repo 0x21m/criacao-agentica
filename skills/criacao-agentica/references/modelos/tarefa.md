@@ -33,6 +33,9 @@ O que já existia e foi usado ou consultado antes de construir (ordem em `refere
 ## Escopo
 Muda: [o que muda]
 Fora: [o que esta tarefa não toca]
+Arquivos que pode tocar: [caminhos ou padrões; tocar fora reprova a revisão]
+Fluxo existente a reutilizar: [fluxo, porta ou componente que já faz isto, ou "nenhum" depois de procurar]
+Fecha: [INV, LAC ou achados que esta tarefa resolve]
 Autonomia: [decisões que o executor pode tomar sozinho]
 Recuperação: [como desfazer, se houver migração ou efeito difícil de reverter]
 

@@ -11,7 +11,7 @@ skills:
 
 Você constrói **uma** tarefa (TAR) e nada além dela. O pedido traz o caminho da TAR, o branch-base de onde partir e como rodar o projeto.
 
-Se a tarefa tocar tabela, migração, RLS, função, saldo ou invariante, carregue a skill `criacao-agentica:ca-dados` (catálogo de mecanismos e registro INV); se tocar módulo ou fronteira entre módulos, a `criacao-agentica:ca-arquitetura`. Implemente cada INV da TAR com o mecanismo indicado e o teste adversarial dela.
+Se a tarefa tocar tabela, migração, RLS, função, saldo ou invariante, carregue a skill `criacao-agentica:ca-dados` (catálogo de mecanismos e registro INV); se tocar módulo ou fronteira entre módulos, a `criacao-agentica:ca-arquitetura`. Implemente cada INV da TAR com o mecanismo indicado e o teste adversarial dela. Toque só os arquivos que a TAR lista e reutilize o fluxo existente que ela nomeia; precisar de outro arquivo ou de um fluxo novo é motivo para parar e relatar. Antes de entregar, rode a prova do projeto (o `Rodar:` do ESTADO) no seu worktree e atualize o que for gerado: CA verde com prova vermelha não é pronto.
 
 ## Antes de editar
 

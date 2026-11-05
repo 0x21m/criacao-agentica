@@ -5,7 +5,7 @@
 | Caminho | Quando | Garantia |
 |---|---|---|
 | **Porta** do dono | Escrever no domínio de outro módulo | Função transacional do dono, com permissão checada dentro |
-| **Interface** do dono | Ler ou calcular algo do outro de forma síncrona | Função privada, sem grant para papéis de aplicação |
+| **Interface** do dono | Ler ou calcular algo do outro, ou executar um passo que outra porta pediu | Função privada, sem grant para papéis de aplicação; o poder já foi checado na porta de entrada |
 | **Ponto em modo invariante** | O outro módulo pode vetar a operação (a venda não sai sem estoque) | Roda dentro da mesma transação; recusa desfaz tudo |
 | **Ponto em modo reação** | O outro módulo reage ao fato, mas não pode impedi-lo (dar pontos de fidelidade) | Roda depois do commit, por outbox; falha é registrada e reprocessada, não desfaz o fato |
 | **Ponto em modo consulta** | O outro módulo contribui com uma informação para uma leitura do dono (o saldo de pontos na tela do pedido) | Leitura pura, sem escrita, com a permissão do usuário; o dono reúne as respostas dos módulos ligados e a tela mostra o que vier, omitindo o "ausente" |
@@ -18,6 +18,10 @@ Leitura direta de tabela de outro dono é proibida, salvo o que o manifesto do n
 - O dono oferece o ponto (`pontos_oferecidos`), com contrato versionado.
 - Os módulos respondem (`respostas`), declarando o modo.
 - Só conta a resposta de módulo ligado; módulo ausente ou desligado é tratado pela resposta na ausência.
+- **Duas realizações de reação**, que o manifesto declara:
+  - **depois do commit, por outbox**, com nova tentativa e fila de atenção: o padrão;
+  - **na mesma transação, num savepoint**, sem nova tentativa: o fato e a reação ficam atômicos, mas a falha se perde (no PMD, prêmios de fidelidade e avisos perdidos). Só é permitida quando a reação não tem efeito externo e não carrega obrigação, e a falha dela entra na fila de atenção.
+- **Reação que carrega uma obrigação** (abrir o caso de devolução, devolver estoque, avisar o cliente) não pode sumir quando o módulo que reage está desligado. Ou o núcleo cumpre a obrigação por conta própria, ou o fato é recusado enquanto ninguém pode cumpri-la. Cumprir por conta própria quer dizer: o núcleo registra a obrigação como estado dele ("devolução devida"), na mesma transação do fato, visível numa tela do núcleo e coberta por uma verificação com alerta; o módulo opcional só acrescenta a superfície de atendimento. No PMD, com o pós-venda desligado, um pedido pago fechado como não concluído não abriu caso e o dinheiro ficou no limbo.
 - Uma reação nunca fura uma invariante, nem a do próprio módulo. Se a reação esbarraria numa (estorno de pontos que já foram gastos deixaria saldo negativo), ela registra a pendência e segue a política escrita para esse caso: permitir o negativo declarado, absorver ou mandar para uma pessoa. A política é uma regra de negócio (RN) decidida pela pessoa.
 - Invariante é para o que **não pode** acontecer; reação é para o que **deve acontecer depois**. Na dúvida, reação: invariante demais deixa a transação lenta e frágil.
 

@@ -34,6 +34,8 @@ Na dúvida entre dois níveis, escolha pelo pior dano possível de um erro, não
 | Dois usuários conhecidos dividindo dados (casal, sócios) | `mvp` | Há autorização entre eles e isolamento contra terceiros, mas sem volume |
 | Mudança num projeto existente que passa a guardar dados de outras pessoas (login novo) | `evolucao` com a matriz de `mvp` para a parte nova | O que existe fica Δ; o que nasce segue o nível do dano novo |
 
+Antes do primeiro cliente real (`mvp` com dados reais, `transacional`, `evolucao`), a **entrega 0** deixa o sistema operável: backup restaurado, monitor, alertas, isolamento de ambiente e roteiro de incidente (skill `ca-dados`, `references/operacao.md`). Sem ela, publicar para cliente real fica bloqueado por uma LAC.
+
 ## Matriz documento × nível
 
 `●` obrigatório, como arquivo próprio ou como seção completa de outro · `◐` seção curta (pode viver dentro do PRD ou do plano) · `○` uma linha `[NÃO SE APLICA — motivo]` · `Δ` só o que a mudança toca

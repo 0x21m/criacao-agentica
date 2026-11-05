@@ -11,6 +11,7 @@ Consulte antes de decidir. Se o caso não está aqui, registre a decisão como A
 | Algo que deve acontecer depois de um fato | Resposta em modo reação, ou consumidor de evento |
 | Número de relatório ou indicador | Consulta ou view; materializada só se medir lentidão |
 | Módulo que contribui com valor no documento de outro dono (desconto, taxa, frete) | O dono oferece um ponto de ajuste; o documento guarda a linha de ajuste com o módulo de origem e o valor congelado |
+| Nova forma de fazer uma ação que já existe (atalho, tela rápida) | Chama o fluxo existente; nunca uma porta paralela com outros passos |
 | Integração com serviço externo | Adapter num módulo próprio |
 | Dependência entre dois módulos opcionais | Ponte |
 | Variação por país, segmento ou cliente | Configuração ou dado do módulo, ou módulo condicionado ao contexto; nunca bifurcação do núcleo |

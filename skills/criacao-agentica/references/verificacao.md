@@ -29,6 +29,15 @@ Na segunda vez que você repetir a mesma checagem à mão, transforme-a em verif
 
 O verificador passa a ser citado nos CA que ele cobre. Uma regra vale para os dois formatos: se um passo falha, corrija e rode tudo de novo **desde o passo 1**. Verificação pela metade não se entrega.
 
+## QA de uso
+
+O código pode estar certo e o sistema errado para quem o usa. No PMD, um atalho de devolução construído, testado e revisado no mesmo dia caiu no primeiro clique do dono: era um segundo fluxo que pulava o caso.
+
+- **Cenários com papel e objetivo** ("a dona quer devolver o dinheiro de um pedido cancelado"), com uma linha **"isto não pode ser possível"** (devolver duas vezes, fechar o caso com dinheiro devido).
+- **Jogados por quem não lê o código**: um agente com o navegador, no ambiente local, com dados de teste. Cada achado volta ao código com a causa e um teste.
+- **Mão dupla:** o mapa do código (estado → quem escreve, ação → entradas) gera hipóteses, que viram cenários.
+- **Quando:** toda etapa que muda uma tela tem a sua rodada. Uma entrega `transacional` fecha com uma caminhada da pessoa pelos cenários principais.
+
 ## Revisão pelo nível de risco
 
 O risco vem da mudança, não de quem a escreveu, e fica no campo `Risco:` da TAR. Na dúvida, o nível de cima. Caminhos listados em "Caminhos que sempre pedem uma pessoa" do `REVIEW.md` são `alto`, qualquer que seja o tamanho da mudança.

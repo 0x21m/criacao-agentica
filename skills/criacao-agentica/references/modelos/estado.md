@@ -10,7 +10,10 @@ Objetivo atual: [entrega em andamento, com REQ-IDs]
 
 ## Esperando o responsável
 Primeiro o que só a pessoa pode decidir. Cada item com o que bloqueia, desde quando e a recomendação.
-- LAC-[ID]: [pergunta em linguagem simples] — bloqueia [TAR-IDs] — aberta em [data] — recomendo [opção e motivo]
+Comece já (demoram: advogado, tarefa manual, conta externa):
+- LAC-[ID]: [pergunta] — trava [N] TAR até [onda ou data] — recomendo [opção e motivo]
+Demais, pela quantidade de tarefas que travam:
+- LAC-[ID]: [pergunta em linguagem simples] — trava [N] TAR ([TAR-IDs]) até [onda ou data] — aberta em [data] — recomendo [opção e motivo]
 [ou: Nada pendente.]
 
 ## Em andamento
