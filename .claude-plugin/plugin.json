@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "criacao-agentica",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Metodologia de criação agêntica: da intenção do produto à entrega verificável, com documentos-contrato, IDs rastreáveis, auditoria antes de codar, verificação por quem não fez o trabalho e estado entre sessões. Inclui 7 agentes especializados.",
   "author": {
     "name": "0x21m",

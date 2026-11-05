@@ -14,7 +14,7 @@ import re
 import sys
 import unicodedata
 
-PREFIXOS = ("REQ", "RN", "CA", "FLX", "DEC", "ADR", "TAR", "LAC")
+PREFIXOS = ("REQ", "RN", "CA", "FLX", "DEC", "ADR", "TAR", "LAC", "INV")
 ID = re.compile(r"\b(?:%s)-\d{3,}\b" % "|".join(PREFIXOS))
 # Define um ID: no começo da linha ou de um título. Itens de lista e tabelas só referenciam.
 DEF = re.compile(r"^(#{1,6}\s+)?(?:\*\*)?((?:%s)-\d{3,})\b" % "|".join(PREFIXOS))

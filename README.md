@@ -16,6 +16,8 @@ O agente transforma decisões em software. Quando falta uma decisão, ele a reco
   - `scripts/checar.py`, que aponta problemas de rastreabilidade e a fronteira de tarefas prontas;
   - o **loop da entrega**: a skill monta um `/goal` que executa as tarefas da entrega uma a uma até todas fecharem ou o loop bater num freio (teto de turnos, lacuna, revisão que não converge) e termina com o que você precisa ler.
 - **Hooks de git** (só em projetos com `docs/ESTADO.md`; nos demais, não fazem nada). Pedem a sua confirmação antes de `push` e antes de commit ou merge na `main`, e barram o commit enquanto houver tarefa marcada concluída sem registro de verificação. Precisam de Python no PATH (`python` ou `python3`).
+- **A skill `ca-dados`:** garantias de dados no banco (PostgreSQL e Supabase). Cada invariante é declarada uma vez e garantida no banco, com o catálogo invariante → mecanismo → armadilha, os quatro registros (audit log, event log, ledger, diário), dinheiro, tempo, numeração legal, períodos, idempotência, tenancy, segurança, migração e testes adversariais.
+- **A skill `ca-arquitetura`:** o padrão de módulo para sistemas complexos e modulares: núcleo soberano, manifesto tipado, estados do módulo, ponte, tabela satélite, pontos entre módulos (invariante e reação), fronteiras verificadas por máquina e a tabela "onde vai o que é novo".
 - **7 agentes:**
 
   | Agente | Faz |

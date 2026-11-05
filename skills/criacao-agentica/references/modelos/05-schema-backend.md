@@ -19,7 +19,8 @@ Nome canônico: [nome]
 Finalidade e proprietário: [significado e usuário/equipe responsável]
 Campos: [nome, tipo, obrigatório, padrão e validação]
 Identificador e relações: [chaves e cardinalidade]
-Restrições: [unicidade, integridade e invariantes]
+Restrições: [unicidade e integridade de linha]
+Fonte de verdade: [quem escreve cada campo crítico, quem lê, onde nunca é duplicado]
 Índices: [consulta atendida e motivo]
 Estados e transições: [referência às regras de negócio]
 
@@ -32,7 +33,12 @@ Isolamento: [como usuário/equipe não acessa registros de outro]
 
 ## Operações e contratos
 Por operação: [ator, entrada, validação, efeito, saída e erros]
-Transação/concorrência: [invariantes e proteção quando aplicável]
+Transação/concorrência: [lock, isolamento e retry quando aplicável]
+
+## Invariantes
+Uma por regra que precisa valer no banco, no formato da skill `ca-dados` (references/invariantes.md):
+INV-[NNN] — [regra]
+Mecanismo: [...] | Contorno possível: [...] | Proteção do contorno: [...] | Teste: [...] | Evidência: [DECLARADO/GARANTIDO/TESTADO]
 Reenvio seguro: [estratégia para operações sujeitas a duplicação]
 
 ## Ciclo de vida
