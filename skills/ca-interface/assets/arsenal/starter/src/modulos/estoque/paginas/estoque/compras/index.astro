@@ -1,0 +1,8 @@
+---
+// Módulo Estoque · rota /estoque/compras/ (compras de fornecedor; ?id=CMP-0007 abre a compra).
+import AppShell from "@/components/app/AppShell.astro";
+import Compras from "../../../telas/Compras";
+---
+<AppShell titulo="Compras do estoque">
+  <Compras client:load />
+</AppShell>

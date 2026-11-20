@@ -1,0 +1,8 @@
+---
+// Módulo Início · rota / (a visão do dia). Os dados de exemplo renderizam no servidor: a tela chega pronta no HTML.
+import AppShell from "@/components/app/AppShell.astro";
+import VisaoGeral from "../telas/VisaoGeral";
+---
+<AppShell titulo="Visão geral">
+  <VisaoGeral client:load />
+</AppShell>

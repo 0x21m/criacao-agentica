@@ -1,0 +1,41 @@
+---
+// Moldura do app: barra lateral recolhível (desktop), barra superior global (busca Ctrl K, notificações, conta),
+// área da página (cada página abre com <BarraFerramentas>) e barra de abas no celular.
+// As partes com estado ficam com transition:persist: não remontam ao trocar de página (STK-26).
+// A navegação vem do registro dos módulos (src/modulos/registro.ts).
+import Base from "@/layouts/Base.astro";
+import BarraLateral from "./BarraLateral";
+import BarraSuperior from "./BarraSuperior";
+import AbasInferiores from "./AbasInferiores";
+import GuardaDeModulo from "./GuardaDeModulo";
+import { rotaAtual } from "@/lib/url";
+import { moduloPorId } from "@/modulos/registro";
+import { moduloDaRota } from "@/modulos/rotas";
+
+interface Props { titulo: string }
+const { titulo } = Astro.props;
+// item ativo já no HTML do servidor; a casca hidrata depois da tela (client:idle): os links funcionam antes disso
+const rota = rotaAtual(Astro.url.pathname);
+// guarda de rota (EST-47): a página de um módulo leva o id dele; se o módulo não estiver ligado, o aviso entra no lugar
+// da tela (o Base.astro marca html[data-modulo-indisponivel] antes da pintura e o CSS esconde a tela do módulo)
+const idDoModulo = moduloDaRota(rota);
+const mod = idDoModulo ? moduloPorId(idDoModulo) : undefined;
+const guarda = idDoModulo && mod ? {
+  id: idDoModulo, nome: mod.nome, rota: mod.nav[0]?.caminho, de: rota,
+  ondeLigar: moduloPorId("configuracoes") ? `configuracoes/modulos/#${idDoModulo}` : undefined,
+} : null;
+---
+<Base titulo={titulo} modulo={guarda?.id}>
+  <BarraLateral client:idle rota={rota} transition:persist="lateral" />
+  <BarraSuperior client:idle transition:persist="topo" />
+  <div class="lg:pl-[var(--lateral)] transition-[padding] duration-300 ease-[var(--ease-out)] motion-reduce:transition-none">
+    <main id="conteudo" tabindex="-1" transition:name="conteudo"
+      class="min-h-dvh pt-[var(--topo)] pb-[calc(var(--abas)+env(safe-area-inset-bottom))] outline-none lg:pb-8">
+      {guarda && <div data-guarda-modulo><GuardaDeModulo client:load {...guarda} /></div>}
+      <slot />
+    </main>
+  </div>
+  <AbasInferiores client:idle rota={rota} transition:persist="abas" />
+  <!-- camadas de tela cheia (abertura, etc.) ficam fora do <main>, que forma contexto de empilhamento por causa do transition:name -->
+  <slot name="sobreposicao" />
+</Base>

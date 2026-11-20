@@ -1,0 +1,8 @@
+---
+// Módulo Clientes · rota /clientes/novo/ (?nome= vem da busca sem resultado).
+import AppShell from "@/components/app/AppShell.astro";
+import NovoCliente from "../../../telas/NovoCliente";
+---
+<AppShell titulo="Novo cliente">
+  <NovoCliente client:load />
+</AppShell>

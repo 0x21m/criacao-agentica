@@ -1,0 +1,117 @@
+---
+// /site/ — a landing da Oficina Norte (spec 5.13, jornada da Juliana passo 1). Feita com a design-taste-frontend:
+// cada seção ocupa uma ou duas telas, a entrada do hero no carregamento e dois momentos sorteados.
+import SiteLayout from "@/modulos/site/casca/SiteLayout.astro";
+import Foto from "@/modulos/site/casca/Foto.astro";
+import { SITE, SERVICOS, PASSOS, PERGUNTAS, ROTAS } from "@/proto/site";
+const linkHorario = ROTAS.agendar("limpeza-split", "2026-11-17T10:00");
+
+const seta = `<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg>`;
+const h = SITE.proximoHorario;
+---
+<SiteLayout
+  titulo="Oficina Norte: ar-condicionado e elétrica em Belo Horizonte"
+  descricao="Técnicos próprios limpam, instalam e consertam split em casas e comércios de BH e Contagem, com preço antes da visita e agenda pelo site."
+>
+  <!-- HERO split: o texto em 5 colunas, a fotografia do trabalho em 6, o próximo horário livre no cartão -->
+  <section class="hero hero--split" data-enter aria-labelledby="hero-h">
+    <div class="wrap"><div class="hero-text grid hero__grid">
+      <div class="hero__text span-5">
+        <p class="hero__kicker"><span class="dot" aria-hidden="true"></span>BH, Contagem, Betim, Nova Lima e Sabará</p>
+        <h1 id="hero-h">Técnicos de ar-condicionado em BH</h1>
+        <p class="hero__lead">Limpeza, instalação e conserto de split em casas e comércios, feitos pela nossa equipe. A limpeza custa R$ 220,00, com hora marcada e {SITE.garantiaDias} dias de garantia.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href={ROTAS.servico("limpeza-split")}>Agendar limpeza<Fragment set:html={seta} /></a>
+          <a class="btn btn--secondary" href={ROTAS.servico("conserto-ar")}>Pedir avaliação</a>
+        </div>
+      </div>
+      <div class="hero__media span-6 start-7">
+        <Foto id="f160025964" eager alt="Técnico ligando o manômetro e as mangueiras na unidade externa de um ar-condicionado" sizes="(max-width: 1023px) 100vw, 80vw" style="--ly-pos: 62% 50%" />
+        <a class="ly-float" href={linkHorario} aria-label={`Reservar o próximo horário livre: limpeza de split, ${h.dia}, às ${h.hora}`}>
+          <div class="ly-float__row"><span class="ly-live">Próximo horário livre</span><span>{h.hora}</span></div>
+          <div class="ly-float__title">Limpeza de split, {h.dia}</div>
+        </a>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- SERVIÇOS: peek-list (cada serviço tem a própria fotografia; ela troca com o ponteiro, o foco ou o toque) -->
+  <section class="section" id="servicos" style="--hm: 2" aria-labelledby="servicos-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="servicos-h">Serviços e preços, da limpeza à montagem</h2>
+      </div>
+      <div class="grid grid--top fill" data-peek>
+        <ul class="rows span-5">
+          {SERVICOS.map((s) => (
+            <li data-peek-to={s.id} tabindex="0">
+              <a class="rows__name" href={ROTAS.servico(s.id)}>{s.nome}</a>
+              <p>{s.linha}</p>
+              <span class="rows__value">{s.valor}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="frame frame--photo frame--fill span-6 start-7">
+          {SERVICOS.map((s, i) => (
+            <Foto id={s.foto} class="frame__img" alt={s.alt} loading="eager" data-peek-for={s.id} hidden={i > 0} sizes="(max-width: 639px) 200vw, (max-width: 1023px) 100vw, 80vw" />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISITA E GARANTIA: uma afirmação que se acende palavra por palavra ao rolar (word-highlight) -->
+  <section class="section statement" id="visita-e-garantia" data-moment="word-highlight" aria-label="Visita e garantia">
+    <div class="wrap">
+      <p class="t-label">Visita e garantia</p>
+      <p class="mo-wh__text">Para conserto e serviço elétrico, a visita de diagnóstico custa {SITE.taxaVisita} e sai do preço quando você aprova o orçamento. O orçamento vale {SITE.validadeOrcamentoDias} dias e todo serviço tem <strong>{SITE.garantiaDias} dias de garantia</strong>.</p>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA: os três passos à esquerda; a fotografia revela-se uma vez ao entrar (picture-develops, filme) -->
+  <section class="section" id="como-funciona" aria-labelledby="como-h">
+    <div class="wrap grid grid--top">
+      <div class="span-5">
+        <div class="section-head">
+          <h2 id="como-h">Agendamento da visita em 3 passos</h2>
+          <p>Do site até o técnico na sua porta.</p>
+        </div>
+        <ol class="passos">
+          {PASSOS.map((p) => (<li><h3>{p.titulo}</h3><p>{p.texto}</p></li>))}
+        </ol>
+      </div>
+      <figure class="develop span-6 start-7" data-moment="picture-develops"><Foto id="f190519567" alt="Grade de uma unidade externa de ar-condicionado vista de perto, de lado" sizes="(max-width: 1023px) 100vw, 50vw" /></figure>
+    </div>
+  </section>
+
+  <!-- PERGUNTAS: faq com todas as respostas abertas -->
+  <section class="section secao-faq" id="perguntas" aria-labelledby="perguntas-h">
+    <div class="wrap grid grid--top">
+      <div class="span-5 stack-4">
+        <h2 id="perguntas-h">Perguntas</h2>
+        <p class="muted">O que mais perguntam antes de agendar.</p>
+        <p><a class="link" href={ROTAS.contato()}>Falar com o atendimento</a></p>
+      </div>
+      <div class="faq span-6 start-7">
+        {PERGUNTAS.map((q) => (<div class="faq__item"><h3>{q.p}</h3><p>{q.r}</p></div>))}
+      </div>
+    </div>
+  </section>
+
+  <!-- LOJA: photo-pair, as duas fotografias numa proporção só; some com a loja desligada em Configurações -->
+  <section class="section" id="loja" aria-labelledby="loja-h" data-parte-loja>
+    <div class="wrap">
+      <div class="section-head section-head--split">
+        <div>
+          <h2 id="loja-h">Loja de peças na Pampulha. <span class="muted">Aparelhos, filtros e material elétrico.</span></h2>
+          <p>Compre pelo site e retire no balcão da Pampulha, ou receba em casa.</p>
+        </div>
+        <a class="btn btn--secondary" href={ROTAS.loja()}>Comprar peças</a>
+      </div>
+      <div class="dupla fill">
+        <div class="frame frame--photo"><Foto id="f43676063" class="frame__img" alt="Dois filtros de ar com moldura branca encostados numa parede de metal" sizes="(max-width: 639px) 100vw, 50vw" /></div>
+        <div class="frame frame--photo"><Foto id="f11759360" class="frame__img" alt="Disjuntores, barramento e uma caixa de quadro elétrico novos sobre a bancada" sizes="(max-width: 639px) 100vw, 50vw" /></div>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

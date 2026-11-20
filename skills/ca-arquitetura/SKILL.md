@@ -2,7 +2,7 @@
 name: ca-arquitetura
 description: Padrão de módulo para sistemas complexos e modulares construídos com IA (ERPs, mas também módulos de conversa, automação, IA que lê os outros módulos, integrações com o mundo físico). Define o núcleo soberano, o manifesto tipado de cada módulo, os estados de um módulo (ausente, ligado, desligado com dados, removido), a ponte entre dois módulos, a tabela satélite, os pontos entre módulos (invariante e reação), a instalação com backfill, a remoção que preserva dados e as fronteiras verificadas por máquina. Use ao criar, ligar, desligar, remover ou integrar um módulo, ao decidir onde fica um campo, regra, estado ou integração nova, ou quando um módulo precisar ler ou reagir a outro, mesmo que a pessoa não diga "módulo".
 metadata:
-  version: "0.11.0"
+  version: "0.12.0"
 ---
 
 # Arquitetura de sistemas modulares

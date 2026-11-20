@@ -2,7 +2,7 @@
 name: ca-dados
 description: Garantias de dados no banco para sistemas transacionais complexos (ERPs, financeiro, estoque, fiscal, módulos de conversa, automação e IA) em PostgreSQL e Supabase. Ensina a declarar cada invariante uma vez e garanti-la no banco (constraint, trigger adiado, lock, RLS), a separar audit log, event log, ledger e diário, e a tratar dinheiro, tempo, numeração legal, períodos, idempotência, tenancy, segurança, migração e testes adversariais. Use ao desenhar ou mudar tabelas, colunas, constraints, funções, policies RLS, migrações, saldos, lançamentos, documentos com estado, multiempresa ou qualquer regra que precise valer mesmo quando alguém escreve SQL direto, mesmo que a pessoa não diga "invariante".
 metadata:
-  version: "0.11.0"
+  version: "0.12.0"
 ---
 
 # Dados com garantia

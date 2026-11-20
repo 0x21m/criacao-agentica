@@ -15,7 +15,8 @@ CHECAR = pathlib.Path(__file__).resolve().parent.parent / "skills" / "criacao-ag
 INDICE = """Família de skills e quando chamar cada uma:
 - criacao-agentica:criacao-agentica — o método: modos, documentos, TAR, ESTADO, verificação, git.
 - criacao-agentica:ca-dados — tabela, migração, RLS, função, saldo, ledger, dinheiro, período, tenancy ou qualquer invariante (registro INV).
-- criacao-agentica:ca-arquitetura — módulo novo, ligar, desligar ou remover módulo, fronteira entre módulos, "onde fica isto"."""
+- criacao-agentica:ca-arquitetura — módulo novo, ligar, desligar ou remover módulo, fronteira entre módulos, "onde fica isto".
+- criacao-agentica:ca-interface — tela, fluxo, protótipo, componente, DESIGN.md e tokens, estados de tela, notificação ou chat com cliente, revisão de interface."""
 
 
 def raiz_do_projeto(cwd):
@@ -62,7 +63,7 @@ def main():
         return 0
     if dados.get("hook_event_name") == "SubagentStart":
         texto = ("[criacao-agentica] Este projeto segue o método criacao-agentica. Use os termos do GLOSSARY.md e os IDs "
-                 "de docs/ (REQ, CA, TAR, INV). Se a sua tarefa tocar dados ou módulos, carregue a skill indicada antes de agir.\n"
+                 "de docs/ (REQ, CA, TAR, INV). Se a sua tarefa tocar dados, módulos ou interface, carregue a skill indicada antes de agir.\n"
                  + INDICE)
         print(json.dumps({"hookSpecificOutput": {"hookEventName": "SubagentStart", "additionalContext": texto}}))
         return 0

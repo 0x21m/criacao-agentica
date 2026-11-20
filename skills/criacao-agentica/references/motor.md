@@ -43,11 +43,13 @@ O que fazer quando uma skill não está instalada está na última coluna da tab
 | Especificar → plano | `to-tickets` | Fatiar a entrega em TAR bala traçadora, com `Bloqueada por:` e expand–contract | Use a seção "Fatiamento" do plano |
 | Especificar (dados) | `ca-dados` (deste plugin) | Invariantes no registro INV, mecanismo no banco, testes adversariais | Catálogo em `ca-dados/references/invariantes.md` |
 | Especificar (módulos) | `ca-arquitetura` (deste plugin) | Manifesto, dono de cada objeto, pontos entre módulos, onde fica o que é novo | `ca-arquitetura/references/onde-vai.md` |
+| Especificar (interface) | `ca-interface` (deste plugin) | Pontas e projeção no `03`, direção e sistema no `04`, referências, protótipo aprovado pela pessoa (DEC) antes de construir | `ca-interface/references/documentacao-e-integracao.md` |
 | Executar (uma TAR) | `implement` → `tdd` → revisão | Construir pela costura combinada, teste vermelho primeiro, revisão em dois eixos | Siga o modo Executar de `modos.md` |
+| Executar (TAR com tela) | `ca-interface` + agente `ca-verificador-ui` | CA de interface do `checklist.md` dela; verificação no navegador e QA de uso por quem não fez | `ca-interface/references/verificacao.md` |
 | Executar (fronteira inteira) | Loop da entrega (`loop.md`), com o `/goal` nativo; em paralelo, `implement-spec` | Uma TAR por vez até a entrega fechar ou bater num freio; o `implement-spec` põe subagentes em worktrees, um por TAR, integrando num branch | Uma TAR por vez, pelo Próxima |
 | Corrigir bug | `diagnosing-bugs` | Loop que fica vermelho antes de qualquer hipótese; teste de regressão antes do fix | `references/falhas.md` |
 | Revisar | `ponytail-review`, rodada pelo agente `ca-revisor` | Correção, segurança, carga real, teste do que é arriscado, velocidade e o que cortar; um caso concreto por achado e um veredito | `ca-verificador` |
-| Conformidade com a TAR (risco alto) | agente `ca-verificador` | Cego: CA contra o diff, prova por mutação, isolamento entre usuários | — |
+| Conformidade com a TAR (risco médio e alto) | agente `ca-verificador` | Cego: CA contra o diff, prova por mutação, isolamento entre usuários | — |
 | Encerrar entrega | `ponytail-debt`, depois `retro` | Erro mecânico vira checagem determinística; julgamento vira padrão de código; CLAUDE.md só com ponteiros | "Falha que importou deixa um caso", em `falhas.md` |
 | Adotar / saúde do código | `ponytail-audit`; entre entregas, `improve-codebase-architecture` e `codebase-design` | Oportunidades de módulos profundos; vocabulário de costura e interface | — |
 | A qualquer momento | `wait-what` | Reexplicar em linguagem simples, com o glossário | — |
@@ -56,9 +58,11 @@ O que fazer quando uma skill não está instalada está na última coluna da tab
 
 ## Tensões já resolvidas
 
-- **Costuras de teste** (`tdd`, `to-spec` mandam confirmar com o usuário): ficam registradas na seção "Costuras de teste" da TAR e o `ca-revisor-plano` as confere. Só vão ao responsável quando são costura nova ou mudam a arquitetura.
+- **Costuras de teste** (`tdd`, `to-spec` mandam confirmar com o usuário): ficam registradas na seção "Costuras de teste" da TAR e o `ca-revisor-plano` as confere. A que muda a arquitetura é decidida pelo agente, registrada na TAR e mostrada no relatório, sem esperar a pessoa.
 - **`to-spec`** não cria arquivo de spec. O issue-tracker.md distribui cada seção no documento dono. O modo Especificar costuma substituí-lo; use-o quando a conversa já decidiu tudo e só falta sintetizar.
-- **Verificação:** a `ponytail-review` roda em toda entrega. O nosso `ca-verificador` (cego, com prova por mutação e teste de isolamento) e o `/security-review` nativo entram a mais nas TAR de risco `alto` (tabela em `verificacao.md`). Os dois recebem o `REVIEW.md`.
+- **Verificação:** a `ponytail-review` roda em toda entrega. O nosso `ca-verificador` (cego, com prova por mutação e teste de isolamento) entra a mais nas TAR de risco `médio` e `alto`, e o `/security-review` nativo nas de risco `alto` (tabela em `verificacao.md`). Os dois recebem o `REVIEW.md`.
+- **`prototype` × portão de protótipo:** lacuna de aparência ou de fluxo de tela vai para a `ca-interface`, que fecha com a aprovação da pessoa registrada como DEC no `04`; a `prototype` fica para dúvida de comportamento sem tela.
+- **`ca-revisor` × `ca-revisor-ui`:** o `ca-revisor` roda em toda TAR; quando a TAR muda tela, o `ca-revisor-ui` entra a mais, para o eixo de interface. Um não substitui o outro.
 - **Tamanho dos testes:** a `tdd` pede teste primeiro; a ponytail pede um teste pequeno só para lógica não trivial. Valem as duas: todo CA tem verificador, e o verificador de uma mudança trivial pode ser um comando ou uma inspeção, sem teste novo.
 - **Atalho deliberado:** um limite conhecido vira comentário `shortcut: <limite>, <quando melhorar>` no código. Não é LAC enquanto tiver gatilho; o `ponytail-debt` o recolhe no Encerrar.
 - **Revisão de padrões:** o `code-review` do Matt Pocock não é usado; a `ponytail-review` cobre o eixo de padrões. Quando `tdd`, `implement` ou `implement-spec` mandam chamar "code-review", cai no `/code-review` nativo do Claude Code, o que é aceitável.
@@ -80,8 +84,11 @@ Um subagente só se paga quando isola saída volumosa, precisa de independência
 | `ca-revisor-plano` | Executar, risco alto | TAR contra o repositório, antes de codar | leitura + busca de fontes | sonnet, high |
 | `ca-construtor` | Executar | Uma TAR num worktree, `tdd` pré-carregada, fontes oficiais antes de editar | tudo, menos criar subagentes | sonnet, medium; opus e high na chamada em risco alto |
 | `ca-revisor` | Executar, toda TAR | `ponytail-review` + `REVIEW.md` em contexto limpo | só leitura | sonnet, high |
-| `ca-verificador` | Executar, risco alto | Cego: CA, mutação, isolamento, num worktree | leitura + Edit no worktree | opus, high |
+| `ca-verificador` | Executar, risco médio e alto | Cego: CA, mutação, isolamento, num worktree | leitura + Edit no worktree | opus, high |
 | `ca-rodador` | qualquer | Roda suíte, build ou comando longo; devolve só as falhas | Bash, Read | haiku, low |
+| `ca-referencias` | Especificar (interface) | 3 a 6 referências de bom gosto, de pelo menos 2 fontes, antes do protótipo | leitura + busca de fontes | sonnet, medium |
+| `ca-revisor-ui` | Executar, TAR com tela | Revisão de interface em contexto limpo, achados P0 a P3 por domínio | só leitura | sonnet, high |
+| `ca-verificador-ui` | Executar, TAR com tela | Navegador por quem não fez: viewports, estados, medidas e QA de uso | leitura + navegador | sonnet, high |
 
 As definições vivem na pasta `agents/` do plugin `criacao-agentica`. Instalados pelo plugin, os agentes aparecem com o prefixo do plugin (`criacao-agentica:ca-construtor`); se alguém copiar os arquivos para `~/.claude/agents/`, aparecem sem prefixo. Use o nome que estiver na lista de agentes disponíveis. A `implement-spec` pode usar o `ca-construtor` como seu implementador. Especialistas externos, só quando o projeto pedir: `claude-security` (auditoria de segurança profunda), `code-modernization` (legado pesado), `pr-review-toolkit` (falhas silenciosas e testes fracos que apareçam em "Já escapou").
 
@@ -91,7 +98,7 @@ As definições vivem na pasta `agents/` do plugin `criacao-agentica`. Instalado
 - **Worktree sem ambiente:** um worktree é uma cópia nova. Teste que falha por falta de `.env` ou de dependência é problema de ambiente, não de código: confira o `.worktreeinclude` e instale as dependências no worktree. Se reinstalar a cada worktree pesa, proponha à pessoa `worktree.symlinkDirectories: ["node_modules"]` no `.claude/settings.json` do projeto.
 - **`/security-review`:** também roda sobre a pasta da sessão. Fora do repositório, aplique o procedimento dele num agente `general-purpose`, passando o intervalo de commits (`git -C <projeto> diff <base>..<branch>`).
 - **Ferramenta de perguntas ausente** (num subagente ou num teste): escreva as perguntas na resposta, no formato da `grilling` (numeradas, com recomendação, "sim" aceita), e pare.
-- **Custo:** o `ca-verificador` é o agente mais caro (pode passar de 100 mil tokens numa TAR grande). Ele se paga em risco alto; não o rode em risco baixo ou médio.
+- **Custo:** o `ca-verificador` é o agente mais caro (pode passar de 100 mil tokens numa TAR grande). Ele se paga em risco médio e alto; não o rode em risco baixo.
 
 ## Fronteira de fase
 

@@ -1,0 +1,14 @@
+schema_version: "1.1"
+name: nova-tela-rastreio-cliente
+expected_outcome: |
+  Modo criar tela nova num sistema existente. A resposta lê o DESIGN.md e usa os
+  tokens e componentes existentes; traduz cada estado interno do pedido para uma
+  frase do cliente sem jargão (tabela de projeção), decidindo o que fica oculto
+  (notas internas, custo do frete); inclui os dados que o cliente procura no
+  rastreio (data prevista, progresso incluindo etapas antes do envio,
+  transportadora e código com link, histórico datado, itens e total) e os estados
+  de exceção (entrega não realizada, cancelamento pendente, reembolso); pensa
+  primeiro no celular e em abrir pelo link sem login; e apresenta um protótipo com
+  dados falsos para aprovação antes de construir a versão definitiva.
+context:
+  scaffold_script: place-files.sh

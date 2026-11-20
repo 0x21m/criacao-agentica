@@ -15,12 +15,13 @@ O agente transforma decisões em software. Quando falta uma decisão, ele a reco
   - `docs/ESTADO.md` como ponto de retomada entre sessões;
   - `scripts/checar.py`, que aponta problemas de rastreabilidade e a fronteira de tarefas prontas;
   - o **loop da entrega**: a skill monta um `/goal` que executa as tarefas da entrega uma a uma até todas fecharem ou o loop bater num freio (teto de turnos, lacuna, revisão que não converge) e termina com o que você precisa ler.
-- **Hook de início** (só em projetos com `docs/ESTADO.md` ou `docs/01-prd.md`): ao abrir, retomar ou compactar a sessão, põe no contexto o índice das três skills, o estado do `checar.py` e a próxima ação do ESTADO; cada subagente recebe o índice curto. Assim o método e as skills de dados e de arquitetura entram sem depender de alguém lembrar.
+- **Hook de início** (só em projetos com `docs/ESTADO.md` ou `docs/01-prd.md`): ao abrir, retomar ou compactar a sessão, põe no contexto o índice das quatro skills, o estado do `checar.py` e a próxima ação do ESTADO; cada subagente recebe o índice curto. Assim o método e as skills de dados, de arquitetura e de interface entram sem depender de alguém lembrar.
 - **Hook de delegação** (só em projetos do método): confere se cada chamada de agente tem modelo e as linhas do briefing (Objetivo, Pronto quando, Resposta, Pare quando). Avisa por padrão e recusa no nível transacional.
 - **Hooks de git** (só em projetos com `docs/ESTADO.md`; nos demais, não fazem nada). Pedem a sua confirmação antes de `push` e antes de commit ou merge na `main`, e barram o commit enquanto houver tarefa marcada concluída sem registro de verificação. Precisam de Python no PATH (`python` ou `python3`).
 - **A skill `ca-dados`:** garantias de dados no banco (PostgreSQL e Supabase). Cada invariante é declarada uma vez e garantida no banco, com o catálogo invariante → mecanismo → armadilha, os quatro registros (audit log, event log, ledger, diário), dinheiro, tempo, numeração legal, períodos, idempotência, tenancy, segurança, migração e testes adversariais.
 - **A skill `ca-arquitetura`:** o padrão de módulo para sistemas complexos e modulares: núcleo soberano, manifesto tipado, estados do módulo, ponte, tabela satélite, pontos entre módulos (invariante e reação), fronteiras verificadas por máquina e a tabela "onde vai o que é novo".
-- **7 agentes:**
+- **A skill `ca-interface`:** telas, apps e fluxos do sistema inteiro (painel do operador, ERP ou CRM, app e portal do cliente, loja, parceiros, chat e notificações) em desktop, tablet e celular, com referências de bom gosto, um protótipo aprovado por você antes de construir, `DESIGN.md` e tokens, estados de cada tela, revisão de interface e QA de uso no navegador.
+- **10 agentes:**
 
   | Agente | Faz |
   |---|---|
@@ -29,8 +30,11 @@ O agente transforma decisões em software. Quando falta uma decisão, ele a reco
   | `ca-revisor-plano` | Confronta uma tarefa de risco alto com o repositório antes de codar |
   | `ca-construtor` | Constrói uma tarefa num worktree próprio, teste primeiro |
   | `ca-revisor` | Revisa em contexto limpo cada tarefa construída |
-  | `ca-verificador` | Verifica às cegas uma tarefa de risco alto, com prova por mutação e teste de isolamento |
+  | `ca-verificador` | Verifica às cegas uma tarefa de risco médio ou alto, com prova por mutação e teste de isolamento |
   | `ca-rodador` | Roda suíte e build e devolve só as falhas |
+  | `ca-referencias` | Busca de 3 a 6 referências de bom gosto antes do protótipo de uma tela ou fluxo |
+  | `ca-revisor-ui` | Revisa uma tela, fluxo ou diff de interface em contexto limpo, com achados P0 a P3 |
+  | `ca-verificador-ui` | Verifica no navegador, sem ter feito o trabalho, viewports, estados e o QA de uso |
 
 ## Instalar
 
@@ -74,7 +78,7 @@ Abra o Claude Code **dentro da pasta do projeto** e diga o que quer:
 - "quero adotar a criacao-agentica neste projeto", num projeto que já tem código;
 - "e agora?", num projeto que já usa o método.
 
-O agente pergunta antes de criar qualquer arquivo.
+O agente cria só os documentos mínimos, marca como `[ASSUMIDO]` o que escolheu por você e pergunta na mesma rodada; você corrige o que discordar.
 
 ## Créditos
 

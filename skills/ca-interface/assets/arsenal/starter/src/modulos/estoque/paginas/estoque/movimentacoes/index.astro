@@ -1,0 +1,8 @@
+---
+// Módulo Estoque · rota /estoque/movimentacoes/ (o que entrou e saiu; ?sku= filtra um produto).
+import AppShell from "@/components/app/AppShell.astro";
+import Movimentacoes from "../../../telas/Movimentacoes";
+---
+<AppShell titulo="Movimentações do estoque">
+  <Movimentacoes client:load />
+</AppShell>

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Interface (ca-interface)"
+  short_description: "Cria e revisa telas, apps e fluxos com protótipo aprovado"
+policy:
+  allow_implicit_invocation: true

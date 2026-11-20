@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: criar-app-barbearia-aberto
+expected_outcome: |
+  Pedido curto e aberto. A resposta descobre as pontas (barbeiro, recepção ou dono,
+  cliente que agenda pelo celular), propõe direções de personalidade distintas com
+  referências, monta um protótipo com biblioteca de componentes, ícones e folha do
+  sistema, cobre estados da agenda (livre, reservado, confirmado, atrasado, falta,
+  cancelado) e termina pedindo aprovação e decisões, sem construir back-end.

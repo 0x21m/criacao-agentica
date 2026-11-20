@@ -1,0 +1,8 @@
+---
+// Módulo Mensagens · rota /mensagens/ (?conversa=CV-0031 abre a conversa; ?caixa= e ?q= filtram a lista).
+import AppShell from "@/components/app/AppShell.astro";
+import Mensagens from "../../telas/Mensagens";
+---
+<AppShell titulo="Mensagens">
+  <Mensagens client:load />
+</AppShell>

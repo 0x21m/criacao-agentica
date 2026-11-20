@@ -1,0 +1,48 @@
+---
+// /site/contato/ — canais (spec 5.13). Telefone fictício da spec, sem link tel: (regra 9 da taste); e-mail só no
+// mailto, num .example (stand-in até o cliente dar o endereço real); endereço só com o bairro.
+import "@/styles/global.css";
+import SiteLayout from "@/modulos/site/casca/SiteLayout.astro";
+import BannerSite from "@/modulos/site/casca/BannerSite";
+import { SITE, UNIDADES, HORARIO, PORTAL, linkRegiao } from "@/proto/site";
+---
+<SiteLayout
+  titulo="Contato: Oficina Norte, ar-condicionado em BH"
+  descricao="Fale com a Oficina Norte por WhatsApp ou e-mail, ou acompanhe seu pedido pelo portal do cliente."
+  atual="contato"
+>
+  <div class="wrap interna-banner">
+    <BannerSite
+      client:load
+      sobrelinha="Atendimento"
+      titulo="Fale com a Oficina Norte"
+      descricao="Segunda a sexta das 8:00 às 18:00 e sábado das 8:00 às 12:00. Quem já tem pedido fala com a gente pela conversa do pedido, no portal."
+      fatos={[
+        { rotulo: "WhatsApp", valor: SITE.whatsapp },
+        { rotulo: "Loja e balcão", valor: "Bandeirantes, BH" },
+        { rotulo: "Base de campo", valor: "Eldorado, Contagem" },
+      ]}
+      acao={{ rotulo: "Enviar e-mail", href: `mailto:${SITE.email}`, secundaria: { rotulo: "Abrir o portal", href: PORTAL.entrada() } }}
+    />
+  </div>
+  <div class="bloco">
+    <div class="wrap grid grid--top">
+      <div class="span-5 stack-4">
+        <h2>Unidades</h2>
+        {UNIDADES.map((u) => (
+          <div>
+            <h3 class="t-card">{u.nome}</h3>
+            <p>{u.papel}. {u.bairro}, {u.cidade}.</p>
+            <p><a class="link" href={linkRegiao(u)}>Ver a região</a></p>
+          </div>
+        ))}
+      </div>
+      <div class="span-6 start-7 stack-4">
+        <h2>Horário</h2>
+        <dl class="hours" data-tz="America/Sao_Paulo">
+          {HORARIO.map((h) => (<><dt data-days={h.dataDays}>{h.dias}</dt><dd>{h.horas}</dd></>))}
+        </dl>
+      </div>
+    </div>
+  </div>
+</SiteLayout>

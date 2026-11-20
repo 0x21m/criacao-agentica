@@ -1,0 +1,46 @@
+---
+// Catálogo vivo: tudo o que o protótipo pode usar, funcionando. Some com node scripts/limpar-arsenal.mjs.
+import AppShell from "@/components/app/AppShell.astro";
+import { GRUPOS } from "@/arsenal/catalogo";
+import { CATALOGO } from "@/arsenal/fontes";
+import { url } from "@/lib/url";
+import { MODULOS } from "@/modulos/registro";
+import { importsDoTexto, usoDaPeca } from "../../../scripts/mapa-arsenal.mjs";
+
+// mapa de uso (scripts/mapa-arsenal.mjs): que módulos usam cada peça, pela varredura dos imports no build
+const nomeDe = (id: string) => MODULOS.find((m) => m.id === id)?.nome ?? id;
+function emUso(importar: string) {
+  const usos = importsDoTexto(importar).map((a) => usoDaPeca(a));
+  const mods = [...new Set(usos.flatMap((u) => Object.keys(u.modulos)))].map(nomeDe);
+  const casca = usos.some((u) => u.casca), paginas = usos.some((u) => u.paginas.length);
+  if (casca) return "Em uso: casca do painel" + (mods.length ? ` e ${mods.length} módulos` : "");
+  if (mods.length) return "Em uso: " + mods.join(", ");
+  return paginas ? "Em uso: páginas do protótipo" : "Nenhuma tela usa ainda";
+}
+---
+<AppShell titulo="Arsenal">
+  <div data-barra-ferramentas class="casca-fixa sticky top-[var(--topo)] z-20 px-4 py-3 md:px-6 md:py-4">
+    <h1 class="t-pagina">Arsenal</h1>
+    <p class="truncate text-sm text-muted-foreground" title="Escolha, importe e adapte. Tudo aqui responde ao tema, ao vidro e ao preset.">Escolha, importe e adapte. Tudo aqui responde ao tema, ao vidro e ao preset.</p>
+  </div>
+  <div class="grid gap-8 p-4 md:p-6">
+    {GRUPOS.map((g) => { const itens = CATALOGO.filter((i) => i.grupo === g.id); return (
+      <section aria-labelledby={`g-${g.id}`}>
+        <h2 id={`g-${g.id}`} class="t-secao">{g.nome}</h2>
+        <p class="mb-3 text-sm text-muted-foreground">{g.texto}</p>
+        {/* sem card órfão: 4 colunas quando 3 deixariam um sozinho na última linha */}
+        <ul class:list={["grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2", itens.length % 3 === 1 && itens.length > 3 ? "xl:grid-cols-4" : "xl:grid-cols-3"]}>
+          {itens.map((i) => (
+            <li class="min-w-0">
+              <a href={url(i.destino ?? `arsenal/${i.id}/`)} data-nivel="card" data-interativa class="sup flex h-full flex-col gap-1 rounded-[var(--raio-sup)] p-4 outline-none">
+                <span class="t-card">{i.nome}</span>
+                <span class="line-clamp-2 text-sm text-muted-foreground">{i.quandoUsar}</span>
+                <span class="mt-auto truncate pt-1 text-xs text-muted-foreground" title={emUso(i.importar)} data-uso-arsenal>{emUso(i.importar)}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ); })}
+  </div>
+</AppShell>

@@ -1,0 +1,10 @@
+---
+import AppShell from "@/components/app/AppShell.astro";
+import { BannerSobreposto } from "@/components/sistema/BannerSobreposto";
+import QuadroDeCombinacoes from "@/components/sistema/QuadroDeCombinacoes";
+---
+<AppShell titulo="Folha do sistema">
+  <BannerSobreposto client:load variante="compacta" titulo="Folha do sistema" descricao="Cores, tipografia, superfícies, vidro, botões, campos, selos e estados do preset, nas 4 combinações. Contraste medido no navegador." />
+  <div class="h-4"></div>
+  <QuadroDeCombinacoes client:load />
+</AppShell>

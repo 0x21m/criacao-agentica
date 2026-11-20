@@ -1,0 +1,52 @@
+---
+// /site/precos/ — tabela simples de serviços (spec 5.13). Os valores vêm de SERVICOS (src/proto/site.ts).
+import "@/styles/global.css";
+import SiteLayout from "@/modulos/site/casca/SiteLayout.astro";
+import BannerSite from "@/modulos/site/casca/BannerSite";
+import { SERVICOS, SITE, ROTAS, acaoDoServico } from "@/proto/site";
+import { semQuebra } from "@/modulos/site/dados";
+
+const TIPO = { fechado: "Preço fechado", "a-partir": "Confirmado na visita", orcamento: "Sob orçamento", hora: "Por hora" } as const;
+---
+<SiteLayout
+  titulo="Preços: Oficina Norte, ar-condicionado em BH"
+  descricao="Tabela de preços da Oficina Norte: limpeza de split por R$ 220,00, instalação, conserto, serviço elétrico e montagem, com as taxas e prazos."
+  atual="precos"
+>
+  <div class="wrap interna-banner">
+    <BannerSite
+      client:load
+      sobrelinha="Antes de agendar"
+      titulo="Tabela de preços"
+      descricao="Preço fechado para limpeza e instalação. Conserto e serviço elétrico começam por uma visita de diagnóstico."
+      fatos={[
+        { rotulo: "Visita de diagnóstico", valor: SITE.taxaVisita },
+        { rotulo: "Validade do orçamento", valor: `${SITE.validadeOrcamentoDias} dias` },
+        { rotulo: "Garantia", valor: `${SITE.garantiaDias} dias` },
+      ]}
+      nota={`A visita de diagnóstico é abatida do conserto quando você aprova o orçamento. Pix vale ${SITE.pixMinutos} minutos; boleto vence em ${SITE.boletoDias} dias.`}
+    />
+  </div>
+  <div class="bloco">
+    <div class="wrap">
+      <h2 class="sr-only">Serviços e valores</h2>
+      <table class="tabela-precos">
+        <thead><tr><th scope="col">Serviço</th><th scope="col">Como cobra</th><th scope="col">Duração</th><th scope="col">Valor</th><th scope="col"><span class="sr-only">Ação</span></th></tr></thead>
+        <tbody>
+          {SERVICOS.map((s) => {
+            const a = acaoDoServico(s);
+            return (
+              <tr>
+                <td><a class="link" href={ROTAS.servico(s.id)}>{semQuebra(s.nome)}</a></td>
+                <td>{TIPO[s.tipo]}</td>
+                <td>{s.duracao}</td>
+                <td class="valor">{s.valor}</td>
+                <td><a class="link" href={a.href}>{a.rotulo}</a></td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</SiteLayout>

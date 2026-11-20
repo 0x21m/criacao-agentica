@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: criar-erp-assistencia-tecnica
+expected_outcome: |
+  Modo criar do zero. Antes de qualquer código de produção, a resposta entrega:
+  perguntas de descoberta curtas e úteis; mapa de pontas e atores (balcão, técnico,
+  dono, cliente, loja online, entrega, WhatsApp); os objetos com ciclo de vida
+  (ordem de serviço, pedido, unidade de estoque, peça, pagamento) e a tabela de
+  estados da ordem de serviço com rótulo do operador e frase do cliente; um MVP
+  recortado com justificativa; referências com link e o que se aproveita; e um
+  protótipo navegável com dados falsos em pt-BR (ou o plano dele) apresentado
+  para aprovação, terminando com a pergunta de aprovação em vez de construir tudo.

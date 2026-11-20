@@ -18,7 +18,7 @@ Quem constrói avalia o próprio trabalho com boa vontade: sabe o que quis fazer
 2. **Confira o que mudou, não só que a sua mudança está lá.** Leia o diff inteiro: ferramentas reescrevem arquivos (finais de linha, aspas, ordem) quando você edita uma linha só.
 3. **Tente quebrar a própria prova.** Para os critérios que importam, devolva o defeito de propósito (reverta a linha, inverta a condição) e veja o teste falhar. Teste que sobrevive ao próprio defeito não prova nada. Restaure o código depois.
 4. Duas verificações verdes não são uma suíte verde. Rode o que existe completo e inclua casos que deveriam falhar.
-5. **Olhe.** O que tem tela é capturado em cada estado afetado, em largura de celular e de desktop, e lido como a pessoa leria. Procure `undefined`, `null`, `NaN`, `[object Object]` e `Invalid Date` no texto visível. O navegador é compartilhado entre sessões e agentes: abra uma aba própria, confira a origem (endereço e porta) antes de digitar ou clicar, e comece com o armazenamento do site limpo. Use dados de teste que você mesmo criou.
+5. **Olhe.** O que tem tela é capturado em cada estado afetado, em largura de celular e de desktop, e lido como a pessoa leria. Procure `undefined`, `null`, `NaN`, `[object Object]` e `Invalid Date` no texto visível. O navegador é compartilhado entre sessões e agentes: abra uma aba própria, confira a origem (endereço e porta) antes de digitar ou clicar, e comece com o armazenamento do site limpo. Use dados de teste que você mesmo criou. Larguras, estados, medidas e o agente `ca-verificador-ui` estão em `references/verificacao.md` da skill `ca-interface`.
 6. **Teste que pode derrubar ou travar o processo** (o vermelho de "o servidor cai") roda com tempo limite (`timeout 60 …`) ou em processo filho, para não pendurar a sessão.
 
 ## Checagem que se repete vira verificador do projeto
@@ -36,6 +36,7 @@ O código pode estar certo e o sistema errado para quem o usa. No PMD, um atalho
 - **Cenários com papel e objetivo** ("a dona quer devolver o dinheiro de um pedido cancelado"), com uma linha **"isto não pode ser possível"** (devolver duas vezes, fechar o caso com dinheiro devido).
 - **Jogados por quem não lê o código**: um agente com o navegador, no ambiente local, com dados de teste. Cada achado volta ao código com a causa e um teste.
 - **Mão dupla:** o mapa do código (estado → quem escreve, ação → entradas) gera hipóteses, que viram cenários.
+- **Quem e como:** o agente `ca-verificador-ui`; a geração dos cenários a partir da projeção do `03`, das transições do `05` e das INV está na `ca-interface` (DOC-25, VER-28).
 - **Quando:** toda etapa que muda uma tela tem a sua rodada. Uma entrega `transacional` fecha com uma caminhada da pessoa pelos cenários principais.
 
 ## Revisão pelo nível de risco
@@ -45,10 +46,10 @@ O risco vem da mudança, não de quem a escreveu, e fica no campo `Risco:` da TA
 | Risco | Exemplos | Revisão |
 |---|---|---|
 | `baixo` | texto, documentação, mudança aditiva atrás de flag | `ponytail-review` |
-| `médio` | mudança comum de produto | `ponytail-review`; o responsável aprova lendo a evidência antes de integrar |
-| `alto` | auth, cobrança, dados de terceiros, migração, CI, instalador, efeito difícil de desfazer | o acima + `ca-revisor-plano` antes de codar + `ca-verificador` + `/security-review`; aprovação do responsável antes de integrar |
+| `médio` | mudança comum de produto | `ponytail-review` + `ca-verificador`; o veredito dele libera a integração, sem aprovação humana |
+| `alto` | auth, cobrança, dados de terceiros, migração, CI, instalador, efeito difícil de desfazer | o acima + `ca-revisor-plano` antes de codar + `/security-review`; aprovação do responsável antes de integrar |
 
-A aprovação humana é condição para **integrar** na base, não para concluir a TAR: a TAR concluída libera as dependentes no branch de trabalho, e a aprovação espera em "Esperando o responsável" no ESTADO. Aprovação de agente nunca ocupa o lugar de uma aprovação humana. A aprovação vale para o commit aprovado: commit novo depois dela pede nova aprovação.
+No risco alto, a aprovação humana é condição para **integrar** na base, não para concluir a TAR: a TAR concluída libera as dependentes no branch de trabalho, e a aprovação espera em "Esperando o responsável" no ESTADO. Aprovação de agente nunca ocupa o lugar de uma aprovação humana. A aprovação vale para o commit aprovado: commit novo depois dela pede nova aprovação.
 
 ## Revisão padrão
 
@@ -56,7 +57,7 @@ Entregue o `REVIEW.md` ao revisor junto com o diff: ele não o lê sozinho. Toda
 
 ## Verificação independente
 
-Use, além da revisão padrão, em toda TAR de risco `alto`. Chame o agente `ca-verificador` e entregue a ele o `REVIEW.md`.
+Use, além da revisão padrão, em toda TAR de risco `médio` ou `alto`. Chame o agente `ca-verificador` e entregue a ele o `REVIEW.md`.
 
 - Ele recebe **só** os CA com seus verificadores, o diff ou intervalo de commits e como rodar o projeto. Não recebe o seu relatório nem a conversa: um verificador que lê a explicação de quem construiu começa a concordar com ela.
 - Só tem acesso de leitura e de execução. Se achar defeito, relata. Um verificador que corrige virou um segundo construtor, e aí ninguém está verificando.

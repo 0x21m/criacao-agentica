@@ -1,0 +1,8 @@
+---
+// Módulo Equipe · rota /equipe/ (?id=PES-11 abre a pessoa; ?q=&papel=&estado= filtram).
+import AppShell from "@/components/app/AppShell.astro";
+import Pessoas from "../../telas/Pessoas";
+---
+<AppShell titulo="Equipe e permissões">
+  <Pessoas client:load />
+</AppShell>

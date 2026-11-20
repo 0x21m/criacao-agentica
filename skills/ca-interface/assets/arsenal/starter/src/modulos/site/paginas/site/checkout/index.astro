@@ -1,0 +1,13 @@
+---
+// /site/checkout/ · fechar a compra: entrega ou retirada, dados e Pix (5.13).
+import "@/styles/global.css";
+import SiteLayout from "../../../casca/SiteLayout.astro";
+import LojaFechada from "../../../casca/LojaFechada.astro";
+import Checkout from "../../../telas/Checkout";
+---
+<SiteLayout titulo="Fechar a compra: loja da Oficina Norte" descricao="Escolha entre retirar no balcão da Pampulha ou receber em casa e pague com Pix." atual="loja" transacional>
+  <div class="wrap transacao">
+    <div data-loja-aberta><Checkout client:load /></div>
+    <LojaFechada />
+  </div>
+</SiteLayout>

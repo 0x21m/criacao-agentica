@@ -1,0 +1,21 @@
+---
+// /site/loja/<sku>/ · a página do produto (5.13; CLI-37). Rota estática pelo catálogo da semente (D8): todo produto que
+// já foi vendido online tem página, inclusive o fora de linha ("Fora de linha" e semelhantes, nunca 404).
+import "@/styles/global.css";
+import SiteLayout from "../../../casca/SiteLayout.astro";
+import LojaFechada from "../../../casca/LojaFechada.astro";
+import Produto from "../../../telas/Produto";
+import { produtos } from "@/modulos/estoque/dados";
+
+export function getStaticPaths() {
+  return produtos.semente().filter((p) => p.categoria !== "Peças").map((p) => ({ params: { sku: p.id.toLowerCase() }, props: { sku: p.id, nome: p.nome, preco: p.preco } }));
+}
+const { sku, nome, preco } = Astro.props as { sku: string; nome: string; preco: number };
+const valor = preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+---
+<SiteLayout titulo={`${nome}: loja da Oficina Norte`} descricao={`${nome} por ${valor} na loja da Oficina Norte, com retirada na Pampulha ou entrega em BH e região.`} atual="loja" transacional>
+  <div class="wrap transacao">
+    <div data-loja-aberta><Produto client:load sku={sku} /></div>
+    <LojaFechada />
+  </div>
+</SiteLayout>

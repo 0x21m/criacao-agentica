@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: revisar-listagem-de-pedidos
+expected_outcome: |
+  Modo revisar. A resposta entrega um relatório com achados priorizados P0–P3,
+  cada um com evidência no arquivo, impacto, correção e critério de aceite; aponta
+  os problemas graves primeiro (exclusão otimista sem rollback nem desfazer real,
+  ações só no hover inutilizáveis no tablet, botões só-ícone sem nome acessível,
+  status só por cor, zoom bloqueado, filtros fora da URL) antes de acabamento;
+  declara o que não pôde verificar; e não altera o arquivo sem mostrar antes um
+  antes/depois para aprovação.
+context:
+  scaffold_script: place-files.sh

@@ -1,0 +1,8 @@
+---
+// Módulo Agenda · rota /agenda/minha/ (o "Meu dia" do técnico).
+import AppShell from "@/components/app/AppShell.astro";
+import MinhaAgenda from "../../../telas/MinhaAgenda";
+---
+<AppShell titulo="Meu dia">
+  <MinhaAgenda client:load />
+</AppShell>

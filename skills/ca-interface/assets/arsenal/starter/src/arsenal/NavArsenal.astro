@@ -1,0 +1,24 @@
+---
+// Navegação própria do /arsenal: grupos e itens. Fica ao lado do palco no desktop e no topo no celular.
+import { GRUPOS } from "./catalogo";
+import { CATALOGO } from "./fontes";
+import { url } from "@/lib/url";
+interface Props { atual?: string }
+const { atual } = Astro.props;
+---
+<nav aria-label="Arsenal" class="text-sm">
+  <a href={url("arsenal/")} class:list={["mb-3 block rounded-md px-2 py-2.5 lg:py-1.5 font-medium hover:bg-muted", !atual && "bg-muted"]}>Todo o arsenal</a>
+  {GRUPOS.map((g) => (
+    <div class="mb-3">
+      <p class="px-2 pb-1 text-xs font-medium text-muted-foreground">{g.nome}</p>
+      <ul>
+        {CATALOGO.filter((i) => i.grupo === g.id).map((i) => (
+          <li>
+            <a href={url(`arsenal/${i.id}/`)} aria-current={i.id === atual ? "page" : undefined}
+              class:list={["block truncate rounded-md px-2 py-2.5 lg:py-1.5 hover:bg-muted", i.id === atual && "bg-muted font-medium"]} title={i.nome}>{i.nome}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</nav>

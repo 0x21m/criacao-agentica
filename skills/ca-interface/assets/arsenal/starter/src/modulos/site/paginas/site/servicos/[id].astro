@@ -1,0 +1,70 @@
+---
+// /site/servicos/<id>/ — a página de cada serviço (spec 5.13; jornada da Juliana, passo 2). Rota estática: o
+// catálogo é fixo na semente (D8). O botão principal leva ao ponto de entrada do portal (/portal/?acao=...),
+// ainda não construído: ver PORTAL em src/proto/site.ts.
+import "@/styles/global.css";
+import SiteLayout from "@/modulos/site/casca/SiteLayout.astro";
+import BannerSite from "@/modulos/site/casca/BannerSite";
+import Foto from "@/modulos/site/casca/Foto.astro";
+import { SERVICOS, SITE, ROTAS, acaoDoServico, agendaDireto, type Servico } from "@/proto/site";
+import { semQuebra } from "@/modulos/site/dados";
+
+export function getStaticPaths() {
+  return SERVICOS.map((s) => ({ params: { id: s.id }, props: { servico: s } }));
+}
+const { servico: s } = Astro.props as { servico: Servico };
+const acao = acaoDoServico(s);
+const direto = agendaDireto(s);
+const nota = direto
+  ? `Garantia de ${SITE.garantiaDias} dias a partir da entrega. Remarque ou cancele pelo portal até o serviço começar.`
+  : `Respondemos com o orçamento em até 2 dias úteis. Visita de ${SITE.taxaVisita}, abatida se você aprovar.`;
+const outros = SERVICOS.filter((o) => o.id !== s.id);
+---
+<SiteLayout
+  titulo={`${s.nome}: Oficina Norte em BH`}
+  descricao={`${s.nome} em Belo Horizonte e região: ${s.valor}, ${s.duracao}. ${s.resumo}`}
+  atual="servicos"
+  fechamento={{ titulo: direto ? `Agende: ${semQuebra(s.nome.toLowerCase())}` : "Peça a visita de diagnóstico", linha: nota, rotulo: acao.rotulo, href: acao.href }}
+>
+  <div class="wrap interna-banner">
+    <BannerSite
+      client:load
+      sobrelinha="Serviços"
+      titulo={semQuebra(s.nome)}
+      descricao={s.resumo}
+      fatos={[
+        { rotulo: "Preço", valor: s.valor },
+        { rotulo: "Duração", valor: s.duracao },
+        { rotulo: "Garantia", valor: `${SITE.garantiaDias} dias` },
+      ]}
+      acao={{ rotulo: acao.rotulo, href: acao.href, secundaria: { rotulo: "Ver tabela de preços", href: ROTAS.precos() } }}
+      nota={nota}
+    />
+  </div>
+
+  <div class="bloco">
+    <div class="wrap grid grid--top">
+      <div class="span-5 stack-4">
+        <h2 id="inclui-h">O que inclui</h2>
+        <ul class="rows">
+          {s.inclui.map((i) => (<li><span class="rows__name">{i}</span></li>))}
+        </ul>
+        {!direto && <p class="muted">O preço sai no orçamento, com mão de obra e peças separadas. O orçamento vale {SITE.validadeOrcamentoDias} dias.</p>}
+      </div>
+      <div class="frame frame--photo span-6 start-7" style="aspect-ratio: 4 / 3">
+        <Foto id={s.foto} class="frame__img" alt={s.alt} eager />
+      </div>
+    </div>
+  </div>
+
+  <div class="bloco">
+    <div class="wrap">
+      <h2 id="outros-h">Outros serviços</h2>
+      <ul class="rows" style="margin-top: var(--s-6)">
+        {outros.map((o) => (
+          <li><a class="rows__name link" href={ROTAS.servico(o.id)}>{semQuebra(o.nome)}</a><span class="rows__value">{o.valor}</span></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</SiteLayout>

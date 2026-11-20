@@ -1,0 +1,9 @@
+---
+// Portal do cliente · /portal/ (5.12): o início da Juliana. ?acao=agendar|avaliacao|loja&servico=… chega dos botões do
+// site (src/proto/site.ts, PORTAL) e mostra o próximo passo do que a pessoa pediu.
+import CascaCliente from "../../telas/CascaCliente.astro";
+import Inicio from "../../telas/Inicio";
+---
+<CascaCliente titulo="Início">
+  <Inicio client:load />
+</CascaCliente>

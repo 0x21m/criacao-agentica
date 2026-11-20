@@ -1,0 +1,8 @@
+---
+// Módulo Agenda · rota /agenda/livres/ (horários livres por serviço; bancada da GradeDeHorarios do Site e do Portal).
+import AppShell from "@/components/app/AppShell.astro";
+import HorariosLivres from "../../../telas/HorariosLivres";
+---
+<AppShell titulo="Horários livres">
+  <HorariosLivres client:load />
+</AppShell>

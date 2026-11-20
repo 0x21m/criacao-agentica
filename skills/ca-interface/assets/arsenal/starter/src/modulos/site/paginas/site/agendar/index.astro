@@ -1,0 +1,9 @@
+---
+// /site/agendar/?servico=limpeza-split · agendar pelo site (5.13; jornada da Juliana, passos 2 a 7).
+import "@/styles/global.css";
+import SiteLayout from "../../../casca/SiteLayout.astro";
+import Agendar from "../../../telas/Agendar";
+---
+<SiteLayout titulo="Agendar: Oficina Norte, ar-condicionado em BH" descricao="Agende limpeza, instalação, conserto, serviço elétrico ou montagem com a Oficina Norte: horários livres da semana e Pix na hora." atual="agendar" transacional>
+  <div class="wrap transacao"><Agendar client:load /></div>
+</SiteLayout>

@@ -1,0 +1,9 @@
+---
+// /site/confirmacao/?id=OS-1070 · a confirmação do agendamento ou da compra (5.13; CLI-30; jornada, passo 8).
+import "@/styles/global.css";
+import SiteLayout from "../../../casca/SiteLayout.astro";
+import Confirmacao from "../../../telas/Confirmacao";
+---
+<SiteLayout titulo="Confirmação: Oficina Norte" descricao="O número do seu pedido, o que acontece agora, o comprovante e o acesso ao portal do cliente." atual="agendar" transacional>
+  <div class="wrap transacao"><Confirmacao client:load /></div>
+</SiteLayout>

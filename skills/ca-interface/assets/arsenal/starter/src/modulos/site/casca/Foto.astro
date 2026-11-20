@@ -1,0 +1,23 @@
+---
+// Uma fotografia do site: srcset em WebP, largura e altura certas, preguiçosa por padrão (a do hero é "eager").
+import { foto } from "@/components/site/fotos";
+interface Props { id: string; alt: string; sizes?: string; class?: string; eager?: boolean; style?: string; [k: string]: unknown }
+const { id, alt, sizes = "(max-width: 1023px) 100vw, 50vw", class: classe, eager = false, style, ...resto } = Astro.props;
+const f = foto(id);
+---
+<img
+  class={classe}
+  src={f.src}
+  srcset={f.srcset}
+  sizes={sizes}
+  width={f.width}
+  height={f.height}
+  alt={alt}
+  style={style}
+  loading={eager ? "eager" : "lazy"}
+  fetchpriority={eager ? "high" : undefined}
+  decoding="async"
+  data-source="stand-in"
+  data-subject={id}
+  {...resto}
+/>
