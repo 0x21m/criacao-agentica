@@ -1,0 +1,8 @@
+---
+// Módulo Financeiro · rota /financeiro/receber/
+import AppShell from "@/components/app/AppShell.astro";
+import Contas from "../../../telas/Contas";
+---
+<AppShell titulo="Contas a receber">
+  <Contas client:load natureza="receber" />
+</AppShell>

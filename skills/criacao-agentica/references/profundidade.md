@@ -22,7 +22,7 @@ A mesma escada da ponytail, aplicada a documentos. Para cada documento ou seçã
 | `transacional` | Dinheiro movimentado, estoque, dados de terceiros em volume, reserva cujo conflito causa prejuízo | Regras de estado, concorrência, repetição de operações, integrações e recuperação |
 | `evolucao` | Produto existente recebendo mudança | Diagnóstico do atual, contratos preservados, documentação concentrada na mudança |
 
-Na dúvida entre dois níveis, escolha pelo pior dano possível de um erro, não pelo tamanho do código. Um app pequeno que guarda dados de saúde é `mvp` ou mais. O agente recomenda o nível; a pessoa confirma.
+Na dúvida entre dois níveis, escolha pelo pior dano possível de um erro, não pelo tamanho do código. Um app pequeno que guarda dados de saúde é `mvp` ou mais. O agente escolhe o nível e o declara (ADR-0001 e relatório); a pessoa troca se discordar.
 
 **Casos que confundem:**
 

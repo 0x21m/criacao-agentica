@@ -1,0 +1,8 @@
+---
+// Módulo Agenda · rota /agenda/ (dia por recurso; semana de um recurso).
+import AppShell from "@/components/app/AppShell.astro";
+import AgendaOficina from "../../telas/AgendaOficina";
+---
+<AppShell titulo="Agenda">
+  <AgendaOficina client:load />
+</AppShell>

@@ -1,0 +1,17 @@
+---
+// O que aparece no lugar da loja quando Configurações a desliga ou ela sai do ar (EST-47): o HTML vem do servidor e o
+// CSS do site o mostra só com html[data-loja] (marcado antes da pintura): nada da loja pisca. Sem ação morta.
+import { ROTAS, PORTAL } from "@/proto/site";
+---
+<section data-loja-fechada class="loja-fechada" aria-labelledby="loja-fechada-h">
+  <h1 id="loja-fechada-h" class="t-h3">
+    <span data-se-loja="desligada">A loja online está fechada</span>
+    <span data-se-loja="fora">A loja online está fora do ar</span>
+  </h1>
+  <p data-se-loja="desligada">A venda no balcão da Pampulha continua, de segunda a sábado. Os serviços seguem com agenda pelo site.</p>
+  <p data-se-loja="fora">Só a loja não responde agora; os serviços e o portal funcionam. Tente de novo em instantes.</p>
+  <div class="btn-row">
+    <a class="btn btn--primary" href={ROTAS.agendar("limpeza-split")}>Agendar limpeza</a>
+    <a class="btn btn--secondary" href={PORTAL.entrada()}>Abrir o portal</a>
+  </div>
+</section>

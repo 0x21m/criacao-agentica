@@ -1,0 +1,133 @@
+---
+// Quadro de fluxos (PRO-11): telas reais do protótipo, uma faixa por fluxo, a seta saindo do elemento tocado (contorno)
+// e chegando na tela seguinte; ramos de erro e conflito com borda de perigo e o rótulo "Ramo". Agrupado por módulo na
+// ordem do registro dos módulos (src/modulos/registro.ts). Cada fluxo de scripts/quadro.mjs declara o módulo no campo
+// `modulo`: o id do módulo ("pedidos") ou um caminho da navegação dele ("pedidos/novo/").
+// As telas vêm de `node scripts/quadro.mjs` (public/quadro/quadro.json + PNGs).
+import fs from "node:fs";
+import AppShell from "@/components/app/AppShell.astro";
+import { BannerSobreposto } from "@/components/sistema/BannerSobreposto";
+import { MODULOS, achatar } from "@/modulos/registro";
+import { ROTAS_DOS_MODULOS } from "@/modulos/rotas";
+import { MATRIZ, PAPEIS, type Capacidade } from "@/proto/permissoes";
+import { url } from "@/lib/url";
+
+type Tela = { arquivo: string; legenda: string; rect: { x: number; y: number; width: number; height: number } | null; ramo: boolean; w: number; h: number };
+type Fluxo = { id: string; modulo: string; ponta: string; telas: Tela[] };
+const caminho = "public/quadro/quadro.json";
+const dados: { geradoEm?: string; aparencia?: Record<string, string>; fluxos: Fluxo[] } = fs.existsSync(caminho) ? JSON.parse(fs.readFileSync(caminho, "utf8")) : { fluxos: [] };
+const GAP = 64;
+const largura = (t: Tela) => (t.w > 600 ? 340 : 190);
+const doModulo = (m: (typeof MODULOS)[number], f: Fluxo) =>
+  f.modulo === m.id || m.nav.some((n) => n.caminho === f.modulo || n.filhos?.some((x) => x.caminho === f.modulo));
+const grupos = MODULOS
+  .map((m) => ({ nome: m.nome, fluxos: dados.fluxos.filter((f) => doModulo(m, f)) }))
+  .filter((g) => g.fluxos.length);
+// Mapa dos módulos, gerado do registro no build: rotas (pastas paginas/), quem vê (a capacidade do primeiro item da
+// navegação na MATRIZ), coleções e dependências. É a mesma tabela do LEIAME (scripts/gerar-docs.mjs).
+const PONTA: Record<string, string> = { operador: "Painel", cliente: "Portal do cliente", publico: "Site", ferramenta: "Protótipo" };
+function quemVe(m: (typeof MODULOS)[number]) {
+  if (m.ponta === "cliente") return "A cliente da sessão";
+  if (m.ponta !== "operador") return "Todos";
+  if (!m.nav.length) return "Fora da navegação (links e Ctrl K)";
+  const cap = achatar(m.nav).find((i) => i.capacidade)?.capacidade as Capacidade | undefined;
+  if (!cap) return "Todos os papéis";
+  const linha = MATRIZ[cap] as Record<string, unknown>;
+  const ps = PAPEIS.filter((p) => linha[p.id] !== false);
+  return ps.length === PAPEIS.length ? "Todos os papéis" : ps.map((p) => p.nome).join(", ");
+}
+const mapa = MODULOS.map((m) => ({
+  id: m.id, nome: m.nome, ponta: PONTA[m.ponta] ?? m.ponta, quem: quemVe(m), colecoes: m.colecoes, depende: m.depende.map((d) => MODULOS.find((x) => x.id === d)?.nome ?? d),
+  rotas: ROTAS_DOS_MODULOS.filter((r) => r.modulo === m.id).map((r) => r.rota).sort(),
+}));
+const quando = dados.geradoEm ? new Date(dados.geradoEm).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) : null;
+---
+<AppShell titulo="Quadro de fluxos">
+  <BannerSobreposto client:load variante="compacta" titulo="Quadro de fluxos"
+    descricao={`Telas reais do protótipo. Cada seta sai do elemento tocado e chega na tela seguinte; faixas com "Ramo" são caminhos de erro e conflito.${quando ? ` Gerado em ${quando}.` : ""}`} />
+  <div class="grid gap-8 px-4 pt-4 pb-8 md:px-6">
+    <section class="grid gap-3" aria-label="Mapa dos módulos">
+      <header>
+        <h2 class="t-secao">Mapa dos módulos</h2>
+        <p class="text-sm text-pretty text-muted-foreground">{mapa.length} módulos, lidos do registro no build: rotas, quem vê, coleções e de quem cada um depende.</p>
+      </header>
+      <div class="sup rounded-[var(--raio-sup)] p-1.5" data-nivel="card">
+        <ul class="divide-y divide-[color-mix(in_oklch,var(--foreground)_8%,transparent)]">
+          {mapa.map((m) => (
+            <li class="grid grid-cols-[minmax(0,1fr)] gap-2 px-3 py-3 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-4" data-mapa-modulo={m.id}>
+              <div class="min-w-0">
+                <p class="t-card">{m.nome}</p>
+                <p class="text-xs text-muted-foreground">{m.ponta} · <code class="font-mono">{m.id}</code></p>
+              </div>
+              <dl class="grid min-w-0 gap-1.5 text-sm sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-x-3">
+                <dt class="text-xs text-muted-foreground sm:pt-0.5">Rotas</dt>
+                <dd class="flex min-w-0 flex-wrap gap-x-2 gap-y-1">
+                  {m.rotas.length ? m.rotas.map((r) => r.includes("[") ? <span class="inline-flex items-center font-mono text-xs text-muted-foreground" title="Rota dinâmica: uma página por registro">/{r}</span> : <a href={url(r)} class="inline-flex items-center font-mono text-xs underline-offset-2 hover:underline pointer-coarse:min-h-10 pointer-coarse:min-w-10">/{r}</a>) : <span class="text-muted-foreground">Páginas em src/pages</span>}
+                </dd>
+                <dt class="text-xs text-muted-foreground sm:pt-0.5">Quem vê</dt>
+                <dd class="text-pretty">{m.quem}</dd>
+                <dt class="text-xs text-muted-foreground sm:pt-0.5">Coleções</dt>
+                <dd class="text-pretty">{m.colecoes.length ? m.colecoes.join(", ") : "Nenhuma (lê as dos outros)"}</dd>
+                <dt class="text-xs text-muted-foreground sm:pt-0.5">Depende de</dt>
+                <dd class="text-pretty">{m.depende.length ? m.depende.join(", ") : "Nenhum"}</dd>
+              </dl>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+    {grupos.length === 0 && (
+      <div class="sup rounded-[var(--raio-sup)] p-6 text-sm" data-nivel="card">
+        <p class="t-card">Nenhum fluxo capturado ainda</p>
+        <p class="mt-1 text-muted-foreground">Rode <code class="font-mono">node scripts/quadro.mjs</code> com o protótipo no ar para gerar as telas.</p>
+      </div>
+    )}
+    {grupos.map((g) => (
+      <section class="grid gap-4" aria-label={g.nome}>
+        <h2 class="t-secao">{g.nome}</h2>
+        {g.fluxos.map((f) => {
+          const ws = f.telas.map(largura);
+          const xs = ws.map((_, i) => ws.slice(0, i).reduce((s, w) => s + w + GAP, 0));
+          const hs = f.telas.map((t, i) => (t.h / t.w) * ws[i]);
+          const H = Math.max(...hs);
+          const W = xs[xs.length - 1] + ws[ws.length - 1];
+          const ramo = f.telas[0]?.ramo;
+          return (
+            <div class="sup overflow-x-auto rounded-[var(--raio-sup)] p-4 md:p-5" data-nivel="card" data-tom={ramo ? "perigo" : undefined} data-rolagem-permitida>
+              <h3 class="t-card mb-4 flex items-center gap-2">
+                {ramo && <span class="rounded-full bg-[color-mix(in_oklch,var(--negative)_14%,transparent)] px-2 py-0.5 text-xs font-medium text-negativo-texto">Ramo</span>}
+                {f.ponta}
+              </h3>
+              <div class="relative" style={`width:${W}px;height:${H + 64}px`}>
+                {f.telas.map((t, i) => (
+                  <figure class="absolute m-0" style={`left:${xs[i]}px;top:0;width:${ws[i]}px`}>
+                    <img src={url("quadro/" + t.arquivo)} alt={t.legenda} width={ws[i]} height={Math.round(hs[i])}
+                      class="rounded-[calc(var(--radius)*0.8)] shadow-[0_0_0_1px_var(--sup-aro),0_12px_28px_-18px_var(--sombra-cor)]" />
+                    <figcaption class="mt-2 text-xs leading-snug text-muted-foreground">{t.legenda}</figcaption>
+                  </figure>
+                ))}
+                <svg class="pointer-events-none absolute inset-0" width={W} height={H} aria-hidden="true">
+                  <defs><marker id={"m" + f.id} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--texto-primario)" /></marker></defs>
+                  {f.telas.slice(0, -1).map((t, i) => {
+                    if (!t.rect) return null;
+                    const s = ws[i] / t.w;
+                    const cx = xs[i] + (t.rect.x + t.rect.width / 2) * s;
+                    const cy = Math.min((t.rect.y + t.rect.height / 2) * s, hs[i]);
+                    const tx = xs[i + 1] - 4, ty = Math.min(hs[i + 1] / 2, H - 20);
+                    const r = (t.rect.width * s) / 2 + 3;
+                    return (
+                      <g>
+                        <rect x={xs[i] + t.rect.x * s - 3} y={t.rect.y * s - 3} width={t.rect.width * s + 6} height={t.rect.height * s + 6} rx="6" fill="none" stroke="var(--texto-primario)" stroke-width="2.5" />
+                        <path d={`M${cx + r} ${cy} C ${cx + r + 40} ${cy}, ${tx - 40} ${ty}, ${tx} ${ty}`} fill="none" stroke="var(--texto-primario)" stroke-width="2" marker-end={`url(#m${f.id})`} />
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            </div>
+          );
+        })}
+      </section>
+    ))}
+  </div>
+</AppShell>

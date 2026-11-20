@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Painel</title>
+<style>
+  * { transition: all .6s ease-in; }
+  body { margin: 0; height: 100vh; font-family: system-ui, sans-serif; background: #fafafa; color: #222; }
+  .app { display: flex; height: 100vh; }
+  nav { width: 64px; background: #111; display: flex; flex-direction: column; gap: 18px; padding: 16px 0; align-items: center; }
+  nav span { color: #fff; font-size: 20px; cursor: pointer; }
+  main { flex: 1; padding: 40px; overflow: auto; }
+  h1 { font-size: 40px; margin: 0 0 4px; }
+  .sub { color: #bbb; font-size: 12px; margin-bottom: 40px; }
+  .filtros { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .filtros input, .filtros select { font-size: 13px; padding: 4px 6px; border: 1px solid #eee; width: 140px; }
+  .card { background: #fff; border: 1px solid #eee; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,.12); padding: 24px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 6px 8px; font-size: 13px; border-bottom: 1px solid #f3f3f3; }
+  tr:hover { background: #f5f7ff; }
+  .acoes { visibility: hidden; }
+  tr:hover .acoes { visibility: visible; }
+  .acoes button { border: 0; background: none; font-size: 16px; cursor: pointer; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+  .pago { background: #3c3; } .pendente { background: #fc3; } .cancelado { background: #e33; }
+  .vazio { color: #bbb; text-align: center; padding: 40px; }
+  .toast { position: fixed; bottom: 16px; right: 16px; background: #333; color: #fff; padding: 10px 14px; border-radius: 8px; display: none; }
+  .erro { color: #e33; font-size: 12px; }
+  button.salvar[disabled] { opacity: .4; }
+</style>
+</head>
+<body>
+<div class="app">
+  <nav><span>🏠</span><span>📦</span><span>👥</span><span>💰</span><span>⚙️</span></nav>
+  <main>
+    <h1>Performance</h1>
+    <div class="sub">Aqui você pode visualizar e gerenciar todos os seus pedidos de forma simples e poderosa!</div>
+    <div class="filtros">
+      <input id="busca" placeholder="Buscar...">
+      <select id="status"><option value="">Status</option><option>pago</option><option>pendente</option><option>cancelado</option></select>
+      <select id="periodo"><option>Período</option><option>7 dias</option><option>30 dias</option></select>
+      <input placeholder="Cliente"><input placeholder="Vendedor"><input placeholder="Cidade"><input placeholder="Valor mín."><input placeholder="Valor máx.">
+    </div>
+    <div class="card">
+      <p id="contador"></p>
+      <table>
+        <thead><tr><th></th><th>Pedido</th><th>Cliente</th><th>Total</th><th>Data</th><th></th></tr></thead>
+        <tbody id="linhas"></tbody>
+      </table>
+      <div id="vazio" class="vazio" style="display:none">Nenhum dado</div>
+      <p class="erro" id="erro"></p>
+      <button class="salvar" disabled>Salvar</button>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast">Pedido excluído com sucesso! <a href="#" id="desfazer">desfazer</a></div>
+<script>
+  let pedidos = [
+    {id: 1042, cliente: 'Maria Aparecida dos Santos Comércio de Eletrônicos e Acessórios Ltda', total: 128450.5, data: '2026-11-03', status: 'pago'},
+    {id: 1043, cliente: 'João', total: 89.9, data: '2026-11-04', status: 'pendente'},
+    {id: 1044, cliente: 'Ana Paula', total: -35, data: '2026-11-05', status: 'cancelado'},
+    {id: 1045, cliente: 'Carlos Eduardo', total: 0, data: '2026-11-06', status: 'pago'}
+  ];
+  function render() {
+    const q = document.getElementById('busca').value.toLowerCase();
+    const s = document.getElementById('status').value;
+    const lista = pedidos.filter(p => p.cliente.toLowerCase().includes(q) && (!s || p.status === s));
+    document.getElementById('contador').textContent = lista.length + ' pedido(s)';
+    document.getElementById('linhas').innerHTML = lista.map(p => `
+      <tr onclick="location.href='pedido.html?id=${p.id}'">
+        <td><span class="dot ${p.status}"></span></td>
+        <td>#${p.id}</td><td>${p.cliente}</td><td>R$${p.total}</td><td>${p.data}</td>
+        <td class="acoes"><button onclick="editar(${p.id})">✎</button><button onclick="excluir(event, ${p.id})">🗑</button></td>
+      </tr>`).join('');
+    document.getElementById('vazio').style.display = lista.length ? 'none' : 'block';
+  }
+  function excluir(e, id) {
+    e.stopPropagation();
+    pedidos = pedidos.filter(p => p.id !== id);
+    render();
+    fetch('/api/pedidos/' + id, {method: 'DELETE'}).catch(() => {
+      document.getElementById('erro').textContent = 'Ops! Algo deu errado!';
+    });
+    const t = document.getElementById('toast'); t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 2000);
+  }
+  function editar(id) { alert('Em breve!'); }
+  document.getElementById('busca').addEventListener('input', () => { fetch('/api/busca?q=' + document.getElementById('busca').value); render(); });
+  document.getElementById('status').addEventListener('change', render);
+  render();
+</script>
+</body>
+</html>

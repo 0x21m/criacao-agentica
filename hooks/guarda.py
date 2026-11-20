@@ -2,7 +2,8 @@
 
 Só age em projetos com docs/ESTADO.md; nos demais, sai em silêncio.
 - commit com TAR concluída sem registro completo: barrado (deny), com o que falta;
-- push, ou commit/merge na main ou master: pede a confirmação da pessoa (ask).
+- push, ou commit/merge na main ou master: pede a confirmação da pessoa (ask);
+- push fora da main, com "push no branch de trabalho" na linha "Pode sem perguntar:" de docs/README.md: segue sem perguntar.
 Sucesso é silencioso: sem saída, a permissão segue o fluxo normal.
 """
 import json
@@ -38,6 +39,17 @@ def tar_sem_registro(raiz):
     return TAR_SEM_REGISTRO.findall(r.stdout)
 
 
+def push_liberado(raiz, comando):
+    """A linha "Pode sem perguntar:" de docs/README.md traz "push no branch de trabalho", e o comando não cita main/master."""
+    try:
+        texto = (pathlib.Path(raiz) / "docs" / "README.md").read_text(encoding="utf-8")
+    except OSError:
+        return False
+    m = re.search(r"^Pode sem perguntar:(.*)$", texto, re.M)
+    # shortcut: procura main/master no comando inteiro, não só no destino do push; basta para os comandos do agente
+    return bool(m and re.search(r"push no branch de trabalho", m.group(1), re.I)) and not re.search(r"\b(main|master)\b", comando)
+
+
 def decidir(decisao, motivo):
     print(json.dumps({"hookSpecificOutput": {
         "hookEventName": "PreToolUse",
@@ -64,7 +76,8 @@ def main():
                                "ou volte a TAR para 'em execução'; depois faça o commit de novo.")
         ramo = git(pasta, "branch", "--show-current")
         if verbo == "push":
-            pedidos.append("push envia o trabalho para fora")
+            if ramo in ("main", "master") or not push_liberado(raiz, comando):
+                pedidos.append("push envia o trabalho para fora")
         elif ramo in ("main", "master"):
             pedidos.append(f"{verbo} na {ramo} integra na base")
     if pedidos:

@@ -14,6 +14,17 @@ Por tela: [nome canônico, rota quando aplicável, objetivo, papéis,
 dados necessários, ações e estados]
 Pontos de entrada: [URL, convite, busca, notificação ou outro]
 
+## Objetos e projeção por ponta
+Pontas e atores: [operador, cliente, parceiro, chat, notificações; quem usa cada uma]
+Por objeto compartilhado: [nome canônico do GLOSSARY.md, relações e papéis]
+
+| Eixo | Estado interno | Rótulo do operador | Frase do cliente (próxima ação) | Visível para | Notificação e canal | Operador pode suprimir? | Cor |
+|---|---|---|---|---|---|---|---|
+| [eixo] | `[_Código_]` | [rótulo] | "[frase]" ([ação]) | [pontas] | [evento · canal ou nenhuma] | [Sim/Não/—] | [token] |
+
+Transições usadas pela tela: [citadas do 05 pelo código; o estado canônico e quem pode cada transição não se redefinem aqui]
+Sem tela própria para o cliente: [NÃO SE APLICA — motivo]. Formato e exemplos: `assets/modelo-tabela-de-estados.md` da skill `ca-interface`.
+
 ## FLX-[ID] — [jornada]
 Requisitos relacionados: [REQ-IDs]
 Ator: [papel]

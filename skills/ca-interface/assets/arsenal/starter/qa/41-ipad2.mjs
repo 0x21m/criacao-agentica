@@ -1,0 +1,10 @@
+import { abrir, ctx, cap, ir, nota } from "./lib.mjs";
+const b = await abrir(); const c = await ctx(b, "ipad"); const p = await c.newPage();
+await ir(p, "/", 6000); await cap(p, "41-ipad-inicio-1349");
+await ir(p, "/clientes/?id=c11", 5000); await cap(p, "41-ipad-cliente-1349");
+const c2 = await ctx(b, "iphone"); const q = await c2.newPage();
+await ir(q, "/clientes/?id=c99", 5000); await cap(q, "41-iphone-c99-1349");
+await ir(q, "/pedidos/novo/", 5000);
+await q.getByRole("button", { name: /Escolha o cliente/ }).tap(); await q.waitForTimeout(600);
+await q.getByRole("option", { name: /Companhia Brasileira/ }).tap(); await q.waitForTimeout(800); await cap(q, "41-iphone-form-1349");
+await b.close();

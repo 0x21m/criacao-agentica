@@ -1,0 +1,8 @@
+---
+// Módulo Estoque · rota /estoque/ (saldo com mínimo; ?id=FLT-0912 abre o produto; ?situacao=repor filtra os baixos).
+import AppShell from "@/components/app/AppShell.astro";
+import Estoque from "../../telas/Estoque";
+---
+<AppShell titulo="Estoque">
+  <Estoque client:load />
+</AppShell>

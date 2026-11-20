@@ -1,0 +1,8 @@
+---
+// Módulo Configurações · rota /configuracoes/aparencia/ (o painel de aparência mora em src/proto/aparencia).
+import AppShell from "@/components/app/AppShell.astro";
+import PainelAparencia from "@/proto/aparencia/PainelAparencia";
+---
+<AppShell titulo="Aparência">
+  <PainelAparencia client:load />
+</AppShell>

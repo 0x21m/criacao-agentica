@@ -1,0 +1,74 @@
+/* Kanban e agenda interativos: só tokens do starter (nenhuma cor fixa). */
+
+/* Coluna ou horário onde não dá para soltar: hachura discreta na cor do texto. */
+.hachura {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklch, var(--foreground) 9%, transparent) 0 1px,
+    transparent 1px 7px
+  );
+}
+
+/* Vaga onde o cartão vai cair. */
+.vaga-cartao {
+  border: 1.5px dashed color-mix(in oklch, var(--primary) 60%, transparent);
+  background: color-mix(in oklch, var(--primary) 8%, transparent);
+}
+.vaga-cartao[data-invalido] {
+  border-color: color-mix(in oklch, var(--negative) 60%, transparent);
+  background: color-mix(in oklch, var(--negative) 7%, transparent);
+}
+
+/* Cartão erguido (pego pelo ponteiro ou pelo teclado): sombra de duas camadas mais funda que a do card. */
+.cartao-erguido {
+  box-shadow:
+    0 0 0 1.5px color-mix(in oklch, var(--primary) 55%, transparent),
+    0 4px 10px -2px var(--sombra-cor),
+    0 22px 44px -14px var(--sombra-cor) !important;
+  z-index: 1;
+}
+
+/* Agenda: linhas de 30 min e de hora na coluna (o passo de encaixe é 15 min). */
+.agenda-linhas {
+  background-image:
+    linear-gradient(to bottom, color-mix(in oklch, var(--foreground) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklch, var(--foreground) 4.5%, transparent) 1px, transparent 1px);
+  background-size: 100% var(--hora), 100% calc(var(--hora) / 2);
+}
+
+/* Bloco de agendamento: a cor vem de --evento (um token), misturada ao card. */
+.bloco-agenda {
+  /* oklab, não oklch: com o card quase neutro, a mistura de matiz dava a volta (azul saía rosado no Sóbrio) */
+  background: color-mix(in oklab, var(--evento) 15%, var(--card));
+  box-shadow: inset 3px 0 0 var(--evento), inset 0 0 0 1px color-mix(in oklch, var(--evento) 28%, transparent);
+  color: var(--foreground);
+}
+.bloco-agenda[data-tracejado] {
+  background: color-mix(in oklab, var(--evento) 8%, var(--card));
+  box-shadow: inset 3px 0 0 var(--evento);
+  outline: 1.5px dashed color-mix(in oklch, var(--evento) 60%, transparent);
+  outline-offset: -1.5px;
+}
+.bloco-agenda[data-conflito] {
+  box-shadow: inset 3px 0 0 var(--negative), inset 0 0 0 1.5px var(--negative);
+}
+.bloco-agenda[data-fantasma] {
+  background: color-mix(in oklch, var(--primary) 18%, var(--card));
+  box-shadow: inset 3px 0 0 var(--primary), inset 0 0 0 1.5px color-mix(in oklch, var(--primary) 70%, transparent),
+    0 18px 36px -14px var(--sombra-cor);
+}
+.bloco-agenda[data-fantasma][data-conflito] {
+  box-shadow: inset 3px 0 0 var(--negative), inset 0 0 0 1.5px var(--negative), 0 18px 36px -14px var(--sombra-cor);
+}
+.bloco-agenda[data-fantasma][data-invalido] {
+  background: color-mix(in oklch, var(--negative) 10%, var(--card));
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklch, var(--negative) 70%, transparent);
+  outline: none;
+}
+.bloco-agenda {
+  transition: box-shadow 160ms var(--ease-out, ease-out), opacity 160ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bloco-agenda { transition: none; }
+}
+html[data-movimento="reduzido"] .bloco-agenda { transition: none; }

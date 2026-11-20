@@ -1,0 +1,14 @@
+---
+// Casca das telas de entrada: o layout comum (tema antes da pintura, barra F, toasts) sem a moldura do painel (lateral,
+// barra superior e abas só existem depois de entrar). Uma ilha por página, a tela, dentro do <main>.
+import Base from "@/layouts/Base.astro";
+import "../entrada.css";
+
+interface Props { titulo: string }
+const { titulo } = Astro.props;
+---
+<Base titulo={titulo}>
+  <main id="conteudo" tabindex="-1" data-entrada transition:name="conteudo" class="min-h-dvh outline-none">
+    <slot />
+  </main>
+</Base>

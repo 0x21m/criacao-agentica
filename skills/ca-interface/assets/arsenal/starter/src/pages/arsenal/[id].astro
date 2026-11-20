@@ -1,0 +1,64 @@
+---
+// Uma página por item do arsenal: o item funcionando e o bloco de uso (quando usar, quando não, import, dependências).
+import AppShell from "@/components/app/AppShell.astro";
+import NavArsenal from "@/arsenal/NavArsenal.astro";
+import Palco from "@/arsenal/Palco";
+import { CATALOGO } from "@/arsenal/fontes";
+import { url } from "@/lib/url";
+import { MODULOS } from "@/modulos/registro";
+import { importsDoTexto, usoDaPeca } from "../../../scripts/mapa-arsenal.mjs";
+
+export function getStaticPaths() {
+  return CATALOGO.map((item) => ({ params: { id: item.id } }));
+}
+const { id } = Astro.params;
+const item = CATALOGO.find((i) => i.id === id)!;
+const pos = CATALOGO.indexOf(item);
+const ant = CATALOGO[pos - 1], prox = CATALOGO[pos + 1];
+// onde a peça é usada (scripts/mapa-arsenal.mjs): módulos e telas, pela varredura dos imports no build
+const usos = importsDoTexto(item.importar).map((a) => usoDaPeca(a));
+const porModulo = new Map<string, Set<string>>();
+for (const u of usos) for (const [id, telas] of Object.entries(u.modulos)) for (const t of telas) (porModulo.get(id) ?? porModulo.set(id, new Set()).get(id)!).add(t);
+const modulosQueUsam = MODULOS.filter((m) => porModulo.has(m.id)).map((m) => ({ nome: m.nome, telas: [...porModulo.get(m.id)!] }));
+const naCasca = usos.some((u) => u.casca);
+const paginas = [...new Set(usos.flatMap((u) => u.paginas))];
+---
+<AppShell titulo={`Arsenal · ${item.nome}`}>
+  <div data-barra-ferramentas class="casca-fixa sticky top-[var(--topo)] z-20 px-4 py-3 md:px-6 md:py-4">
+    <a href={url("arsenal/")} class="inline-flex min-h-10 items-center text-sm text-muted-foreground hover:text-foreground md:min-h-0">Arsenal</a>
+    <h1 class="t-pagina line-clamp-2">{item.nome}</h1>
+  </div>
+  <div class="grid grid-cols-[minmax(0,1fr)] gap-6 p-4 md:p-6 lg:grid-cols-[14rem_minmax(0,1fr)]">
+    <aside class="hidden lg:block"><div data-rolagem-permitida class="sticky top-[calc(var(--topo)+6rem)] max-h-[calc(100dvh-var(--topo)-8rem)] overflow-y-auto"><NavArsenal atual={item.id} /></div></aside>
+    <div class="grid min-w-0 gap-6">
+      <!-- a peça viva primeiro, a documentação depois (no celular, a peça aparece sem rolar) -->
+      <Palco client:only="react" id={item.id} tipo={item.grupo} />
+      <dl data-nivel="card" class="sup grid gap-3 rounded-[var(--raio-sup)] p-4 text-sm md:grid-cols-2 md:p-5">
+        {item.quandoUsar && <div><dt class="font-medium">Quando usar</dt><dd class="text-muted-foreground">{item.quandoUsar}</dd></div>}
+        {item.quandoNaoUsar && <div><dt class="font-medium">Quando não usar</dt><dd class="text-muted-foreground">{item.quandoNaoUsar}</dd></div>}
+        <div class="min-w-0 md:col-span-2"><dt class="font-medium">Import</dt><dd><code data-rolagem-permitida class="block overflow-x-auto rounded-md bg-muted px-3 py-2 font-mono text-xs whitespace-pre">{item.importar}</code></dd></div>
+        {item.dependencias && <div><dt class="font-medium">Dependências</dt><dd class="text-muted-foreground">{item.dependencias}</dd></div>}
+        {item.nota && <div><dt class="font-medium">Ao adaptar</dt><dd class="text-muted-foreground">{item.nota}</dd></div>}
+        <div class="min-w-0 md:col-span-2" data-uso-arsenal>
+          <dt class="font-medium">Onde é usado</dt>
+          <dd class="text-muted-foreground">
+            {!naCasca && !modulosQueUsam.length && !paginas.length && "Nenhuma tela usa ainda: o limpar-arsenal.mjs tira esta peça no fim."}
+            {naCasca && <p>Na casca do painel (aparece em toda tela).</p>}
+            {modulosQueUsam.length > 0 && (
+              <ul class="mt-1 grid gap-0.5">
+                {modulosQueUsam.map((m) => <li><span class="text-foreground">{m.nome}</span>: {m.telas.join(", ")}</li>)}
+              </ul>
+            )}
+            {paginas.length > 0 && <p class="mt-1">Páginas: {paginas.join(", ")}</p>}
+            <p class="mt-1 text-xs">Gerado pela varredura dos imports (scripts/mapa-arsenal.mjs).</p>
+          </dd>
+        </div>
+      </dl>
+      <nav aria-label="Anterior e próximo" class="flex flex-wrap justify-between gap-3 text-sm">
+        {ant ? <a href={url(`arsenal/${ant.id}/`)} data-nivel="card" data-interativa class="sup inline-flex min-h-10 items-center rounded-full px-4 py-2">← {ant.nome}</a> : <span />}
+        {prox && <a href={url(`arsenal/${prox.id}/`)} data-nivel="card" data-interativa class="sup inline-flex min-h-10 items-center rounded-full px-4 py-2">{prox.nome} →</a>}
+      </nav>
+      <details class="lg:hidden"><summary class="flex min-h-10 cursor-pointer items-center text-sm font-medium">Todos os itens do arsenal</summary><div class="mt-3"><NavArsenal atual={item.id} /></div></details>
+    </div>
+  </div>
+</AppShell>

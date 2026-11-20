@@ -1,0 +1,20 @@
+/* Módulo Entrada: o banner da marca em tela cheia com o card sobreposto ao terço inferior (5.1).
+   Só no modo "shader" (banner escuro da marca); no Sóbrio (plano) e no Vidro (aberto) o banner é a faixa do preset e o
+   card vem logo abaixo, como nas outras telas. */
+html[data-banner="shader"] [data-entrada] [data-slot="banner-sobreposto"] > .banner-caixa { min-height: 40dvh; }
+@media (min-width: 64rem) {
+  html[data-banner="shader"] [data-entrada] [data-slot="banner-sobreposto"] > .banner-caixa { min-height: 46dvh; }
+  html[data-banner="shader"] [data-entrada] .entrada-sobre { margin-top: -12dvh; }
+}
+
+/* Carregamento com a marca depois do "Entrar": o mesmo fundo da abertura (#abertura, sistema.css). */
+.entrada-carregando {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(52rem 34rem at 12% -6%, var(--amb-1, transparent), transparent 68%),
+    radial-gradient(70rem 40rem at 55% 112%, var(--amb-3, transparent), transparent 70%);
+}
+
+/* Com o vidro ligado, o card de entrada (destaque de vidro) passa por cima do banner escuro e do fundo claro ao mesmo
+   tempo: translúcido, o alto dele fica cinza e o texto perde contraste. Opaco, como o resto do que avança sobre o banner. */
+html[data-vidro="on"] [data-entrada] .entrada-sobre > .sup { --n-op: 1; }

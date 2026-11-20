@@ -1,0 +1,214 @@
+---
+// CascaSite (spec 5.13): a casca de todas as páginas do site. Cabeçalho nav-split, fechamento close-photo, rodapé
+// footer-visit e a barra de ação do celular, na estrutura do kit da design-taste-frontend; as cores, as fontes e o
+// fundo ambiente são os do preset ativo do starter (site.css). Não usa o Base.astro do app: o site não tem abertura,
+// barra F, tela de carregamento nem ClientRouter (a taste pede corpo com só header.nav, main e footer.closing).
+// Não importa o global.css (Tailwind): a landing não usa utilitários; as páginas internas que montam peças do
+// starter (BannerSobreposto) importam o global.css elas mesmas, antes deste layout.
+import "@/styles/sistema.css";
+import "./site.css";
+import { MARCA } from "@/proto/marca";
+import { url } from "@/lib/url";
+import { SITE, SERVICOS, UNIDADES, HORARIO, ROTAS, PORTAL, linkRegiao } from "@/proto/site";
+import Foto from "./Foto.astro";
+import { foto } from "@/components/site/fotos";
+import { Toaster } from "@/components/ui/sonner";
+import BarraPrototipo from "@/proto/BarraPrototipo";
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  /** "inicio" na landing; nas internas, o id da palavra do menu marcada como atual. */
+  atual?: "inicio" | "servicos" | "precos" | "contato" | "sobre" | "creditos" | "portal" | "loja" | "agendar";
+  /** Botão principal do fechamento (repete a ação principal da página, palavra por palavra). */
+  fechamento?: { titulo: string; linha: string; rotulo: string; href: string };
+  /**
+   * Página de transação (agendar, loja, carrinho, checkout, confirmação): sem o fechamento com foto (a ação está no card
+   * da etapa), com o Toaster (Desfazer, copiar) e a barra F do protótipo (simular o banco, outra pessoa reservar).
+   */
+  transacional?: boolean;
+}
+const { titulo, descricao, atual = "inicio", fechamento, transacional = false } = Astro.props;
+const naLanding = atual === "inicio";
+const a = (id: string) => (naLanding ? `#${id}` : `${ROTAS.inicio()}#${id}`);
+const acaoPrincipal = { rotulo: "Agendar limpeza", href: ROTAS.servico("limpeza-split") };
+const fecha = fechamento ?? {
+  titulo: "Agende a limpeza do seu split",
+  linha: `R$ 220,00, 1 h 30 e ${SITE.garantiaDias} dias de garantia.`,
+  rotulo: acaoPrincipal.rotulo,
+  href: acaoPrincipal.href,
+};
+const kit = (p: string) => url(`site/assets/${p}`);
+const capa = foto("f160025964").src;
+const ano = 2026;
+const [loja, base] = UNIDADES;
+const seta = `<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg>`;
+---
+<!doctype html>
+<html lang="pt-BR" data-site data-type="service" data-radius="soft" data-buttons="block" data-motion>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>{titulo}</title>
+<meta name="description" content={descricao} />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={titulo} />
+<meta property="og:description" content={descricao} />
+<meta property="og:image" content={capa} />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href={url("favicon.svg")} type="image/svg+xml" />
+<meta name="theme-color" content="#0c1a17" />
+<!-- <link rel="canonical" href="https://(domínio da Oficina Norte)/"> : só quando o domínio existir -->
+<meta name="site-kind" content="other" />
+<meta name="page-type" content="service" />
+<meta name="robots" content="noindex" />
+<!-- Aparência antes da primeira pintura: o mesmo motor do Base.astro (preset, tema, vidro, ?preset=&tema=&vidro=). -->
+<script is:inline>
+  (function () {
+    var r = document.documentElement, p = new URLSearchParams(location.search), s = null;
+    try { s = JSON.parse(localStorage.getItem("proto-aparencia-v2") || "null"); } catch (e) {}
+    var tema = p.get("tema") || (s && s.tema) || "escuro";
+    var vidro = p.has("vidro") ? p.get("vidro") === "1" : (s ? !!s.vidro : true);
+    if (tema === "vidro") { tema = "escuro"; vidro = true; }
+    var escuro = tema === "escuro" || (tema === "sistema" && matchMedia("(prefers-color-scheme: dark)").matches);
+    if (s && typeof s.css === "string" && /^--[a-z-]+:[^;{}<>]*(;--[a-z-]+:[^;{}<>]*)*;?$/.test(s.css)) r.setAttribute("style", s.css);
+    var at = (s && s.at) || { "data-preset": "noite", "data-skin": "padrao", "data-raio": "padrao", "data-borda": "linha", "data-densidade": "confortavel", "data-profundidade": "padrao", "data-destaque": "marca" };
+    if (!at["data-preset"]) at["data-preset"] = "noite";
+    var pp = p.get("preset");
+    if (pp && /^(noite|aurora|vidro|sobrio|sinal)$/.test(pp)) {
+      at = Object.assign({}, at, { "data-preset": pp, "data-skin": "padrao", "data-destaque": "marca", "data-borda": "linha", "data-profundidade": "padrao", "data-raio": pp === "vidro" ? "arredondado" : "padrao", "data-densidade": "confortavel" });
+    }
+    // o modo do banner (shader, plano, aberto) sai do preset: o BannerSobreposto do starter é decidido em CSS por ele
+    at["data-banner"] = { vidro: "aberto", sobrio: "plano" }[at["data-preset"]] || "shader";
+    for (var k in at) if (/^data-(preset|banner|skin|raio|borda|densidade|profundidade|destaque)$/.test(k)) {
+      if (/^[a-z]+$/.test(at[k])) r.setAttribute(k, at[k]); else r.removeAttribute(k);
+    }
+    r.classList.toggle("dark", escuro);
+    if (vidro) r.dataset.vidro = "on"; else delete r.dataset.vidro;
+  })();
+</script>
+<!-- Loja online desligada em Configurações (EST-47): marca o <html> antes da pintura (a mesma coleção que o
+     módulo lê, proto-dados:modulos_situacao, a mesma do registro) e acompanha as outras abas. O CSS esconde as partes da loja. -->
+<script is:inline>
+  (function () {
+    var r = document.documentElement;
+    function ler() {
+      var s = "ligado";
+      try { var l = JSON.parse(localStorage.getItem("proto-dados:modulos_situacao:v1") || "null"); if (l) for (var i = 0; i < l.length; i++) if (l[i].id === "loja") s = l[i].situacao; } catch (e) {}
+      if (s === "ligado") r.removeAttribute("data-loja"); else r.setAttribute("data-loja", s === "fora_do_ar" ? "fora" : "desligada");
+    }
+    ler();
+    addEventListener("storage", function (e) { if (!e.key || e.key.indexOf("modulos_situacao") >= 0) ler(); });
+    addEventListener("site:loja", ler);
+    // voltar pelo histórico (bfcache) depois de desligar em Configurações: relê antes de mostrar o menu
+    addEventListener("pageshow", ler);
+  })();
+</script>
+<link rel="stylesheet" href={kit("system.css")} />
+<link rel="stylesheet" href={kit("ui/cards.css")} />
+<link rel="stylesheet" href={kit("motion/motion.css")} />
+<link rel="stylesheet" href={kit("layout/layout.css")} />
+<!-- a entrada do hero (motion.md): as palavras esperam o motion.js; aos 700 ms aparecem de qualquer jeito -->
+<script is:inline>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
+<script is:inline>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href={kit("moments/moments.js")} />
+<link rel="modulepreload" href={kit("moments/lib.js")} />
+<link rel="modulepreload" href={kit("moments/picture-develops/moment.js")} />
+<link rel="modulepreload" href={kit("moments/word-highlight/moment.js")} />
+<slot name="head" />
+</head>
+<!--
+  tipo: service (a Oficina Norte é contratada: técnicos vão até a casa ou o comércio)
+  deal: hero split, nav nav-split, close close-photo, footer footer-visit, rhythm space, buttons block, mark stack
+        (trocada pelo logo próprio da marca, MARCA.logo); paleta e fontes do preset do starter (waiver CLI-42)
+  momentos: picture-develops (filme) em #como-funciona; word-highlight em #visita-e-garantia
+-->
+<body>
+<header class="nav nav--split">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Pular para o conteúdo</a>
+    <a class="nav__logo" href={naLanding ? "#top" : ROTAS.inicio()}><span class="marca-logo" aria-hidden="true" set:html={MARCA.logo} />{SITE.nome}</a>
+    <nav class="nav__links" aria-label="Principal">
+      <div class="nav__item">
+        <a class="nav__link" href={a("servicos")} aria-current={atual === "servicos" ? "page" : undefined}>Serviços <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="nav__menu">
+          <div class="wrap grid">
+            <div class="menu-col span-4">
+              <p class="t-label">Ar-condicionado</p>
+              {SERVICOS.slice(0, 4).map((s) => <a href={ROTAS.servico(s.id)}>{s.nome}<span>{s.valor}</span></a>)}
+            </div>
+            <div class="menu-col span-4">
+              <p class="t-label">Casa e comércio</p>
+              {SERVICOS.slice(4).map((s) => <a href={ROTAS.servico(s.id)}>{s.nome}<span>{s.valor}</span></a>)}
+            </div>
+            <div class="menu-col span-3 start-10">
+              <p class="t-label">Antes de agendar</p>
+              <a href={ROTAS.precos()}>Tabela de preços<span>Os seis serviços e as taxas</span></a>
+              <a href={a("perguntas")}>Perguntas<span>Cidades, prazos e pagamento</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav__item" data-parte-loja><a class="nav__link" href={ROTAS.loja()} aria-current={atual === "loja" ? "page" : undefined}>Loja</a></div>
+      <div class="nav__item"><a class="nav__link" href={ROTAS.precos()} aria-current={atual === "precos" ? "page" : undefined}>Preços</a></div>
+      <div class="nav__item"><a class="nav__link" href={ROTAS.contato()} aria-current={atual === "contato" ? "page" : undefined}>Contato</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="nav__link" href={PORTAL.entrada()}>Minha conta</a>
+      <a class="btn btn--primary" href={acaoPrincipal.href}>{acaoPrincipal.rotulo}</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+<main id="top" class={naLanding ? undefined : "interna"}>
+  <slot />
+</main>
+<footer class="footer closing footer--visit" id="contact" aria-labelledby={transacional ? undefined : "close-h"} aria-label={transacional ? "Endereço e horário" : undefined}>
+  <div class="wrap">
+    {!transacional && <div class="closing__cta close--photo">
+      <div class="section-head--split">
+        <div><h2 id="close-h">{fecha.titulo}</h2><p class="t-lead">{fecha.linha}</p></div>
+        <a class="btn btn--primary" href={fecha.href}>{fecha.rotulo}<Fragment set:html={seta} /></a>
+      </div>
+      <div class="close__media"><Foto id="f41117679" alt="Caixa de ferramentas aberta com chaves, alicates e trena" sizes="(max-width: 639px) 190vw, (max-width: 1439px) 100vw, 1280px" /></div>
+    </div>}
+    <div class="closing__links">
+      <div class="grid">
+        <div class="span-6 stack-4">
+          <address class="footer__address">{loja.bairro}, {loja.cidade}</address>
+          <p><a class="link" href={linkRegiao(loja)}>Ver a região</a></p>
+        </div>
+        <div class="span-6 start-7 stack-4">
+          <h3>Horário de atendimento</h3>
+          <dl class="hours" data-tz="America/Sao_Paulo">
+            {HORARIO.map((h) => (<><dt data-days={h.dataDays}>{h.dias}</dt><dd>{h.horas}</dd></>))}
+          </dl>
+        </div>
+      </div>
+      <div class="footer__legal">
+        <span>&copy; {ano} {SITE.nome}</span>
+        <nav class="rodape-links" aria-label="Rodapé">
+          <a href={ROTAS.precos()}>Preços</a>
+          <a href={ROTAS.loja()} data-parte-loja>Loja</a>
+          <a href={ROTAS.sobre()}>Sobre</a>
+          <a href={ROTAS.contato()}>Contato</a>
+          <a href={PORTAL.entrada()}>Minha conta</a>
+        </nav>
+        <a class="credits" href={ROTAS.creditos()}>Fotografias via Wikimedia Commons</a>
+      </div>
+    </div>
+  </div>
+</footer>
+{!transacional && <nav class="actionbar" aria-label="Ações rápidas">
+  <a class="btn btn--primary" href={acaoPrincipal.href}>{acaoPrincipal.rotulo}</a>
+</nav>}
+<script type="module" src={kit("system.js")} is:inline></script>
+<script type="module" src={kit("motion/motion.js")} is:inline></script>
+<script type="module" src={kit("layout/layout.js")} is:inline></script>
+<slot name="scripts" />
+{transacional && <BarraPrototipo client:idle />}
+{transacional && <Toaster client:idle duration={7000} position="bottom-right" mobileOffset={{ bottom: 100 }} closeButton />}
+</body>
+</html>

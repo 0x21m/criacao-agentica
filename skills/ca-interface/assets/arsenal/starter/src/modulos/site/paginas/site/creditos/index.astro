@@ -1,0 +1,26 @@
+---
+// /site/creditos/ — a lista dos créditos das fotografias (a linha do rodapé aponta para cá). Todas são stand-ins
+// licenciados do Wikimedia Commons, a trocar pelas fotos da própria Oficina Norte.
+import SiteLayout from "@/modulos/site/casca/SiteLayout.astro";
+import { FOTOS } from "@/components/site/fotos";
+---
+<SiteLayout
+  titulo="Créditos das fotografias: Oficina Norte"
+  descricao="Autores, licenças e páginas de origem das fotografias usadas no site da Oficina Norte."
+  atual="creditos"
+>
+  <div class="bloco">
+    <div class="wrap">
+      <h1 style="font: var(--display-weight) var(--t-h2)/1.1 var(--font-display)">Créditos das fotografias</h1>
+      <ul class="rows" style="margin-top: var(--s-7)">
+        {Object.entries(FOTOS).map(([id, f]) => (
+          <li>
+            <span class="rows__name">{f.by}</span>
+            <p><a class="link" href={f.page}>Página no Wikimedia Commons</a> · {f.licenceUrl ? <a class="link" href={f.licenceUrl}>{f.licence}</a> : f.licence}</p>
+            <span class="rows__value">{id}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</SiteLayout>

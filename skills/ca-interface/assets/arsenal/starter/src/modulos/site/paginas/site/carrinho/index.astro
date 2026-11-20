@@ -1,0 +1,13 @@
+---
+// /site/carrinho/ · o carrinho deste aparelho (5.13).
+import "@/styles/global.css";
+import SiteLayout from "../../../casca/SiteLayout.astro";
+import LojaFechada from "../../../casca/LojaFechada.astro";
+import Carrinho from "../../../telas/Carrinho";
+---
+<SiteLayout titulo="Carrinho: loja da Oficina Norte" descricao="Os produtos que você escolheu na loja da Oficina Norte, com o frete por CEP." atual="loja" transacional>
+  <div class="wrap transacao">
+    <div data-loja-aberta><Carrinho client:load /></div>
+    <LojaFechada />
+  </div>
+</SiteLayout>

@@ -28,7 +28,7 @@ Revisão: [ponytail-review / verificador independente / pessoa] — autorrevisã
 
 ## Autonomia concedida
 Vale também para as skills que mandarem commitar, integrar ou publicar.
-Pode sem perguntar: [padrão: iniciar o git, criar branches de trabalho, commitar neles, juntar TAR concluída no branch da entrega, editar e testar]
-Precisa perguntar: [padrão: integrar na main, push, publicar, migração em produção, instalar algo, gastar]
+Pode sem perguntar: [padrão: iniciar o git, criar branches de trabalho, commitar neles, juntar TAR concluída no branch da entrega, editar e testar, instalar dentro do projeto com licença livre e registro]
+Precisa perguntar: [padrão: integrar na main, push (se a pessoa liberar, escreva "push no branch de trabalho" na linha de cima: o hook do plugin lê essa frase e deixa de perguntar), publicar, migração em produção, instalação global, serviço pago ou chave de API, trocar biblioteca já usada, licença restritiva, MCP novo, gastar]
 Fora do alcance: [ex.: credenciais, apagar dados reais]
 Aprovação humana por risco: ver a tabela em `references/verificacao.md` da skill; os caminhos que sempre pedem uma pessoa ficam no `REVIEW.md`.

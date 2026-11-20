@@ -1,0 +1,8 @@
+---
+// Módulo Pedidos · rota /pedidos/ (lista; ?vista=quadro para o quadro; ?id=OS-1052 abre o detalhe).
+import AppShell from "@/components/app/AppShell.astro";
+import Pedidos from "../../telas/Pedidos";
+---
+<AppShell titulo="Pedidos e OS">
+  <Pedidos client:load />
+</AppShell>

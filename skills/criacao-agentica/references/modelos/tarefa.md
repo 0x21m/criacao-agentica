@@ -8,7 +8,7 @@ Evite caminhos de arquivo e trechos de código: envelhecem rápido. -->
 # TAR-[NNN] — [título: o comportamento entregue, em termos do glossário]
 Estado: [a fazer/em execução/bloqueada/em revisão/concluída/integrada/publicada/descartada]
 <!-- "bloqueada" é para quem espera uma LAC; quem espera outra TAR fica "a fazer" e o "Bloqueada por:" a segura.
-"concluída" = critérios atendidos, revisada e registrada; libera as dependentes. A aprovação humana (risco médio ou alto) é para integrar. -->
+"concluída" = critérios atendidos, revisada e registrada; libera as dependentes. A aprovação humana (risco alto) é para integrar; em risco médio, o veredito do ca-verificador. -->
 Bloqueada por: [TAR-IDs e LAC-IDs que precisam fechar antes, ou "nada"]
 Executor: [agente/pessoa]
 Risco: [baixo/médio/alto] — [o que na mudança define o nível]
@@ -46,7 +46,7 @@ Verificação:
 - CA-[ID]: [atendido/não atendido/não verificável] — como: [comando, teste ou procedimento] — onde: [commit, ambiente] — [data]
 Não verificado: [limitação e motivo]
 Revisão: [ca-revisor / + ca-verificador / + security-review] — rodadas: [N]
-Aprovação para integrar: [não exigida (risco baixo) / pendente / aprovada pelo responsável no commit X]
+Aprovação para integrar: [não exigida (risco baixo) / veredito do ca-verificador (risco médio) / pendente / aprovada pelo responsável no commit X]
 Achados:
 - [deve-corrigir|deveria|opcional] [achado] — [corrigido | descartado: motivo | aberto]
 Integração: [commit/PR/merge]

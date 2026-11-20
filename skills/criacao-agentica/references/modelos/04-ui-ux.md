@@ -42,6 +42,11 @@ Cenários e viewports: [telas, estados e dimensões a verificar]
 Critérios: [legibilidade, hierarquia, consistência e ausência de cortes]
 Assets pendentes: [arquivo, responsável e impacto]
 
+## Decisões
+DEC-[ID] — [título] (formato do modelo `decisao.md`)
+Aprovação de protótipo: [versão em prototipos/<fluxo>/vN/, quem aprovou, data, o que foi aprovado e o que ficou fora; resolve a LAC protótipo]
+Pulo do portão de protótipo: [motivo, quem decidiu e o risco aceito, ou [NÃO SE APLICA]]
+
 ## Perguntas e lacunas
 LAC-[ID] [marcador] [descrição]
 Refs: [IDs] | Impacto: [bloqueia-tarefa TAR-IDs / bloqueia-futura / não-bloqueia]

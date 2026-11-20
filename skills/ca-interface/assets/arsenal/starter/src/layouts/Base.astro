@@ -1,0 +1,254 @@
+---
+// Layout comum: tema antes da pintura, ClientRouter, abertura com a marca, barra F e Toaster.
+// Toda página usa este layout (direto ou pelo AppShell).
+import "@/styles/global.css";
+import "@/styles/sistema.css";
+import { ClientRouter } from "astro:transitions";
+import { Toaster } from "@/components/ui/sonner";
+import BarraPrototipo from "@/proto/BarraPrototipo";
+import { MARCA } from "@/proto/marca";
+import { url } from "@/lib/url";
+
+import { MODULOS, achatar } from "@/modulos/registro";
+
+interface Props { titulo: string; /** Id do módulo dono da página (o AppShell passa): guarda de rota do EST-47. */ modulo?: string }
+const { titulo, modulo } = Astro.props;
+const aberturaAtiva = MARCA.abertura.ativa;
+const home = url("");
+// links de cada módulo na navegação: o script abaixo esconde os do módulo desligado antes da pintura (src/proto/modulos.ts)
+const linksDosModulos = MODULOS.map((m) => ({ id: m.id, nome: m.nome, hrefs: achatar(m.nav).map((i) => url(i.caminho)) })).filter((m) => m.hrefs.length);
+const chaveModulos = "proto-dados:modulos_situacao:v1";
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex" />
+    <title>{`Protótipo v1 · ${titulo} · ${MARCA.nome}`}</title>
+    <link rel="icon" href={url("favicon.svg")} />
+    {modulo && <meta name="proto-modulo" content={modulo} />}
+    <script is:inline define:vars={{ aberturaAtiva, home, linksDosModulos, chaveModulos }}>
+      (function () {
+        var r = document.documentElement;
+        function aplicar() {
+          var p = new URLSearchParams(location.search), s = null, lat = null;
+          try { s = JSON.parse(localStorage.getItem("proto-aparencia-v2") || "null"); lat = localStorage.getItem("proto-lateral"); } catch (e) {}
+          var tema = p.get("tema") || (s && s.tema) || "escuro";
+          var vidro = p.has("vidro") ? p.get("vidro") === "1" : (s ? !!s.vidro : true);
+          if (tema === "vidro") { tema = "escuro"; vidro = true; } // valor antigo
+          var escuro = tema === "escuro" || (tema === "sistema" && matchMedia("(prefers-color-scheme: dark)").matches);
+          // só pares "--nome:valor" sem chaves nem tags: nada de texto livre do armazenamento vira CSS
+          if (s && typeof s.css === "string" && /^--[a-z-]+:[^;{}<>]*(;--[a-z-]+:[^;{}<>]*)*;?$/.test(s.css)) r.setAttribute("style", s.css);
+          // eixos nomeados (data-preset, data-skin, data-raio…): só nomes de letras, sem texto livre; padrão do preset Noite
+          var at = (s && s.at) || { "data-preset": "noite", "data-banner": "shader", "data-skin": "padrao", "data-raio": "padrao", "data-borda": "linha", "data-densidade": "padrao", "data-profundidade": "padrao", "data-destaque": "marca" };
+          if (!at["data-preset"]) at["data-preset"] = "noite";
+          // guardado antes do data-banner existir: deduz do preset
+          if (!at["data-banner"]) at["data-banner"] = { vidro: "aberto", sobrio: "plano" }[at["data-preset"]] || "shader";
+          // ?preset= na URL (capturas e links diretos): a paleta já vem certa na primeira pintura
+          var pp = p.get("preset");
+          if (pp && /^(noite|aurora|vidro|sobrio|sinal)$/.test(pp)) {
+            var forma = { noite: ["padrao", "padrao"], aurora: ["padrao", "padrao"], vidro: ["arredondado", "padrao"], sobrio: ["compacto", "compacta"], sinal: ["padrao", "padrao"] }[pp];
+            at = Object.assign({}, at, { "data-banner": { vidro: "aberto", sobrio: "plano" }[pp] || "shader", "data-preset": pp, "data-skin": "padrao", "data-destaque": "marca", "data-borda": "linha", "data-profundidade": "padrao", "data-raio": forma[0], "data-densidade": forma[1] });
+          }
+          for (var k in at) if (/^data-(preset|banner|skin|raio|borda|densidade|profundidade|destaque)$/.test(k)) {
+            if (/^[a-z]+$/.test(at[k])) r.setAttribute(k, at[k]); else r.removeAttribute(k);
+          }
+          r.classList.toggle("dark", escuro);
+          if (vidro) r.dataset.vidro = "on"; else delete r.dataset.vidro;
+          if (lat === "recolhida") r.dataset.lateral = "recolhida";
+          if (p.get("controles") === "1") r.setAttribute("data-prototipo-controles", "");
+        }
+        aplicar();
+
+        // Sessão fora da padrão (outro papel ou pessoa, outra unidade, matriz ajustada; ver permissoes.ts): o HTML do servidor
+        // está no papel padrão, então o conteúdo e a casca ficam escondidos até as ilhas renderizarem com a sessão guardada.
+        // Assim ninguém vê, nem por um quadro, o dado de outro papel. Os hooks de permissoes.ts tiram as marcas.
+        function sessaoPendente(busca) {
+          var papel = null, s = null, aj = null;
+          try { papel = localStorage.getItem("proto-papel"); s = JSON.parse(localStorage.getItem("proto-sessao") || "null"); aj = localStorage.getItem("proto-matriz-ajustes"); } catch (e) {}
+          var daUrl = new URLSearchParams(busca).get("papel");
+          if (/^(dono|gestora|atendente|tecnico|financeiro)$/.test(daUrl || "")) papel = daUrl;
+          return (!!papel && papel !== "gestora") || !!(s && ((s.pessoaId && s.pessoaId !== "marina") || (s.unidade && s.unidade !== "pampulha"))) || !!(aj && aj !== "{}");
+        }
+        function liberarDepois(marcas) {
+          // rede de segurança para página sem ilha que leia a sessão: solta quando as ilhas da página começaram a hidratar e
+          // o navegador ficou ocioso duas vezes (a hidratação e a nova renderização com a sessão já terminaram)
+          var t0 = Date.now();
+          var ocioso = window.requestIdleCallback || function (f) { return setTimeout(f, 300); };
+          var soltar = function () { marcas.forEach(function (m) { r.removeAttribute(m); }); };
+          (function ver() {
+            // com a casca na lista, espera também as ilhas dela (client:idle)
+            var faltam = document.querySelector(marcas.length > 1 ? "astro-island[ssr]:not([client=visible])" : "astro-island[ssr][client=load]");
+            if (faltam && Date.now() - t0 < 8000) return requestAnimationFrame(ver);
+            ocioso(function () { ocioso(soltar, { timeout: 4000 }); }, { timeout: 4000 });
+          })();
+        }
+        if (!window.__protoIniciado && sessaoPendente(location.search)) {
+          r.setAttribute("data-sessao-pendente", "");
+          r.setAttribute("data-casca-pendente", "");
+          document.addEventListener("DOMContentLoaded", function () { liberarDepois(["data-sessao-pendente", "data-casca-pendente"]); });
+        }
+        // Cliente do portal fora da padrão (src/proto/cliente.ts): o mesmo cuidado, com marcas próprias (o CSS só esconde
+        // o conteúdo do portal e a conta no topo; os hooks de cliente.ts tiram as marcas)
+        function clientePendente(busca) {
+          var c = null;
+          try { c = localStorage.getItem("proto-cliente"); } catch (e) {}
+          var daUrl = new URLSearchParams(busca).get("cliente");
+          if (/^C-\d{4}$/.test(daUrl || "")) c = daUrl;
+          return !!c && /^C-\d{4}$/.test(c) && c !== "C-0007";
+        }
+        if (!window.__protoIniciado && clientePendente(location.search)) {
+          r.setAttribute("data-cliente-pendente", "");
+          r.setAttribute("data-cliente-casca-pendente", "");
+          document.addEventListener("DOMContentLoaded", function () { liberarDepois(["data-cliente-pendente", "data-cliente-casca-pendente"]); });
+        }
+
+        // Módulo desligado ou fora do ar (src/proto/modulos.ts): o HTML do servidor sai com todos ligados. Antes da pintura,
+        // uma folha de estilo do documento (sobrevive à troca de página) esconde os links do módulo desligado na navegação e
+        // no "Mais", e html[data-modulo-indisponivel] esconde a tela do módulo que não está ligado (o GuardaDeModulo mostra
+        // o aviso no lugar). Depois de hidratar, a casca já renderiza sem o módulo; a folha acompanha as mudanças.
+        function situacoesDosModulos() {
+          var m = {};
+          try { (JSON.parse(localStorage.getItem(chaveModulos) || "[]") || []).forEach(function (x) { if (x && typeof x.id === "string") m[x.id] = x.situacao; }); } catch (e) {}
+          return m;
+        }
+        window.__protoModulosCss = function () {
+          if (typeof CSSStyleSheet === "undefined" || !("adoptedStyleSheets" in document)) return;
+          var sit = situacoesDosModulos(), regras = [];
+          linksDosModulos.forEach(function (m) {
+            if (sit[m.id] !== "desligado") return;
+            var a = ":is(" + m.hrefs.map(function (h) { return 'a[href="' + h + '"]'; }).join(", ") + ")";
+            // o item (li) só com links do módulo, na navegação; e o grupo do módulo na página "Mais"
+            regras.push("nav li:has(" + a + "):not(:has(a:not(" + a + "))), #conteudo section[aria-label=\"" + m.nome.replace(/"/g, "") + "\"]:has(" + a + ") { display: none !important; }");
+          });
+          if (!window.__protoFolhaModulos) {
+            if (!regras.length) return;
+            window.__protoFolhaModulos = new CSSStyleSheet();
+            document.adoptedStyleSheets = document.adoptedStyleSheets.concat([window.__protoFolhaModulos]);
+          }
+          window.__protoFolhaModulos.replaceSync(regras.join("\n"));
+        };
+        function marcarModulo(doc) {
+          var meta = doc.querySelector('meta[name="proto-modulo"]'), id = meta && meta.getAttribute("content");
+          var s = id ? situacoesDosModulos()[id] : null;
+          if (s && s !== "ligado") doc.documentElement.setAttribute("data-modulo-indisponivel", id);
+          else doc.documentElement.removeAttribute("data-modulo-indisponivel");
+        }
+        if (!window.__protoIniciado) {
+          window.__protoModulosCss();
+          marcarModulo(document);
+          document.addEventListener("astro:before-swap", function (e) { marcarModulo(e.newDocument); });
+        }
+
+        // o conteúdo vem pronto no HTML (dados de exemplo renderizados no servidor): não há tela de carregamento
+        if (!window.__protoIniciado) {
+          window.__protoIniciado = true;
+          // o ClientRouter troca os atributos do <html> pelos da página nova: leva os do protótipo junto
+          document.addEventListener("astro:before-swap", function (e) {
+            var n = e.newDocument.documentElement;
+            if (sessaoPendente(e.to.search)) {
+              n.setAttribute("data-sessao-pendente", "");
+              // vindo de uma página sem a casca (a Entrada), a casca nova chega com o HTML do servidor (a pessoa padrão):
+              // esconde também, até as ilhas dela renderizarem com a sessão guardada (P3-17: "MD" no lugar de "BS")
+              var marcas = ["data-sessao-pendente"];
+              if (!document.querySelector("[data-casca-sessao]") && e.newDocument.querySelector("[data-casca-sessao]")) {
+                n.setAttribute("data-casca-pendente", "");
+                marcas.push("data-casca-pendente");
+              }
+              document.addEventListener("astro:page-load", function () { liberarDepois(marcas); }, { once: true });
+            }
+            if (clientePendente(e.to.search)) {
+              n.setAttribute("data-cliente-pendente", "");
+              document.addEventListener("astro:page-load", function () { liberarDepois(["data-cliente-pendente"]); }, { once: true });
+            }
+            ["style", "class", "data-vidro", "data-preset", "data-banner", "data-skin", "data-raio", "data-borda", "data-densidade", "data-profundidade", "data-destaque", "data-lateral", "data-prototipo-controles"].forEach(function (a) {
+              if (r.hasAttribute(a)) n.setAttribute(a, r.getAttribute(a)); else n.removeAttribute(a);
+            });
+          });
+
+          // abertura (splash): uma vez por aparelho (localStorage), na home, sem movimento reduzido, até 1,2 s. É uma
+          // camada estática do layout (#abertura): aparece na primeira pintura, sem buraco entre fases, e sai sozinha.
+          // na home e na porta de entrada (/entrar/): quem chega pelo login vê a abertura ali, e o Início, depois do
+          // "Entrar", já não a repete (a mesma marca de "vista" vale para as duas)
+          var caminho = location.pathname.replace(/\/+$/, "");
+          var naHome = caminho === home.replace(/\/+$/, "") || caminho === home.replace(/\/+$/, "") + "/entrar";
+          var vista = false;
+          try { vista = localStorage.getItem("proto-abertura-vista") === "1"; } catch (e) {}
+          var reduzido = matchMedia("(prefers-reduced-motion: reduce)").matches;
+          var tocar = aberturaAtiva && naHome && !vista && !reduzido;
+          if (tocar) {
+            r.setAttribute("data-abertura", "");
+            try { localStorage.setItem("proto-abertura-vista", "1"); } catch (e) {}
+          }
+          window.__protoEncerrarAbertura = function () {
+            var el = document.getElementById("abertura");
+            if (!r.hasAttribute("data-abertura")) { if (el) el.remove(); return; }
+            r.setAttribute("data-abertura-saindo", "");
+            setTimeout(function () {
+              r.removeAttribute("data-abertura"); r.removeAttribute("data-abertura-saindo");
+              if (el) el.remove();
+              window.dispatchEvent(new Event("proto:abertura-fim"));
+            }, 260);
+          };
+          document.addEventListener("DOMContentLoaded", function () {
+            var el = document.getElementById("abertura");
+            if (!tocar) { if (el) el.remove(); }
+          });
+          if (tocar) {
+            // "Pular" por delegação, registrada já aqui no <head>: o botão responde assim que aparece na tela. Antes, o
+            // ouvinte entrava no DOMContentLoaded, que espera os scripts dos módulos; sob carga, o clique dos primeiros
+            // segundos se perdia.
+            var relogio = 0, pausado = false;
+            var agendar = function (ms) { clearTimeout(relogio); if (!pausado) relogio = setTimeout(window.__protoEncerrarAbertura, ms || 1200); };
+            var noPular = function (n) { return !!(n && n.closest && n.closest("#abertura-pular")); };
+            document.addEventListener("click", function (e) { if (noPular(e.target)) window.__protoEncerrarAbertura(); }, true);
+            // com o ponteiro ou o foco no "Pular", a abertura espera o clique (não some debaixo do dedo)
+            var pausar = function (e) { if (noPular(e.target)) { pausado = true; clearTimeout(relogio); } };
+            document.addEventListener("pointerover", pausar, true);
+            document.addEventListener("focusin", pausar, true);
+            document.addEventListener("pointerout", function (e) {
+              if (noPular(e.target) && !noPular(e.relatedTarget)) { pausado = false; agendar(600); }
+            }, true);
+            // 1,2 s a partir de quando a página terminou de carregar (com a página ainda carregando, a abertura cobre a espera)
+            if (document.readyState === "complete") agendar(); else addEventListener("load", function () { agendar(); }, { once: true });
+          }
+          // nas trocas de página (ClientRouter), a camada da abertura que veio no HTML novo não toca: sai do DOM
+          document.addEventListener("astro:after-swap", function () { if (!r.hasAttribute("data-abertura")) { var el = document.getElementById("abertura"); if (el) el.remove(); } });
+
+          // a transição de página (View Transitions) é abortada pelo navegador quando a janela muda de tamanho no meio dela:
+          // é benigno (a página nova já entrou), mas vira erro sem dono no console; só esse caso é silenciado
+          addEventListener("unhandledrejection", function (e) {
+            var m = e.reason && (e.reason.message || String(e.reason));
+            if (e.reason && e.reason.name === "InvalidStateError" && /Transition was aborted/.test(m)) e.preventDefault();
+          });
+
+          // tecla F alterna a barra do protótipo (nunca com foco em campo de texto)
+          document.addEventListener("keydown", function (e) {
+            if (e.key.toLowerCase() !== "f" || e.ctrlKey || e.metaKey || e.altKey) return;
+            var t = e.target;
+            if (t && t.closest && t.closest("input, textarea, select, [contenteditable], [role=combobox]")) return;
+            r.toggleAttribute("data-prototipo-controles");
+          });
+        }
+      })();
+    </script>
+    <ClientRouter />
+  </head>
+  <body>
+    <a href="#conteudo" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-md focus:bg-popover focus:px-3 focus:py-2 focus:shadow-lg">Pular para o conteúdo</a>
+    <!-- Abertura: logo e nome sobre o fundo do preset, uma vez por aparelho, até 1,2 s (script do <head>). -->
+    <div id="abertura" data-abertura-tela role="status" aria-label={`${MARCA.nome}, abrindo`}>
+      <div class="abertura-miolo">
+        <span class="abertura-logo" set:html={MARCA.logo} />
+        <span class="font-display text-lg font-semibold tracking-tight">{MARCA.nome}</span>
+      </div>
+      <button id="abertura-pular" type="button" class="absolute top-4 right-4 inline-flex h-10 items-center rounded-full px-4 text-sm shadow-[inset_0_0_0_1px_var(--border)] backdrop-blur hover:bg-muted">Pular</button>
+    </div>
+    <!-- Fundo ambiente (camada 0): malha de brilhos do preset + grão, fixo atrás de tudo. Tokens em sistema.css. -->
+    <div id="fundo-ambiente" aria-hidden="true" transition:persist="fundo-ambiente"></div>
+    <slot />
+    <BarraPrototipo client:idle transition:persist="prototipo" />
+    <Toaster client:idle duration={7000} position="bottom-right" mobileOffset={{ bottom: 100 }} closeButton transition:persist="toaster" />
+  </body>
+</html>

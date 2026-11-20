@@ -1,0 +1,14 @@
+---
+import AppShell from "@/components/app/AppShell.astro";
+import { inicioDoPainel, url } from "@/lib/url";
+// SplitText veio do registro do React Bits: npx shadcn@latest add @react-bits/SplitText-TS-TW
+import SplitText from "@/components/SplitText";
+---
+<AppShell titulo="Página não encontrada">
+  <div class="mx-auto flex max-w-md flex-col items-center gap-3 px-4 py-24 text-center">
+    <p class="num text-sm text-muted-foreground">Erro 404</p>
+    <SplitText client:load text="Esta página não existe" tag="h1" className="text-2xl font-semibold tracking-tight" splitType="chars" trigger="load" />
+    <p class="text-muted-foreground">O link pode estar errado ou a tela ainda não foi feita neste protótipo.</p>
+    <a href={inicioDoPainel()} class="mt-2 inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground">Voltar para a visão geral</a>
+  </div>
+</AppShell>

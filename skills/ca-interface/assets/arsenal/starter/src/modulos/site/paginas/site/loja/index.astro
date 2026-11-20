@@ -1,0 +1,13 @@
+---
+// /site/loja/ · a vitrine da loja online (5.13). Some quando Configurações desliga a loja (casca/LojaFechada.astro).
+import "@/styles/global.css";
+import SiteLayout from "../../../casca/SiteLayout.astro";
+import LojaFechada from "../../../casca/LojaFechada.astro";
+import Loja from "../../../telas/Loja";
+---
+<SiteLayout titulo="Loja: peças e filtros de ar-condicionado em BH" descricao="Aparelhos split, filtros, limpeza e material elétrico da loja da Oficina Norte na Pampulha, com retirada no balcão ou entrega em BH e região." atual="loja" transacional>
+  <div class="wrap transacao">
+    <div data-loja-aberta><Loja client:load /></div>
+    <LojaFechada />
+  </div>
+</SiteLayout>

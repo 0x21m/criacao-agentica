@@ -1,0 +1,19 @@
+---
+// Uma combinação da folha do sistema (preset, tema e vidro pela URL). Embutida em iframe pela rota /sistema.
+import Base from "@/layouts/Base.astro";
+import FolhaDoSistema from "@/components/sistema/FolhaDoSistema";
+---
+<Base titulo="Folha do sistema">
+  <main id="conteudo" class="mx-auto max-w-3xl">
+    <FolhaDoSistema client:load />
+  </main>
+  <script is:inline>
+    // avisa a página-mãe da altura, para o iframe não ter rolagem própria
+    (function () {
+      if (window.parent === window) return;
+      var enviar = function () { parent.postMessage({ folha: location.search, altura: document.documentElement.scrollHeight }, "*"); };
+      new ResizeObserver(enviar).observe(document.documentElement);
+      addEventListener("load", enviar);
+    })();
+  </script>
+</Base>

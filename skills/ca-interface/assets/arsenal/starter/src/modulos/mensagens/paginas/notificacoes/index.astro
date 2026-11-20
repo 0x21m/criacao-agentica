@@ -1,0 +1,8 @@
+---
+// Módulo Mensagens · rota /notificacoes/: a central de notificações (no celular, o sino em tela cheia).
+import AppShell from "@/components/app/AppShell.astro";
+import Notificacoes from "../../telas/Notificacoes";
+---
+<AppShell titulo="Notificações">
+  <Notificacoes client:load />
+</AppShell>

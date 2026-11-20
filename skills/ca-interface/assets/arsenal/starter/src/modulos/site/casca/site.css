@@ -1,0 +1,217 @@
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/figtree";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/geist";
+/* =====================================================================================================================
+   PONTE ENTRE O STARTER E O KIT DA DESIGN-TASTE-FRONTEND (módulo Site e landing, spec 5.13).
+   O kit (system.css, layout.css, motion.css, servidos em /site/assets/) dá a estrutura: uma seção por tela, .wrap,
+   grade de 12 colunas, botões, nav, rodapé, hover e entrada do hero. As cores e as fontes vêm do preset ativo do
+   starter (src/styles/sistema.css, html[data-preset]): é a regra CLI-42, o site e o portal são o mesmo produto.
+   Waiver registrado: a taste dá uma paleta "dealt" por ofício (stone-blueprint) e um par Nunito; aqui valem os
+   tokens do preset (Noite por padrão: verde-petróleo quase preto, acento lima, Bricolage Grotesque / Onest).
+
+   Três nomes colidem entre os dois sistemas: --muted (starter: fundo; kit: texto cinza), --accent e --card.
+   No <html> ficam os do starter (e as cópias --st-*); a partir do <body> valem os do kit. Quem montar uma peça do
+   starter dentro do site (o BannerSobreposto nas páginas internas) põe .escopo-starter em volta dela.
+   ===================================================================================================================== */
+
+/* As fontes de cada preset (as mesmas de src/proto/aparencia/presets.ts). Um --fonte-* gravado pelo painel de
+   aparência (style no <html>) vence estas. */
+html[data-site] {
+  --fonte-titulo: "Bricolage Grotesque Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --fonte-texto: "Onest Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+}
+html[data-site][data-preset="vidro"] { --fonte-titulo: "Figtree Variable", ui-sans-serif, system-ui, sans-serif; --fonte-texto: "Inter Variable", ui-sans-serif, system-ui, sans-serif; }
+html[data-site][data-preset="sobrio"] { --fonte-titulo: "Archivo Variable", ui-sans-serif, system-ui, sans-serif; --fonte-texto: "Archivo Variable", ui-sans-serif, system-ui, sans-serif; }
+html[data-site][data-preset="aurora"] { --fonte-titulo: "Geist Variable", ui-sans-serif, system-ui, sans-serif; --fonte-texto: "Inter Variable", ui-sans-serif, system-ui, sans-serif; }
+html[data-site][data-preset="sinal"] { --fonte-titulo: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif; --fonte-texto: "Manrope Variable", ui-sans-serif, system-ui, sans-serif; }
+
+/* A paleta do kit (--p-*) lida dos tokens do preset. Resolvidas no <html>, onde --card e --muted ainda são os do starter. */
+html[data-site][data-preset] {
+  --p-bg: var(--background);
+  --p-surface: color-mix(in oklab, var(--card) 88%, var(--background));
+  --p-ink: var(--foreground);
+  --p-muted: var(--muted-foreground);
+  --p-accent: var(--primary);
+  --p-accent-ink: var(--primary-foreground);
+  --p-action: var(--primary);
+  --p-action-ink: var(--primary-foreground);
+  --p-inv-bg: var(--destaque-para, var(--foreground));
+  --p-inv-surface: var(--destaque-de, var(--foreground));
+  --p-inv-ink: var(--destaque-tinta, var(--background));
+  --p-inv-muted: var(--destaque-tinta-2, var(--background));
+  --p-inv-accent: var(--banner-1, var(--primary));
+  --p-inv-accent-ink: var(--primary-foreground);
+  --p-inv-action: var(--banner-1, var(--primary));
+  --p-inv-action-ink: var(--primary-foreground);
+  --st-muted: var(--muted);
+  --st-accent: var(--accent);
+  --st-card: var(--card);
+  --display-weight: 400;
+  --display-tracking: -0.03em;
+  background-color: var(--background);
+  color-scheme: light;
+}
+html[data-site][data-preset].dark { color-scheme: dark; }
+
+/* O Tailwind do starter gera .start-N (inset-inline-start) ao ler as classes de grade do kit (.start-7 = coluna 7).
+   No site elas são só colunas: o deslocamento sai. */
+html[data-site] :is(.start-2, .start-3, .start-4, .start-5, .start-6, .start-7, .start-8, .start-9, .start-10, .start-11, .start-12) { inset-inline-start: auto; }
+
+/* Do <body> para dentro: os nomes do kit. */
+html[data-site] body {
+  --muted: var(--p-muted);
+  --accent: var(--p-accent);
+  --accent-ink: var(--p-accent-ink);
+  --card: var(--p-surface);
+  --surface: var(--p-surface);
+  --bg: var(--p-bg);
+  --ink: var(--p-ink);
+  --action: var(--p-action);
+  --action-ink: var(--p-action-ink);
+  --line: color-mix(in oklab, var(--p-ink) 12%, transparent);
+  --line-strong: color-mix(in oklab, var(--p-ink) 22%, transparent);
+  --fx-muted: var(--p-muted);
+  --fx-accent: var(--p-accent);
+  --font-display: var(--fonte-titulo);
+  --font-text: var(--fonte-texto);
+  /* o fundo ambiente do starter aparece por trás das seções (desenhado nos pseudo-elementos abaixo) */
+  background: transparent;
+  color: var(--p-ink);
+  font-family: var(--fonte-texto);
+}
+/* Fundo ambiente do starter (o mesmo #fundo-ambiente de sistema.css: três brilhos do preset e o grão), pintado em
+   pseudo-elementos do <body> para que o corpo da página tenha só header.nav, main e footer.closing (regra da taste). */
+html[data-site] body::before,
+html[data-site] body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+html[data-site] body::before {
+  background-image:
+    radial-gradient(52rem 34rem at 12% -6%, var(--amb-1, transparent), transparent 68%),
+    radial-gradient(46rem 32rem at 96% 4%, var(--amb-2, transparent), transparent 70%),
+    radial-gradient(70rem 40rem at 55% 112%, var(--amb-3, transparent), transparent 70%);
+}
+html[data-site][data-preset="vidro"] body::before {
+  inset: -12%;
+  background-image:
+    radial-gradient(42% 46% at 18% 12%, var(--amb-1), transparent 70%),
+    radial-gradient(38% 42% at 88% 18%, var(--amb-2), transparent 70%),
+    radial-gradient(50% 44% at 55% 96%, var(--amb-3), transparent 70%);
+}
+html[data-site] body::after {
+  opacity: var(--amb-grao, 0.06);
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* Peça do starter dentro do site: volta os nomes do starter. */
+html[data-site] .escopo-starter {
+  --muted: var(--st-muted);
+  --accent: var(--st-accent);
+  --card: var(--st-card);
+  --font-display: var(--fonte-titulo);
+}
+
+/* O cabeçalho do kit é opaco e fixo; no Vidro ele ganha o véu da casca do starter (mesmo opaco o bastante). */
+html[data-site] .nav { background: var(--p-bg); }
+
+/* Logo da marca (MARCA.logo) no lugar da marca sorteada: o cliente tem o próprio SVG. */
+.marca-logo { display: inline-grid; place-items: center; width: 28px; height: 28px; color: var(--p-accent); margin-right: 10px; flex: none; }
+.marca-logo svg { width: 100%; height: 100%; }
+html[data-site]:not(.dark) .marca-logo { color: var(--texto-primario, var(--p-ink)); }
+
+/* ---- página: o que fica dentro de um visual (o kit pede CSS de página só aí) ---- */
+
+/* picture-develops: a fotografia da seção na coluna da direita, da altura do texto ao lado (modelo in-page-service) */
+.develop { margin: 0; border-radius: var(--r-lg); overflow: hidden; height: min(600px, var(--ly-fit)); }
+.develop > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 1023px) { .develop { height: auto; aspect-ratio: 4 / 3; margin-top: var(--s-7); } }
+
+/* lista numerada dos passos */
+.passos { list-style: none; margin: 0; padding: 0; counter-reset: passo; }
+.passos > li { counter-increment: passo; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: var(--s-1) var(--s-4); padding-block: var(--s-5); border-bottom: 1px solid var(--line); }
+.passos > li:first-child { padding-top: 0; }
+.passos > li::before { content: counter(passo); grid-row: span 2; font: var(--display-weight) var(--t-h3)/1 var(--font-display); color: var(--p-accent); }
+html[data-site]:not(.dark) .passos > li::before { color: var(--texto-primario, var(--p-ink)); }
+.passos h3 { font: 500 var(--t-lead)/1.35 var(--font-text); margin: 0; }
+.passos p { margin: 0; max-width: 52ch; }
+
+/* a foto do serviço em cada linha da lista (peek) e a dupla da loja */
+.dupla { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); }
+.dupla .frame { aspect-ratio: 4 / 3; }
+@media (max-width: 639px) { .dupla { grid-template-columns: minmax(0, 1fr); } }
+
+/* rodapé: as palavras do site na linha legal (o rodapé de visita cabe numa tela com o fechamento) */
+.rodape-links { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-6); font-weight: 500; }
+.rodape-links a { display: inline-flex; align-items: center; min-height: 44px; }
+@media (max-width: 639px) {
+  .rodape-links { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+  #loja .dupla.fill { flex: none; }
+  #servicos .rows__name { display: inline-flex; align-items: center; min-height: 44px; }
+  #servicos .frame.frame--fill { aspect-ratio: 4 / 5; }
+}
+
+/* serviços: abaixo de 1024 a lista vem primeiro e a foto do serviço logo abaixo, em 4:3 */
+@media (max-width: 1023px) {
+  #servicos .grid.fill { flex: none; min-height: auto; }
+  #servicos .frame--fill { flex: none; height: auto; aspect-ratio: 4 / 3; margin-top: var(--s-7); }
+}
+
+/* ---- páginas internas (serviço, preços, sobre, contato, créditos): banner do starter e blocos de altura livre ---- */
+.interna { padding-top: var(--nav); }
+.interna .bloco { padding-block: var(--s-9); }
+.interna .bloco + .bloco { padding-top: 0; }
+.interna-banner { padding-top: var(--s-5); }
+.cartao-acao { display: grid; gap: var(--s-4); padding: var(--s-6); }
+.cartao-acao dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); margin: 0; }
+.cartao-acao dt { font-size: var(--t-label); color: var(--muted-foreground); }
+.cartao-acao dd { margin: 0; font: var(--display-weight) var(--t-h3)/1.2 var(--fonte-titulo); }
+@media (max-width: 639px) { .cartao-acao dl { grid-template-columns: minmax(0, 1fr); } }
+.tabela-precos { width: 100%; border-collapse: collapse; }
+.tabela-precos :is(th, td) { text-align: left; padding: var(--s-4) var(--s-4) var(--s-4) 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tabela-precos th { font: 500 var(--t-label)/1.4 var(--font-text); color: var(--p-muted); }
+.tabela-precos td.valor { white-space: nowrap; font-weight: 500; }
+/* a descrição do banner do starter (div, não p) também sem órfã no fim ("dias." sozinho, P3-15) */
+html[data-site] .escopo-starter h1 + div { text-wrap: pretty; }
+/* alvos: os links da tabela e das listas de serviço nunca abaixo de 24 px; no toque, 44 px (P2-10) */
+:is(.tabela-precos, .rows) a.link { min-height: 24px; }
+@media (pointer: coarse), (max-width: 639px) { :is(.tabela-precos, .rows) a.link { min-height: 44px; } }
+@media (max-width: 639px) {
+  .tabela-precos thead { display: none; }
+  .tabela-precos tr { display: grid; padding-block: var(--s-4); border-bottom: 1px solid var(--line); }
+  .tabela-precos td { border: 0; padding: 2px 0; }
+}
+
+/* ---- polish (impeccable): superfícies do navegador, o cartão de horário e a tabela de preços ---- */
+html[data-site] ::selection { background: color-mix(in oklab, var(--p-accent) 70%, transparent); color: var(--p-accent-ink); }
+html[data-site] :is(input, textarea) { caret-color: var(--p-accent); }
+html[data-site] { scrollbar-color: color-mix(in oklab, var(--p-ink) 28%, transparent) transparent; }
+/* o horário é dado do protótipo (relógio fixo, D9): o ponto fica parado, sem pulso de "ao vivo" */
+html[data-site] .ly-live::before { animation: none; }
+/* o cartão do próximo horário leva à reserva desse horário no portal */
+html[data-site] a.ly-float { color: inherit; text-decoration: none; transition: border-color var(--m-in, 150ms) var(--ease), translate var(--m-in, 150ms) var(--ease); }
+@media (hover: hover) and (pointer: fine) { html[data-site] a.ly-float:hover { translate: 0 -2px; border-color: var(--line-strong); } }
+/* o global.css do starter pinta o thead com var(--muted), que no site é cor de texto (colisão de nomes): sai */
+html[data-site] main .tabela-precos thead,
+html[data-site] main .tabela-precos :is(th, td) { background: transparent; }
+html[data-site] main .tabela-precos :is(th, td) { padding-inline: 0 var(--s-4); }
+
+/* ---- loja online ligável (Configurações, EST-47): html[data-loja] vem do script antes da pintura do SiteLayout ---- */
+html[data-loja] [data-parte-loja] { display: none !important; }
+[data-loja-fechada] { display: none; }
+html[data-loja] [data-loja-fechada] { display: block; }
+html[data-loja] [data-loja-aberta] { display: none !important; }
+html[data-loja="fora"] [data-se-loja="desligada"],
+html[data-loja="desligada"] [data-se-loja="fora"] { display: none; }
+
+/* ---- páginas de transação (agendar, loja, carrinho, checkout, confirmação): o banner do starter e o card da etapa ---- */
+.transacao { padding-block: var(--s-5) var(--s-9); }
+/* os títulos do kit (h1 a h4 por elemento, sem camada) não mandam nas peças do starter: valem as utilidades delas */
+html[data-site] .escopo-starter :is(h1, h2, h3, h4) { font-size: revert-layer; line-height: revert-layer; font-weight: revert-layer; letter-spacing: revert-layer; font-family: revert-layer; hyphens: manual; }
+.loja-fechada { max-width: 46rem; padding-block: var(--s-9); }
+.loja-fechada p { margin-top: var(--s-4); color: var(--p-muted); }
+.loja-fechada .btn-row { margin-top: var(--s-6); }
+/* O .grid do kit (12 colunas e todo filho de ponta a ponta) é CSS sem camada e venceria as utilidades do Tailwind
+   (que moram em @layer) nas peças do starter: dentro do .escopo-starter, a grade volta a ser a das utilidades. */
+html[data-site] .escopo-starter .grid { grid-template-columns: revert-layer; column-gap: revert-layer; row-gap: revert-layer; }
+html[data-site] .escopo-starter .grid > * { grid-column: revert-layer; min-width: revert-layer; }

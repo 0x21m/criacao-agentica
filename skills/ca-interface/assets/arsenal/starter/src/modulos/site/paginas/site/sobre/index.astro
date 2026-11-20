@@ -1,0 +1,54 @@
+---
+// /site/sobre/ — confiança (spec 5.13): fatos da seção 1 da spec, a equipe pelo nome (sem retrato: nenhuma foto de
+// pessoa real passa por funcionário) e as duas unidades só com o bairro.
+import "@/styles/global.css";
+import SiteLayout from "@/modulos/site/casca/SiteLayout.astro";
+import BannerSite from "@/modulos/site/casca/BannerSite";
+import Foto from "@/modulos/site/casca/Foto.astro";
+import { SITE, UNIDADES, EQUIPE, linkRegiao } from "@/proto/site";
+---
+<SiteLayout
+  titulo="Sobre a Oficina Norte: climatização e manutenção em BH"
+  descricao="A Oficina Norte cuida de ar-condicionado, elétrica e montagem em Belo Horizonte e região desde 2014, com loja na Pampulha e base em Contagem."
+  atual="sobre"
+>
+  <div class="wrap interna-banner">
+    <BannerSite
+      client:load
+      sobrelinha={`Desde ${SITE.fundada}`}
+      titulo="Sobre a Oficina Norte"
+      descricao="Climatização e manutenção para casas e comércios de Belo Horizonte e região metropolitana."
+      fatos={[
+        { rotulo: "Fundada em", valor: String(SITE.fundada) },
+        { rotulo: "Unidades", valor: "Pampulha e Contagem" },
+        { rotulo: "Garantia de serviço", valor: `${SITE.garantiaDias} dias` },
+      ]}
+    />
+  </div>
+  <div class="bloco">
+    <div class="wrap grid grid--top">
+      <div class="span-5 stack-4">
+        <h2>Duas unidades</h2>
+        {UNIDADES.map((u) => (
+          <div>
+            <h3 class="t-card">{u.nome}</h3>
+            <p>{u.papel}. {u.bairro}, {u.cidade}.</p>
+            <p><a class="link" href={linkRegiao(u)}>Ver a região</a></p>
+          </div>
+        ))}
+        <p class="muted">Atendemos {SITE.cidades.slice(0, -1).join(", ")} e {SITE.cidades.at(-1)}.</p>
+      </div>
+      <div class="frame frame--photo span-6 start-7" style="aspect-ratio: 4 / 3">
+        <Foto id="f188894092" class="frame__img" alt="Unidade interna de split presa na parede, com o tubo de cobre saindo por baixo" eager />
+      </div>
+    </div>
+  </div>
+  <div class="bloco">
+    <div class="wrap">
+      <h2>Quem atende</h2>
+      <ul class="rows" style="margin-top: var(--s-6)">
+        {EQUIPE.map((p) => (<li><span class="rows__name">{p.nome}</span><span class="rows__value">{p.papel}</span></li>))}
+      </ul>
+    </div>
+  </div>
+</SiteLayout>

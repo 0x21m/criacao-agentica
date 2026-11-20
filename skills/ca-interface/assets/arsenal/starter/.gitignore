@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+capturas/
+qa/cap/
+qa/cons/
+.taste-skill/
+*.log
+logs/

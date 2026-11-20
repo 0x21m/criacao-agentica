@@ -1,0 +1,8 @@
+---
+// Módulo Equipe · rota /equipe/permissoes/ (?papel=tecnico escolhe o papel no celular; ?q= e ?simuladas=1 filtram).
+import AppShell from "@/components/app/AppShell.astro";
+import Permissoes from "../../../telas/Permissoes";
+---
+<AppShell titulo="Permissões">
+  <Permissoes client:load />
+</AppShell>

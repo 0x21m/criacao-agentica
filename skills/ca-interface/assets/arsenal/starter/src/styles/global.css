@@ -1,0 +1,1756 @@
+@import "tailwindcss";
+/* O Tailwind não varre documentos, ferramentas nem experimentos: editar um .md recarregava todas as páginas do servidor
+   de desenvolvimento no meio das jornadas (falsos achados e falhas instáveis). */
+@import "tw-animate-css";
+@import "./shadcn-tailwind.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/figtree";
+@import "@fontsource-variable/fraunces";
+@import "@fontsource-variable/dm-sans";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/inter";
+
+@custom-variant dark (&:is(.dark *));
+/* O React Aria marca a orientação com data-orientation; os componentes do shadcn usam
+   data-horizontal/data-vertical. Estas duas linhas fazem as duas formas coincidirem. */
+@custom-variant data-horizontal (&[data-orientation="horizontal"]);
+@custom-variant data-vertical (&[data-orientation="vertical"]);
+
+/* Inter em tudo (biblioteca, vitrine, produtos e sites): nenhuma marca troca a fonte e nenhuma folha de fonte externa
+   entra. Monoespaçada só em código (code, pre, kbd, samp: a do sistema, --font-mono do Tailwind).
+   --text-2xs: o menor texto das peças (contagens, iniciais), que a densidade sobe junto com o resto. */
+@theme {
+    /* Starter: a fonte vem do preset de direção (--fonte-texto no <html>); Inter só como padrão. */
+    --font-sans: var(--fonte-texto, 'Inter Variable'), Inter, ui-sans-serif, system-ui, sans-serif;
+    --text-2xs: 0.6875rem;
+    --text-2xs--line-height: calc(1 / 0.6875);
+}
+
+@theme inline {
+    /* Títulos de camada e de card (font-heading): a mesma Inter; o caráter do título vem do eixo data-titulos. */
+    --font-heading: var(--fonte-titulo, var(--font-sans));
+    --font-display: var(--fonte-titulo, var(--font-sans));
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-azul: var(--chart-1);
+    --color-ambar: var(--chart-2);
+    --color-turquesa: var(--chart-3);
+    --color-violeta: var(--chart-4);
+    --color-positive: var(--positive);
+    --color-positive-foreground: var(--positive-foreground);
+    --color-negative-foreground: var(--negative-foreground);
+    --color-azul-texto: var(--texto-azul);
+    --color-ambar-texto: var(--texto-ambar);
+    --color-turquesa-texto: var(--texto-turquesa);
+    --color-violeta-texto: var(--texto-violeta);
+    --color-alerta: var(--alerta);
+    --color-alerta-texto: var(--texto-alerta);
+    --color-negativo-texto: var(--texto-negativo);
+    --color-negative: var(--negative);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Anel de foco (--ring): as peças o desenham a 50% (ring-ring/50), então o token é escuro no claro e claro no escuro
+   para o anel chegar a 3:1 contra a página, o cartão e o cinza suave (WCAG 1.4.11): 3,2:1 no claro e 3,1:1 no escuro.
+   Com 0,708 e 0,556 (o padrão do shadcn), o anel ficava em 1,5:1 e 1,9:1. Conta em docs/web.md. */
+:root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.488 0.243 264.376);
+    --primary-foreground: oklch(0.97 0.014 254.604);
+    --secondary: oklch(0.967 0.001 286.375);
+    --secondary-foreground: oklch(0.21 0.006 285.885);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.53 0 0);
+    --accent: oklch(0.488 0.243 264.376);
+    --accent-foreground: oklch(0.97 0.014 254.604);
+    --destructive: oklch(0.53 0.22 27);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.25 0 0);
+    --chart-1: oklch(0.546 0.245 262.881);
+    --chart-2: oklch(0.555 0.163 48.998);
+    --chart-3: oklch(0.511 0.096 186.391);
+    --chart-4: oklch(0.491 0.27 292.581);
+    --chart-5: oklch(0.556 0 0);
+    --positive: oklch(0.47 0.12 160);
+    --negative: oklch(0.5 0.2 27);
+    /* Texto sobre o verde e o vermelho cheios (botão de aceitar, contador negativo). */
+    --positive-foreground: oklch(0.985 0 0);
+    --negative-foreground: oklch(0.985 0 0);
+    /* Cor de sentido para TEXTO (selos, valores, ícones): mais escura no claro, para o contraste AA.
+       Gráficos e preenchimentos continuam com o tom vivo de --chart-N. */
+    --texto-azul: oklch(0.48 0.21 263);
+    --texto-ambar: oklch(0.47 0.13 48);
+    --texto-turquesa: oklch(0.45 0.085 186);
+    --texto-violeta: oklch(0.46 0.23 293);
+    --texto-primario: var(--primary);
+    --alerta: oklch(0.77 0.16 72);
+    --texto-alerta: oklch(0.47 0.11 62);
+    /* Texto do botão de recusar (vermelho tingido): folga de 4,8:1 também sobre o pé cinza do cartão. */
+    --texto-negativo: oklch(0.47 0.2 27);
+    --radius: 0.875rem;
+    /* Superfícies (cartões, molduras): contorno e sombra por token; a skin e o eixo de borda trocam (fim do arquivo). */
+    --anel-cartao: color-mix(in oklab, var(--foreground) 9%, transparent);
+    --sombra-cartao: 0 1px 2px 0 oklch(0.2 0.02 260 / 0.05);
+    /* Botão cheio (brilho de 1 px em cima e sombra curta) e controle contornado (sombra mínima). */
+    --sombra-botao: inset 0 1px 0 0 oklch(1 0 0 / 0.14), 0 1px 2px 0 oklch(0.2 0.02 260 / 0.14);
+    --sombra-controle: 0 1px 2px 0 oklch(0.2 0.02 260 / 0.05);
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.546 0.245 262.881);
+    --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.25 0 0);
+}
+
+.dark {
+    /* Campos nativos (data, hora, barra de rolagem) seguem o tema escolhido, não o do sistema. */
+    color-scheme: dark;
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.424 0.199 265.638);
+    --primary-foreground: oklch(0.97 0.014 254.604);
+    --secondary: oklch(0.274 0.006 286.033);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.73 0 0);
+    --accent: oklch(0.424 0.199 265.638);
+    --accent-foreground: oklch(0.97 0.014 254.604);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.8 0 0);
+    --chart-1: oklch(0.707 0.165 254.624);
+    --chart-2: oklch(0.769 0.188 70.08);
+    --chart-3: oklch(0.777 0.152 181.912);
+    --chart-4: oklch(0.702 0.183 293.541);
+    --chart-5: oklch(0.708 0 0);
+    --positive: oklch(0.765 0.177 163.223);
+    --negative: oklch(0.704 0.191 22.216);
+    --positive-foreground: oklch(0.2 0.04 163);
+    --negative-foreground: oklch(0.2 0.03 27);
+    --texto-azul: oklch(0.76 0.13 255);
+    --texto-ambar: oklch(0.8 0.14 70);
+    --texto-turquesa: oklch(0.8 0.12 182);
+    --texto-violeta: oklch(0.77 0.14 293);
+    --texto-primario: oklch(0.74 0.14 258);
+    --alerta: oklch(0.8 0.15 80);
+    --texto-alerta: oklch(0.84 0.13 85);
+    --texto-negativo: oklch(0.78 0.15 22);
+    --anel-cartao: color-mix(in oklab, var(--foreground) 10%, transparent);
+    --sombra-cartao: 0 1px 2px 0 oklch(0 0 0 / 0.3);
+    --sombra-botao: inset 0 1px 0 0 oklch(1 0 0 / 0.12), 0 1px 2px 0 oklch(0 0 0 / 0.4);
+    --sombra-controle: 0 0 #0000;
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.623 0.214 259.815);
+    --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.8 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
+  button:not(:disabled), [role="button"]:not(:disabled) {
+    cursor: pointer;
+    }
+  html {
+    @apply font-sans;
+    }
+}
+/* Base de app no celular: cada regra resolve um sinal de "site no navegador". */
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent; /* sem o brilho cinza ao tocar */
+    -webkit-text-size-adjust: 100%;
+    overscroll-behavior: none; /* sem puxar-para-atualizar sequestrando a rolagem */
+    /* Palavra sem espaço (endereço, e-mail, código) que não cabe na linha quebra onde precisar, em vez de passar da
+       janela a 320 px. Não muda a largura mínima de nada (isso seria `anywhere`); texto em `nowrap` não é afetado. */
+    overflow-wrap: break-word;
+  }
+  /* Texto só para leitor de tela fica na borda esquerda do bloco que o contém. Sem isso, o `sr-only` (absoluto, sem
+     posição) fica onde o texto terminaria: depois de um rótulo em `nowrap` perto da borda, passa da janela e a página
+     rola de lado (visto a 320 px). A posição vertical não muda: focar um campo `sr-only` não pula a página. */
+  .sr-only {
+    left: 0;
+  }
+  /* Sensação de app (docs/padroes.md, "Sensação de app"): o que é INTERFACE não se seleciona nem se arrasta; o que é
+     CONTEÚDO (descrições, valores no detalhe, campos) continua selecionável. Controle, item de lista, cartão do quadro,
+     menu, aba, rótulo, chip, cabeçalho de navegação e aviso são interface. Exceção de conteúdo dentro deles:
+     `data-selecionavel` (ou a utilidade `select-text`). O detector `interface-selecionavel` acusa o que escapar. */
+  /* Lista simples, sem :is(): o navegador agrupa cada seletor pela etiqueta ou pelo atributo e não testa a lista
+     inteira em todo elemento a cada recálculo de estilo. */
+  button:not([data-selecionavel]),
+  /* Link no meio de um texto (parágrafo, citação, corpo de artigo) é conteúdo: copiar o parágrafo leva o link junto.
+     Link que é cartão, célula ou item de lista é interface (sem seleção). */
+  a[href]:not([data-selecionavel], :is(p, dd, blockquote, .prose, [data-prosa]) a),
+  label:not([data-selecionavel]),
+  summary:not([data-selecionavel]),
+  [role="button"]:not([data-selecionavel]),
+  [role="link"]:not([data-selecionavel]),
+  [role="tab"]:not([data-selecionavel]),
+  [role="tablist"]:not([data-selecionavel]),
+  [role="menu"]:not([data-selecionavel]),
+  [role="menuitem"]:not([data-selecionavel]),
+  [role="menuitemradio"]:not([data-selecionavel]),
+  [role="menuitemcheckbox"]:not([data-selecionavel]),
+  [role="option"]:not([data-selecionavel]),
+  [role="row"]:not(tr):not([data-selecionavel]),
+  [role="gridcell"]:not(td):not([data-selecionavel]),
+  /* Célula de tabela que se toca (o mapa de calor, a grade de um calendário) é controle, não dado. */
+  td[tabindex]:not([data-selecionavel]),
+  th[tabindex]:not([data-selecionavel]),
+  [role="switch"]:not([data-selecionavel]),
+  [role="checkbox"]:not([data-selecionavel]),
+  [role="radio"]:not([data-selecionavel]),
+  [role="slider"]:not([data-selecionavel]),
+  [role="toolbar"]:not([data-selecionavel]),
+  [role="separator"]:not([data-selecionavel]),
+  nav:not([data-selecionavel]),
+  header:not([data-selecionavel]),
+  thead:not([data-selecionavel]),
+  [data-slot="badge"]:not([data-selecionavel]),
+  [data-slot="cartao-operacional"]:not([data-selecionavel]),
+  [data-slot="coluna-kanban"]:not([data-selecionavel]),
+  [data-slot="cronograma"]:not([data-selecionavel]),
+  [data-slot="sidebar"]:not([data-selecionavel]),
+  [data-slot="toggle-group"]:not([data-selecionavel]),
+  [data-slot="tabs-list"]:not([data-selecionavel]),
+  [data-slot="barra-inferior"]:not([data-selecionavel]),
+  [data-sonner-toast]:not([data-selecionavel]) {
+    -webkit-user-select: none;
+    user-select: none; /* toque longo não seleciona o rótulo nem o cartão */
+    -webkit-touch-callout: none; /* nem abre o balão de copiar ou compartilhar */
+  }
+  /* Conteúdo dentro de interface (o valor para copiar, o código) e todo campo de texto: selecionáveis. */
+  [data-selecionavel],
+  input,
+  textarea,
+  [contenteditable]:not([contenteditable="false"]) {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+  }
+  /* Tocáveis: sem o atraso de 300 ms nem o zoom de duplo toque; o cursor diz o que é clicável. */
+  button,
+  a[href],
+  summary,
+  label,
+  [role="button"],
+  [role="tab"],
+  [role="menuitem"],
+  [role="option"],
+  [role="row"]:not(tr),
+  [role="switch"],
+  [role="checkbox"],
+  [role="radio"] {
+    touch-action: manipulation;
+  }
+  /* Imagem e link de interface não saem arrastados pelo mouse nem viram "fantasma" ao segurar. */
+  img,
+  svg,
+  a[href] {
+    -webkit-user-drag: none;
+  }
+  /* Rótulo, cabeçalho e chip de interface: seta, não a barra de texto (que promete seleção). */
+  label:not([data-selecionavel]),
+  nav:not([data-selecionavel]),
+  header:not([data-selecionavel]),
+  thead,
+  [role="tablist"],
+  [role="toolbar"],
+  [data-slot="badge"] {
+    cursor: default;
+  }
+  /* Rolagem dentro de camada (menu, painel, diálogo, lista de opções) não arrasta a página de trás nem puxa-para-atualizar. */
+  [role="dialog"],
+  [role="alertdialog"],
+  [role="menu"],
+  [role="listbox"],
+  [data-slot="popover-content"],
+  [data-slot="sheet-content"],
+  [data-slot="drawer-content"] {
+    overscroll-behavior: contain;
+  }
+  @media (pointer: coarse) {
+    input,
+    textarea,
+    select {
+      font-size: 16px; /* o iOS amplia a página em campos menores que 16 px */
+    }
+  }
+}
+
+/* Movimento: as curvas da casa (as mesmas de src/lib/movimento.ts). --ease-saida é a saída forte de interface (entrar,
+   responder ao toque); --mola é uma mola leve em CSS (amortecimento 0,78, 2% de passagem, ~500 ms) para o que chega
+   com vida: o aviso entrando. Fora dos tokens do Tailwind: valem em qualquer CSS, inclusive no do sonner. */
+:root {
+  --ease-saida: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-mover: cubic-bezier(0.77, 0, 0.175, 1);
+  --mola: linear(0, 0.028, 0.099, 0.194, 0.3, 0.409, 0.514, 0.61, 0.695, 0.769, 0.83, 0.881, 0.921, 0.953, 0.976, 0.993, 1.005, 1.013, 1.017, 1.019, 1.02, 1.019, 1.018, 1.016, 1.013, 1.011, 1);
+}
+/* Botões do aviso (Desfazer, Tentar de novo): o sonner os desenha com 24 px; no toque, alvo de 40 px. */
+@media (pointer: coarse) {
+  [data-sonner-toast] [data-button] {
+    min-height: 2.5rem;
+    padding-inline: 0.875rem;
+  }
+}
+
+/* O aviso entra com mola (o sonner usa `ease`); arrastando para dispensar ou saindo, fica como o sonner manda. Com
+   movimento reduzido, o próprio sonner desliga as transições. */
+[data-sonner-toast][data-mounted="true"]:not([data-swiping="true"], [data-removed="true"]) {
+  transition-timing-function: var(--mola), var(--ease-saida), var(--ease-saida), ease;
+}
+
+/* Vidro: desfoque e saturação em todo navegador; sem suporte, cai para fundo opaco. */
+@layer components {
+  /* A barra de vidro segue o desfoque e a saturação da pessoa, mas nunca fica mais transparente que 62% nem com menos de
+     12 px de desfoque: o conteúdo rola por baixo dela (texto sobre texto). */
+  .vidro {
+    background: color-mix(in oklch, var(--background) calc(max(0.62, var(--p-vidro-opacidade, 0.62)) * 100%), transparent);
+    -webkit-backdrop-filter: blur(max(12px, var(--p-vidro-desfoque, 22px))) saturate(var(--p-vidro-saturacao, 180%));
+    backdrop-filter: blur(max(12px, var(--p-vidro-desfoque, 22px))) saturate(var(--p-vidro-saturacao, 180%));
+    border: 1px solid color-mix(in oklch, var(--foreground) 9%, transparent);
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.5),
+      0 10px 30px -10px rgb(0 0 0 / 0.25);
+  }
+  .dark .vidro {
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.1),
+      0 10px 30px -10px rgb(0 0 0 / 0.7);
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .vidro {
+      background: var(--background);
+    }
+  }
+}
+
+/* Divisórias: linhas finas e claras, iguais em todas as tabelas e listas. */
+@layer components {
+  /* Tabelas (do shadcn e comuns): contorno, linhas e colunas. */
+  [data-slot="table-container"],
+  main .tabela-comum {
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 0.8);
+  }
+  /* Tabelas de dados (a grade do calendário é uma <table> do React Aria e fica de fora). Tabela que é uma grade de casas
+     tocáveis (espelho de vendas, calendário de estadia) marca `data-tabela="grade"` e fica fora do respiro de 12 px, das
+     divisórias e do fundo do cabeçalho: a 320 px o respiro deixava a casa com 27 px. */
+  [data-slot="table"] :is(th, td) + :is(th, td),
+  main table:not([data-slot="calendar-grid"], [data-tabela="grade"]) :is(th, td) + :is(th, td) {
+    border-left: 1px solid var(--border);
+  }
+  [data-slot="table"] tr,
+  main table:not([data-slot="calendar-grid"], [data-tabela="grade"]) tr {
+    border-bottom: 1px solid var(--border);
+  }
+  [data-slot="table"] tbody tr:last-child,
+  main table:not([data-slot="calendar-grid"], [data-tabela="grade"]) tbody tr:last-child {
+    border-bottom: 0;
+  }
+  [data-slot="table"] thead,
+  main table:not([data-slot="calendar-grid"], [data-tabela="grade"]) thead {
+    background: color-mix(in oklch, var(--muted) 55%, transparent);
+  }
+  [data-slot="table"] :is(th, td),
+  main table:not([data-slot="calendar-grid"], [data-tabela="grade"]) :is(th, td) {
+    padding-inline: 0.75rem;
+  }
+
+  /* Listas de itens: uma linha fina entre um item e o próximo. */
+  [data-slot="item-group"] > :not([data-slot="item-separator"]) + :not([data-slot="item-separator"]) {
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* Selo (Sinal) dentro da descrição de uma linha de lista: a descrição tem uma linha só, com reticências no fim. O selo
+   não quebra em duas linhas (a pílula de duas linhas desalinhava a lista a 320 px): fica numa linha e, no pior caso,
+   corta com reticências dentro da pílula (o completo está no detalhe). Fora de camada: vence o inline-flex do selo. */
+[data-slot="item-description"] [data-slot="sinal"] {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  margin-inline-end: 0.375rem;
+}
+[data-slot="item-description"] [data-slot="sinal"] > svg {
+  display: inline-block;
+  vertical-align: -0.2em;
+  margin-inline-end: 0.25rem;
+}
+
+/* Faixa de indicadores: sempre ocupa a linha inteira, seja quantos cards forem. */
+@layer components {
+  .grade-indicadores {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* No celular, um card ímpar no fim ocupa a linha toda (sem meia linha vazia). */
+  .grade-indicadores > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  @container main (min-width: 48rem) {
+    .grade-indicadores {
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    }
+    .grade-indicadores > :last-child:nth-child(odd) {
+      grid-column: auto;
+    }
+    /* Seis cards ficam 3 + 3 (nunca 5 + 1). */
+    .grade-indicadores:has(> :nth-child(6):last-child) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    /* Quatro cards nunca ficam 3 + 1: 2 × 2 até caberem os quatro numa linha. */
+    .grade-indicadores:has(> :nth-child(4):last-child) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @container main (min-width: 60rem) {
+    .grade-indicadores:has(> :nth-child(4):last-child) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+}
+
+/* Superfícies do navegador com a cara do app (seleção, cursor, rolagem, números). */
+@layer base {
+  ::selection {
+    background: color-mix(in oklch, var(--primary) 22%, transparent);
+    color: inherit;
+  }
+  input,
+  textarea,
+  [contenteditable] {
+    caret-color: var(--primary);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklch, var(--foreground) 22%, transparent) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--foreground) 22%, transparent) padding-box;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  table,
+  [data-slot="table"] {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Tabela larga em tela estreita: rola para o lado com a primeira coluna fixa e uma sombra na borda
+   avisando que há mais conteúdo (as sombras somem quando se chega ao fim). */
+@layer components {
+  [data-slot="table-container"] {
+    background:
+      linear-gradient(to right, var(--card) 30%, transparent) left / 2.5rem 100% no-repeat local,
+      linear-gradient(to left, var(--card) 30%, transparent) right / 2.5rem 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, rgb(0 0 0 / 0.12), transparent) left / 0.75rem 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, rgb(0 0 0 / 0.12), transparent) right / 0.75rem 100% no-repeat scroll;
+  }
+  [data-slot="table"] :is(th, td):first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--card);
+  }
+  [data-slot="table"] thead :is(th, td):first-child {
+    background: color-mix(in oklch, var(--muted) 55%, var(--card));
+  }
+}
+
+/* A cor principal foi feita para botão cheio; como cor de TEXTO (links, "ver todos") ela usa --texto-primario, que a
+   marca calcula para 4,5:1 sobre o fundo nos dois temas (no tema base, no claro é a própria --primary). Fora de camada,
+   para valer sobre a utilidade do Tailwind. */
+.text-primary {
+  color: var(--texto-primario);
+}
+/* Superfície invertida (botão claro numa faixa da cor principal, fundo --primary-foreground): o texto da marca volta a
+   ser a própria --primary, o par do botão cheio (6,3:1 no claro, 8,1:1 no escuro). O --texto-primario do escuro é claro,
+   feito para o fundo escuro, e ali ficava em 2,1:1. */
+.bg-primary-foreground.text-primary,
+.bg-primary-foreground .text-primary {
+  color: var(--primary);
+}
+
+/* Contador dentro de aba: fica sobre o cinza da barra de abas, então vira contador "de verdade"
+   (neutro com fundo do cartão; negativo e alerta sólidos), sem perder contraste.
+   Fora de @layer, para valer sobre as utilidades de cor do Badge. */
+:is([data-slot="tabs-trigger"], [data-slot="toggle-group-item"]) [data-slot="badge"][data-variant="neutro"] {
+  background: var(--background);
+  color: var(--foreground);
+}
+:is([data-slot="tabs-trigger"], [data-slot="toggle-group-item"]) [data-slot="badge"][data-variant="negativo"] {
+  background: var(--negative);
+  color: white;
+}
+:is([data-slot="tabs-trigger"], [data-slot="toggle-group-item"]) [data-slot="badge"][data-variant="alerta"] {
+  background: var(--alerta);
+  color: oklch(0.25 0.05 60);
+}
+/* No tema escuro o vermelho é claro: o número da pílula fica escuro. */
+.dark :is([data-slot="tabs-trigger"], [data-slot="toggle-group-item"]) [data-slot="badge"][data-variant="negativo"] {
+  color: oklch(0.2 0.03 27);
+}
+
+/* Grade de cartões sem órfão (GradeDeCartoes, forma "lista": 1 coluna, 2 a partir de 42 rem, 3 a partir de 64 rem).
+   Quatro cartões ficam 2 × 2; o último sozinho numa linha ocupa a linha toda. Fora de @layer: precisa vencer as
+   utilidades de colunas. */
+@container main (min-width: 42rem) and (max-width: 63.99rem) {
+  [data-slot="grade-de-cartoes"][data-forma="lista"] > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+@container main (min-width: 64rem) {
+  [data-slot="grade-de-cartoes"][data-forma="lista"]:has(> :nth-child(4):last-child) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  [data-slot="grade-de-cartoes"][data-forma="lista"] > :last-child:nth-child(3n + 1):not(:nth-child(4)) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Densidade do produto: `data-densidade` na raiz (<html>, posto por aplicarMarca a partir de Marca.densidade) ou num
+   contêiner sem data-slot (o CartaoOperacional usa o mesmo atributo para a densidade dele, que não é a do produto).
+   Tudo por tokens, sem reescrever peça: --spacing (a unidade de espaço do Tailwind: altura dos controles,
+   preenchimento, vãos), --text-* (a escala de texto), --alvo (altura mínima de todo tocável), --texto-minimo e, no
+   campo, bordas e texto secundário mais fortes. Sem atributo (ou "padrao"), nada muda. No contêiner, as camadas
+   (menus, painéis) ficam fora da árvore e não recebem a densidade: num produto, ponha na raiz. Tokens e pisos de texto
+   ficam fora de @layer (vencem as utilidades das peças); o piso do alvo fica na camada de componentes (logo abaixo).
+   --------------------------------------------------------------------------------------------------------------- */
+[data-densidade="padrao"]:not([data-slot]) {
+  --spacing: 0.25rem;
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+}
+/* Compacta: ERP denso no computador. Botão de 29 px e texto de 13 px com o mouse; no toque, o espaço volta ao padrão
+   (o alvo de 40 px vale sempre). */
+[data-densidade="compacta"]:not([data-slot]) {
+  --spacing: 0.225rem;
+  --text-sm: 0.8125rem;
+}
+@media (pointer: coarse) {
+  [data-densidade="compacta"]:not([data-slot]) {
+    --spacing: 0.25rem;
+  }
+}
+/* Confortável: telas de uma decisão por vez, público amplo. Alvo de 40 px com o mouse e 44 px no toque, texto de 15 px,
+   mínimo de 13 px. */
+[data-densidade="confortavel"]:not([data-slot]) {
+  --spacing: 0.275rem;
+  --alvo: 2.5rem;
+  --texto-minimo: 0.8125rem;
+  --text-2xs: 0.8125rem;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1rem;
+}
+@media (pointer: coarse) {
+  [data-densidade="confortavel"]:not([data-slot]) {
+    --alvo: 2.75rem;
+  }
+}
+/* Campo: luva, sol, pressa. Alvo de 48 px em qualquer ponteiro (o perfil quiosque da CascaDedicada sobe --alvo para
+   3.5rem), texto base de 16 px e mínimo de 15 px, bordas e texto secundário mais fortes, grade em uma coluna. */
+[data-densidade="campo"]:not([data-slot]) {
+  --spacing: 0.3rem;
+  --alvo: 3rem;
+  --texto-minimo: 0.9375rem;
+  --text-2xs: 0.9375rem;
+  --text-xs: 0.9375rem;
+  --text-sm: 1rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.375rem;
+  --border: oklch(0.82 0 0);
+  --input: oklch(0.6 0 0);
+  --ring: oklch(0.2 0 0);
+  --muted-foreground: oklch(0.43 0 0);
+  --sidebar-border: oklch(0.82 0 0);
+}
+.dark[data-densidade="campo"]:not([data-slot]),
+.dark [data-densidade="campo"]:not([data-slot]) {
+  --border: oklch(1 0 0 / 24%);
+  --input: oklch(1 0 0 / 42%);
+  --ring: oklch(0.9 0 0);
+  --muted-foreground: oklch(0.84 0 0);
+  --sidebar-border: oklch(1 0 0 / 24%);
+}
+
+/* O alvo da densidade no próprio tocável, para o botão de texto ler na altura mínima do toque (button-variants:
+   max(tamanho, --alvo-toque)). Sem herança: o botão dentro de um campo com botões não herda o alvo do campo. */
+@property --alvo-toque {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* Alvo mínimo: todo tocável com pelo menos --alvo de altura (e de largura, se for só ícone). Na camada de componentes:
+   uma altura mínima maior pedida pela peça (min-h-12 da barra inferior, min-h-11 da opção em cartão) continua
+   valendo, e cresce junto com o --spacing. O título do cartão operacional fica de fora (o toque dele é o cartão
+   inteiro), e o campo com botões dentro conta pela altura do campo. */
+@layer components {
+  :is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot])
+    :is(
+      button,
+      a[href],
+      [role="button"],
+      [role="tab"],
+      [role="menuitem"],
+      [role="menuitemradio"],
+      [role="menuitemcheckbox"],
+      [role="option"],
+      input:not([type="checkbox"], [type="radio"], [type="range"], [type="hidden"], [type="file"]),
+      select,
+      textarea,
+      [data-slot="input-group"],
+      [data-slot="select-trigger"],
+      [data-slot="checkbox"],
+      [data-slot="radio-group-item"],
+      [data-slot="switch"]
+    ):not([data-slot="cartao-abrir"], [data-slot="input-group"] *, [aria-hidden="true"]) {
+    min-height: var(--alvo);
+    --alvo-toque: var(--alvo);
+  }
+  :is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot])
+    :is([data-slot="button"][data-size^="icon"], :is(button, a[href], [role="button"])[aria-label]):not(
+      [data-slot="item"],
+      [data-slot="cartao-abrir"],
+      [data-slot="calendar-day"],
+      [data-slot="input-group"] *
+    ) {
+    /* A casa do calendário fica de fora: o tamanho dela é o --cell-size (o alvo, abaixo), que encolhe a largura a 320 px. */
+    min-width: var(--alvo);
+  }
+  /* O que está dentro de uma parte escondida (aria-hidden: o select nativo do React Aria, a cópia decorativa) não
+     cresce. Regra à parte, com o alvo À DIREITA: `:not([aria-hidden="true"] *)` fazia o navegador recalcular o estilo
+     da página inteira toda vez que um menu ou diálogo abria ou fechava (o React Aria põe aria-hidden no app ao abrir
+     uma camada): 80 ms num celular médio, a cada toque. Aqui ele só confere os tocáveis da parte escondida. */
+  :is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot])
+    [aria-hidden="true"]
+    :is(
+      button,
+      a[href],
+      [role="button"],
+      [role="tab"],
+      [role="menuitem"],
+      [role="menuitemradio"],
+      [role="menuitemcheckbox"],
+      [role="option"],
+      input,
+      select,
+      textarea,
+      [data-slot="input-group"],
+      [data-slot="select-trigger"],
+      [data-slot="checkbox"],
+      [data-slot="radio-group-item"],
+      [data-slot="switch"]
+    ) {
+    min-height: revert-layer;
+    min-width: revert-layer;
+    --alvo-toque: initial;
+  }
+  /* Caixa de seleção e opção soltas: o alvo cresce por igual em cima e embaixo, e a caixa continua na primeira linha
+     do texto (rótulo de duas linhas cresce sozinho). */
+  :is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot])
+    :is([data-slot="checkbox"], [data-slot="radio-group-item"])[data-variante="padrao"] {
+    padding-block: max(0px, calc((var(--alvo) - 1lh) / 2));
+  }
+}
+/* A aba pede uma altura mínima MENOR que o alvo (min-h-7, no toque min-h-9): aqui o alvo vence. */
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot]) [data-slot="tabs-trigger"] {
+  min-height: var(--alvo);
+}
+/* O que as regras gerais do alvo não pegam: o botão do menu lateral (nome em texto escondido, sem aria-label), o título
+   da casca que volta ao topo (da largura do texto), as opções de lista e os avisos (Sonner fica fora do conteúdo e
+   tem texto de 13 px). Fora da camada de componentes: estas vencem os utilitários das peças. */
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot])
+  :is([data-slot="sidebar-trigger"], header button[aria-label$="voltar ao topo"]) {
+  min-width: var(--alvo);
+  min-height: var(--alvo);
+}
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot]) [role="option"] {
+  min-height: var(--alvo);
+}
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot]) [data-sonner-toast] [data-button] {
+  min-height: var(--alvo);
+  font-size: var(--texto-minimo);
+}
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot])
+  [data-sonner-toast]
+  :is([data-title], [data-description]) {
+  font-size: var(--texto-minimo);
+}
+/* Calendário: as casas do mês do tamanho do alvo. */
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot]) [data-slot="calendar"] {
+  --cell-size: var(--alvo);
+}
+
+/* Tamanhos fixos das peças (text-[11px], text-[0.8rem]...) acompanham o mínimo da densidade. Enquanto as peças não
+   trocam o tamanho fixo pelo token (text-2xs, text-xs), estas regras seguram o mínimo. Contagem decorativa
+   (aria-hidden, como o número sobre o sino) fica como está. */
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot])
+  :is(.text-\[10px\], .text-\[11px\], .text-\[12px\], .text-\[0\.625rem\]):not([aria-hidden="true"]) {
+  font-size: var(--texto-minimo);
+}
+/* Dentro de uma parte escondida, o tamanho da peça volta (regra à parte pelo mesmo motivo do alvo, logo acima). */
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot])
+  [aria-hidden="true"]
+  :is(.text-\[10px\], .text-\[11px\], .text-\[12px\], .text-\[0\.625rem\]) {
+  font-size: revert-layer;
+}
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot]) .text-\[13px\] {
+  font-size: max(13px, var(--texto-minimo));
+}
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot]) .text-\[14px\] {
+  font-size: max(14px, var(--texto-minimo));
+}
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot]) .text-\[0\.8rem\] {
+  font-size: max(0.8rem, var(--texto-minimo));
+}
+/* Título do cartão operacional (15 px): um ponto acima do texto da densidade. */
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot]) .text-\[15px\] {
+  font-size: calc(var(--text-sm) + 1px);
+}
+/* Contagem embaixo do segmento (segmentado do ToggleGroup). */
+:is([data-densidade="confortavel"], [data-densidade="campo"]):not([data-slot]) .\[\&\>span\+span\]\:text-\[11px\] > span + span {
+  font-size: var(--texto-minimo);
+}
+
+/* Campo: contorno do card mais forte (o anel do card é a borda dele) e grade de cartões em uma coluna até o
+   computador (no computador largo, a grade continua com as colunas que cabem). */
+[data-densidade="campo"]:not([data-slot]) :is([data-slot="card"], [data-slot="cartao-operacional"]):not([class*="ring-primary"]) {
+  --tw-ring-color: color-mix(in oklab, var(--foreground) 24%, transparent);
+}
+@container main (max-width: 63.99rem) {
+  [data-densidade="campo"]:not([data-slot]) [data-slot="grade-de-cartoes"][data-forma="lista"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* O aviso também é Inter (docs/padroes.md, "Inter em tudo"). Fora de camada: o CSS do sonner (sem camada) fixa
+   ui-sans-serif no contêiner, entra depois desta folha e venceria qualquer regra de @layer ou de mesma especificidade. */
+:root [data-sonner-toaster] {
+  font-family: var(--font-sans);
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Skins: a cara da biblioteca inteira por atributo na raiz (<html data-skin>), como a densidade. Uma skin troca
+   superfícies, bordas, raios, sombras, transparência e realce; nunca a fonte (Inter em tudo) nem a estrutura das peças.
+   Eixos independentes, também na raiz e aplicados depois da skin (vencem a escolha dela): data-raio (compacto, padrao,
+   arredondado, pilula), data-borda (linha, sombra, nenhuma) e data-destaque (paletas com contraste conferido em
+   ferramentas/testes/skins.test.mjs). Tokens das superfícies: --anel-cartao (contorno), --sombra-cartao,
+   --fundo-da-pagina (imagem atrás de tudo), --superficie-vidro e --desfoque (só no vidro). Os seletores têm
+   especificidade (0,1,0) e ficam depois do tema base: a marca do produto (<style id="mift-marca">, posta depois no
+   documento) continua vencendo a cor principal. O escuro usa :where(.dark), para não subir a especificidade, e vale
+   na raiz e num contêiner (skins lado a lado na vitrine; num produto, ponha na raiz, para valer nas camadas).
+   Sem atributo, vale a padrão. Como usar: docs/skins.md.
+   --------------------------------------------------------------------------------------------------------------- */
+
+/* Padrão: a de sempre, com contorno mais leve e uma sombra de 1 px (tokens no :root e no .dark, acima). */
+
+/* Suave: raios grandes, sombras macias e longas, nenhuma borda dura; a página é um cinza claro e o cartão flutua. */
+[data-skin="suave"] {
+  --radius: 1.25rem;
+  --background: oklch(0.972 0.004 255);
+  --card: oklch(1 0 0);
+  --popover: oklch(1 0 0);
+  --muted: oklch(0.95 0.005 255);
+  --secondary: oklch(0.95 0.005 255);
+  --muted-foreground: oklch(0.5 0.01 255);
+  --border: oklch(0.925 0.005 255);
+  --input: oklch(0.9 0.006 255);
+  --anel-cartao: transparent;
+  --sombra-cartao: 0 1px 2px 0 oklch(0.3 0.03 255 / 0.05), 0 10px 28px -10px oklch(0.3 0.03 255 / 0.14);
+  --sombra-botao: inset 0 1px 0 0 oklch(1 0 0 / 0.16), 0 6px 14px -6px oklch(0.3 0.03 255 / 0.32);
+  --sombra-controle: 0 1px 2px 0 oklch(0.3 0.03 255 / 0.06), 0 4px 10px -4px oklch(0.3 0.03 255 / 0.1);
+  --sidebar: oklch(0.965 0.004 255);
+  --sidebar-border: oklch(0.925 0.005 255);
+}
+:where(.dark)[data-skin="suave"],
+:where(.dark) [data-skin="suave"] {
+  --background: oklch(0.165 0.006 255);
+  --card: oklch(0.215 0.007 255);
+  --popover: oklch(0.215 0.007 255);
+  --muted: oklch(0.26 0.008 255);
+  --secondary: oklch(0.26 0.008 255);
+  --muted-foreground: oklch(0.75 0.01 255);
+  --border: oklch(1 0 0 / 0.08);
+  --input: oklch(1 0 0 / 0.13);
+  --anel-cartao: transparent;
+  --sombra-cartao: inset 0 1px 0 0 oklch(1 0 0 / 0.04), 0 12px 30px -12px oklch(0 0 0 / 0.55);
+  --sombra-botao: inset 0 1px 0 0 oklch(1 0 0 / 0.14), 0 6px 14px -6px oklch(0 0 0 / 0.6);
+  --sombra-controle: inset 0 1px 0 0 oklch(1 0 0 / 0.04);
+  --sidebar: oklch(0.19 0.006 255);
+  --sidebar-border: oklch(1 0 0 / 0.08);
+}
+
+/* Nítida: raio pequeno, contorno definido, texto secundário e bordas de campo fortes (o campo chega a 3:1). */
+[data-skin="nitida"] {
+  --radius: 0.375rem;
+  --foreground: oklch(0.1 0 0);
+  --card-foreground: oklch(0.1 0 0);
+  --muted: oklch(0.955 0 0);
+  --secondary: oklch(0.955 0 0);
+  --muted-foreground: oklch(0.4 0 0);
+  --border: oklch(0.8 0 0);
+  --input: oklch(0.55 0 0);
+  --ring: oklch(0.15 0 0);
+  --anel-cartao: oklch(0.2 0 0 / 0.78);
+  --sombra-cartao: 0 2px 0 0 oklch(0.2 0 0 / 0.1);
+  --sombra-botao: 0 0 #0000;
+  --sombra-controle: 0 0 #0000;
+  --sidebar-border: oklch(0.8 0 0);
+}
+:where(.dark)[data-skin="nitida"],
+:where(.dark) [data-skin="nitida"] {
+  --background: oklch(0.1 0 0);
+  --foreground: oklch(0.99 0 0);
+  --card: oklch(0.135 0 0);
+  --card-foreground: oklch(0.99 0 0);
+  --popover: oklch(0.135 0 0);
+  --muted: oklch(0.2 0 0);
+  --secondary: oklch(0.2 0 0);
+  --muted-foreground: oklch(0.83 0 0);
+  --border: oklch(1 0 0 / 0.26);
+  --input: oklch(1 0 0 / 0.46);
+  --ring: oklch(0.92 0 0);
+  --anel-cartao: oklch(1 0 0 / 0.5);
+  --sombra-cartao: 0 0 #0000;
+  --sombra-botao: 0 0 #0000;
+  --sombra-controle: 0 0 #0000;
+  --sidebar: oklch(0.12 0 0);
+  --sidebar-border: oklch(1 0 0 / 0.26);
+}
+
+/* Noturna: escura de verdade (quase preto azulado, brilho de cor no alto) com realce violeta. No claro, crepúsculo:
+   lilás acinzentado com o mesmo realce. */
+[data-skin="noturna"] {
+  /* Sobre o fundo com cor e o vidro, as cores de sentido como texto descem um pouco (4,5:1 com folga). */
+  --destructive: oklch(0.47 0.2 27);
+  --negative: oklch(0.46 0.19 27);
+  --texto-negativo: oklch(0.47 0.2 27);
+  --texto-azul: oklch(0.45 0.2 263);
+  --texto-ambar: oklch(0.43 0.12 48);
+  --texto-turquesa: oklch(0.41 0.08 186);
+  --texto-violeta: oklch(0.43 0.22 293);
+  --texto-alerta: oklch(0.43 0.1 62);
+  --background: oklch(0.965 0.012 290);
+  --card: oklch(0.995 0.003 290);
+  --popover: oklch(0.995 0.003 290);
+  --muted: oklch(0.935 0.016 290);
+  --secondary: oklch(0.935 0.016 290);
+  --muted-foreground: oklch(0.47 0.03 290);
+  --border: oklch(0.9 0.016 290);
+  --input: oklch(0.86 0.02 290);
+  --primary: oklch(0.52 0.24 300);
+  --primary-foreground: oklch(0.985 0 0);
+  --accent: oklch(0.52 0.24 300);
+  --accent-foreground: oklch(0.985 0 0);
+  --texto-primario: oklch(0.52 0.24 300);
+  --sidebar: oklch(0.955 0.014 290);
+  --sidebar-primary: oklch(0.52 0.24 300);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.9 0.016 290);
+  --anel-cartao: oklch(0.52 0.12 300 / 0.12);
+  --sombra-cartao: 0 10px 30px -16px oklch(0.45 0.2 300 / 0.28);
+  --sombra-botao: inset 0 1px 0 0 oklch(1 0 0 / 0.18), 0 6px 16px -8px oklch(0.45 0.2 300 / 0.45);
+}
+:where(.dark)[data-skin="noturna"],
+:where(.dark) [data-skin="noturna"] {
+  --destructive: oklch(0.704 0.191 22.216);
+  --negative: oklch(0.704 0.191 22.216);
+  --texto-negativo: oklch(0.78 0.15 22);
+  --texto-azul: oklch(0.76 0.13 255);
+  --texto-ambar: oklch(0.8 0.14 70);
+  --texto-turquesa: oklch(0.8 0.12 182);
+  --texto-violeta: oklch(0.77 0.14 293);
+  --texto-alerta: oklch(0.84 0.13 85);
+  --background: oklch(0.1 0.012 285);
+  --fundo-da-pagina:
+    radial-gradient(70rem 36rem at 50% -16%, oklch(0.42 0.2 300 / 0.38), transparent 70%),
+    radial-gradient(40rem 30rem at 100% 100%, oklch(0.42 0.12 220 / 0.2), transparent 70%);
+  --card: oklch(0.15 0.016 285);
+  --popover: oklch(0.17 0.018 285);
+  --muted: oklch(0.21 0.02 285);
+  --secondary: oklch(0.21 0.02 285);
+  --muted-foreground: oklch(0.75 0.02 285);
+  --border: oklch(1 0 0 / 0.08);
+  --input: oklch(1 0 0 / 0.14);
+  --primary: oklch(0.72 0.19 305);
+  --primary-foreground: oklch(0.2 0.02 260);
+  --accent: oklch(0.72 0.19 305);
+  --accent-foreground: oklch(0.2 0.02 260);
+  --texto-primario: oklch(0.8 0.14 305);
+  --ring: oklch(0.82 0.1 305);
+  --sidebar: oklch(0.12 0.014 285);
+  --sidebar-primary: oklch(0.72 0.19 305);
+  --sidebar-primary-foreground: oklch(0.2 0.02 260);
+  --sidebar-border: oklch(1 0 0 / 0.08);
+  --sidebar-accent: oklch(0.21 0.02 285);
+  --anel-cartao: oklch(1 0 0 / 0.07);
+  --sombra-cartao: inset 0 1px 0 0 oklch(1 0 0 / 0.05), 0 16px 40px -20px oklch(0.6 0.2 305 / 0.4);
+  --sombra-botao: inset 0 1px 0 0 oklch(1 0 0 / 0.25), 0 8px 22px -8px oklch(0.6 0.2 305 / 0.5);
+}
+
+/* Starter: o vidro é um interruptor (html[data-vidro="on"]) que vale sobre qualquer skin, no claro e no escuro.
+   Vem depois das skins para valer por cima delas. */
+/* Vidro: superfícies translúcidas com desfoque e borda clara sobre um fundo com cor. O --card continua opaco (traços de
+   gráfico, colunas presas de tabela); a translucidez vai só nas superfícies (.bg-card, .superficie) e nos menus. */
+[data-vidro="on"] {
+  /* Sobre o fundo com cor e o vidro, as cores de sentido como texto descem um pouco (4,5:1 com folga). */
+  --destructive: oklch(0.47 0.2 27);
+  --negative: oklch(0.46 0.19 27);
+  --texto-negativo: oklch(0.47 0.2 27);
+  --positive: oklch(0.44 0.11 160);
+  --texto-azul: oklch(0.45 0.2 263);
+  --texto-ambar: oklch(0.43 0.12 48);
+  --texto-turquesa: oklch(0.41 0.08 186);
+  --texto-violeta: oklch(0.43 0.22 293);
+  --texto-alerta: oklch(0.43 0.1 62);
+  --background: oklch(0.965 0.02 268);
+  --fundo-da-pagina:
+    radial-gradient(48rem 32rem at 6% -8%, oklch(0.84 0.1 262 / 0.7), transparent 70%),
+    radial-gradient(40rem 30rem at 98% 6%, oklch(0.87 0.09 330 / 0.55), transparent 70%),
+    radial-gradient(56rem 38rem at 50% 110%, oklch(0.89 0.08 190 / 0.5), transparent 70%);
+  --card: oklch(0.99 0.006 268);
+  /* Transparência, desfoque, saturação, brilho da borda e espessura: ajustáveis pela pessoa (--p-vidro-*, lib/skins). */
+  --superficie-vidro: oklch(1 0 0 / var(--p-vidro-opacidade, 0.6));
+  --popover: oklch(0.995 0.004 268 / 0.86);
+  --desfoque: blur(var(--p-vidro-desfoque, 20px)) saturate(var(--p-vidro-saturacao, 170%));
+  --muted: oklch(0.45 0.04 268 / 0.08);
+  --secondary: oklch(0.45 0.04 268 / 0.09);
+  --muted-foreground: oklch(0.44 0.025 268);
+  --border: oklch(0.42 0.04 268 / 0.16);
+  --input: oklch(0.42 0.04 268 / 0.24);
+  --anel-cartao: oklch(1 0 0 / calc(0.85 * var(--p-vidro-aro, 1)));
+  --sombra-cartao:
+    inset 0 calc(1px * var(--p-vidro-espessura, 1)) 0 0 oklch(1 0 0 / 0.7),
+    0 calc(10px * var(--p-vidro-espessura, 1)) calc(30px * var(--p-vidro-espessura, 1)) -14px oklch(0.35 0.09 268 / 0.3);
+  --sombra-botao: inset 0 1px 0 0 oklch(1 0 0 / 0.3), 0 6px 16px -8px oklch(0.35 0.09 268 / 0.45);
+  --sombra-controle: inset 0 1px 0 0 oklch(1 0 0 / 0.6), 0 2px 6px -2px oklch(0.35 0.09 268 / 0.12);
+  --sidebar: oklch(0.965 0.018 268);
+  --sidebar-border: oklch(0.42 0.04 268 / 0.14);
+  --sidebar-accent: oklch(0.45 0.04 268 / 0.08);
+}
+:where(.dark)[data-vidro="on"],
+:where(.dark) [data-vidro="on"] {
+  /* O vidro escuro é mais claro que o cartão do tema base: as cores de sentido como texto sobem junto. */
+  --destructive: oklch(0.84 0.11 22);
+  --negative: oklch(0.84 0.11 22);
+  --texto-negativo: oklch(0.84 0.11 22);
+  --positive: oklch(0.8 0.15 163);
+  --texto-azul: oklch(0.82 0.11 255);
+  --texto-ambar: oklch(0.85 0.12 70);
+  --texto-turquesa: oklch(0.85 0.1 182);
+  --texto-violeta: oklch(0.83 0.12 293);
+  --texto-alerta: oklch(0.88 0.11 85);
+  --background: oklch(0.17 0.03 278);
+  --fundo-da-pagina:
+    radial-gradient(48rem 32rem at 6% -8%, oklch(0.42 0.16 275 / 0.55), transparent 70%),
+    radial-gradient(40rem 30rem at 98% 6%, oklch(0.4 0.15 330 / 0.4), transparent 70%),
+    radial-gradient(56rem 38rem at 50% 110%, oklch(0.42 0.1 200 / 0.35), transparent 70%);
+  --card: oklch(0.22 0.03 278);
+  --superficie-vidro: oklch(0.32 0.03 278 / calc(var(--p-vidro-opacidade, 0.6) * 0.7));
+  --popover: oklch(0.24 0.03 278 / 0.88);
+  --muted: oklch(1 0 0 / 0.07);
+  --secondary: oklch(1 0 0 / 0.08);
+  --muted-foreground: oklch(0.81 0.015 278);
+  --border: oklch(1 0 0 / 0.11);
+  --input: oklch(1 0 0 / 0.17);
+  --anel-cartao: oklch(1 0 0 / calc(0.14 * var(--p-vidro-aro, 1)));
+  --sombra-cartao:
+    inset 0 calc(1px * var(--p-vidro-espessura, 1)) 0 0 oklch(1 0 0 / 0.08),
+    0 calc(12px * var(--p-vidro-espessura, 1)) calc(32px * var(--p-vidro-espessura, 1)) -14px oklch(0 0 0 / 0.6);
+  --sombra-botao: inset 0 1px 0 0 oklch(1 0 0 / 0.18), 0 6px 16px -8px oklch(0 0 0 / 0.6);
+  --sombra-controle: inset 0 1px 0 0 oklch(1 0 0 / 0.06);
+  --sidebar: oklch(0.2 0.03 278);
+  --sidebar-border: oklch(1 0 0 / 0.1);
+  --sidebar-accent: oklch(1 0 0 / 0.07);
+}
+
+/* Eixo raio: vale sobre a skin. Pílula: controles (botão, campo, segmentado, abas) em cápsula; cartões arredondados. */
+[data-raio="compacto"] {
+  --radius: 0.5rem;
+}
+[data-raio="padrao"] {
+  --radius: 0.875rem;
+}
+[data-raio="arredondado"] {
+  --radius: 1.25rem;
+}
+[data-raio="pilula"] {
+  --radius: 1.125rem;
+}
+
+/* Eixo borda: como a superfície se separa do fundo. Linha: contorno, sem sombra. Sombra: sem contorno. Nenhuma: nem um
+   nem outro; o cartão se separa por um tom de fundo. */
+[data-borda="linha"] {
+  --anel-cartao: color-mix(in oklab, var(--foreground) 16%, transparent);
+  --sombra-cartao: 0 0 #0000;
+}
+[data-borda="sombra"] {
+  --anel-cartao: transparent;
+  --sombra-cartao: 0 1px 2px 0 oklch(0.25 0.02 260 / 0.06), 0 8px 24px -8px oklch(0.25 0.02 260 / 0.16);
+}
+:where(.dark)[data-borda="sombra"],
+:where(.dark) [data-borda="sombra"] {
+  --anel-cartao: oklch(1 0 0 / 0.06);
+  --sombra-cartao: 0 12px 30px -12px oklch(0 0 0 / 0.6);
+}
+[data-borda="nenhuma"] {
+  --anel-cartao: transparent;
+  --sombra-cartao: 0 0 #0000;
+  --card: color-mix(in oklab, var(--foreground) 4%, var(--background));
+}
+
+/* Eixo destaque: a cor de realce (botão principal, links, seleção). Valores saídos de tokensDaMarca (lib/marca): texto
+   sobre a cor e a cor como texto com 4,5:1 nos dois temas (conferido em skins.test.mjs). A marca de um produto vence. */
+[data-destaque="azul"] {
+  --primary: oklch(0.488 0.243 264.376);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --accent: oklch(0.488 0.243 264.376);
+  --accent-foreground: oklch(0.97 0.014 254.604);
+  --texto-primario: oklch(0.488 0.243 264.376);
+  --sidebar-primary: oklch(0.546 0.245 262.881);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+}
+:where(.dark)[data-destaque="azul"],
+:where(.dark) [data-destaque="azul"] {
+  --primary: oklch(0.424 0.199 265.638);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --accent: oklch(0.424 0.199 265.638);
+  --accent-foreground: oklch(0.97 0.014 254.604);
+  --texto-primario: oklch(0.74 0.14 258);
+  --sidebar-primary: oklch(0.623 0.214 259.815);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+}
+[data-destaque="violeta"] {
+  --primary: oklch(0.5 0.23 293);
+  --primary-foreground: oklch(0.985 0 0);
+  --accent: oklch(0.5 0.23 293);
+  --accent-foreground: oklch(0.985 0 0);
+  --texto-primario: oklch(0.5 0.23 293);
+  --sidebar-primary: oklch(0.5 0.23 293);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+}
+:where(.dark)[data-destaque="violeta"],
+:where(.dark) [data-destaque="violeta"] {
+  --primary: oklch(0.68 0.17 293);
+  --primary-foreground: oklch(0.2 0.02 260);
+  --accent: oklch(0.68 0.17 293);
+  --accent-foreground: oklch(0.2 0.02 260);
+  --texto-primario: oklch(0.78 0.13 293);
+  --sidebar-primary: oklch(0.68 0.17 293);
+  --sidebar-primary-foreground: oklch(0.2 0.02 260);
+}
+[data-destaque="esmeralda"] {
+  --primary: oklch(0.5 0.12 165);
+  --primary-foreground: oklch(0.985 0 0);
+  --accent: oklch(0.5 0.12 165);
+  --accent-foreground: oklch(0.985 0 0);
+  --texto-primario: oklch(0.5 0.12 165);
+  --sidebar-primary: oklch(0.5 0.12 165);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+}
+:where(.dark)[data-destaque="esmeralda"],
+:where(.dark) [data-destaque="esmeralda"] {
+  --primary: oklch(0.74 0.14 165);
+  --primary-foreground: oklch(0.2 0.02 260);
+  --accent: oklch(0.74 0.14 165);
+  --accent-foreground: oklch(0.2 0.02 260);
+  --texto-primario: oklch(0.82 0.12 165);
+  --sidebar-primary: oklch(0.74 0.14 165);
+  --sidebar-primary-foreground: oklch(0.2 0.02 260);
+}
+[data-destaque="ambar"] {
+  --primary: oklch(0.78 0.15 75);
+  --primary-foreground: oklch(0.2 0.02 260);
+  --accent: oklch(0.78 0.15 75);
+  --accent-foreground: oklch(0.2 0.02 260);
+  --texto-primario: oklch(0.5 0.12 65);
+  --sidebar-primary: oklch(0.78 0.15 75);
+  --sidebar-primary-foreground: oklch(0.2 0.02 260);
+}
+:where(.dark)[data-destaque="ambar"],
+:where(.dark) [data-destaque="ambar"] {
+  --primary: oklch(0.8 0.15 75);
+  --primary-foreground: oklch(0.2 0.02 260);
+  --accent: oklch(0.8 0.15 75);
+  --accent-foreground: oklch(0.2 0.02 260);
+  --texto-primario: oklch(0.86 0.13 80);
+  --sidebar-primary: oklch(0.8 0.15 75);
+  --sidebar-primary-foreground: oklch(0.2 0.02 260);
+}
+[data-destaque="rosa"] {
+  --primary: oklch(0.55 0.21 5);
+  --primary-foreground: oklch(0.985 0 0);
+  --accent: oklch(0.55 0.21 5);
+  --accent-foreground: oklch(0.985 0 0);
+  --texto-primario: oklch(0.53 0.2 5);
+  --sidebar-primary: oklch(0.55 0.21 5);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+}
+:where(.dark)[data-destaque="rosa"],
+:where(.dark) [data-destaque="rosa"] {
+  --primary: oklch(0.72 0.16 5);
+  --primary-foreground: oklch(0.2 0.02 260);
+  --accent: oklch(0.72 0.16 5);
+  --accent-foreground: oklch(0.2 0.02 260);
+  --texto-primario: oklch(0.8 0.12 5);
+  --sidebar-primary: oklch(0.72 0.16 5);
+  --sidebar-primary-foreground: oklch(0.2 0.02 260);
+}
+[data-destaque="grafite"] {
+  --primary: oklch(0.26 0.01 260);
+  --primary-foreground: oklch(0.985 0 0);
+  --accent: oklch(0.26 0.01 260);
+  --accent-foreground: oklch(0.985 0 0);
+  --texto-primario: oklch(0.26 0.01 260);
+  --sidebar-primary: oklch(0.26 0.01 260);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+}
+:where(.dark)[data-destaque="grafite"],
+:where(.dark) [data-destaque="grafite"] {
+  --primary: oklch(0.93 0.005 260);
+  --primary-foreground: oklch(0.2 0.02 260);
+  --accent: oklch(0.93 0.005 260);
+  --accent-foreground: oklch(0.2 0.02 260);
+  --texto-primario: oklch(0.92 0.005 260);
+  --sidebar-primary: oklch(0.93 0.005 260);
+  --sidebar-primary-foreground: oklch(0.2 0.02 260);
+}
+
+/* Fundo da página (vidro e noturna no escuro): preso à janela, atrás de tudo. */
+body {
+  background-image: var(--fundo-da-pagina, none);
+  background-attachment: fixed;
+}
+
+/* Superfície: a moldura comum (vitrine, blocos) com os tokens da skin. Na camada de componentes: raio e espaço vêm das
+   utilidades de quem usa. */
+@layer components {
+  .superficie {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--anel-cartao);
+    box-shadow: var(--sombra-cartao);
+  }
+}
+/* Na camada de utilidades com especificidade baixa (:where): vencem a utilidade de mesma força (bg-card), perdem para
+   os estados (hover:bg-muted, has-[…]:bg-muted/60) e para quem pede outra cor. */
+@layer utilities {
+  /* Molduras antigas (border + bg-card, sem cor de borda, anel nem sombra próprios) seguem a skin do mesmo jeito. */
+  :where(.border.bg-card):not([class*=" border-"], [class*="ring-"], [class*="shadow"], [data-slot]) {
+    border-color: var(--anel-cartao);
+    box-shadow: var(--sombra-cartao);
+  }
+  /* Vidro: a translucidez nas superfícies, com desfoque. Célula de tabela fica opaca (coluna presa). */
+  :where([data-vidro="on"]) :is(.bg-card, .superficie):where(:not(td, th)) {
+    background-color: var(--superficie-vidro);
+    -webkit-backdrop-filter: var(--desfoque);
+    backdrop-filter: var(--desfoque);
+  }
+}
+[data-vidro="on"] .bg-popover {
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+}
+
+/* Pílula: os controles viram cápsula. Num grupo colado (ButtonGroup, ToggleGroup sem espaço), só as pontas de fora. */
+[data-raio="pilula"]
+  :is(
+    [data-slot="button"],
+    [data-slot="toggle"],
+    [data-slot="toggle-group-item"],
+    [data-slot="input"],
+    [data-slot="input-group"]:not(:has(textarea)),
+    [data-slot="select-trigger"],
+    [data-slot="tabs-list"],
+    [data-slot="tabs-trigger"],
+    [data-segmentado]
+  ):not([data-slot="button-group"] > *, [data-slot="toggle-group"][data-spacing="0"] > *) {
+  border-radius: 9999px;
+}
+[data-raio="pilula"] [data-slot="button-group"]:not([data-orientation="vertical"]) > :first-child {
+  border-start-start-radius: 9999px;
+  border-end-start-radius: 9999px;
+}
+[data-raio="pilula"] [data-slot="button-group"]:not([data-orientation="vertical"]) > :last-child {
+  border-start-end-radius: 9999px;
+  border-end-end-radius: 9999px;
+}
+
+/* Menos transparência pedida pelo sistema: tudo opaco, sem desfoque nem fundo de cor. */
+@media (prefers-reduced-transparency: reduce) {
+  [data-vidro="on"] {
+    --superficie-vidro: var(--card);
+    --popover: var(--card);
+    --desfoque: none;
+    --fundo-da-pagina: none;
+  }
+  [data-skin="noturna"] {
+    --fundo-da-pagina: none;
+  }
+  .vidro {
+    background: var(--background);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Composição (docs/padroes.md, "nada flutua"): peça de tela posta direto no fundo, fora de cartão, camada, Secao ou
+   caixa com borda ou fundo, ganha a superfície de um cartão. Dentro de um Bloco ou de um Painel, fica como está. */
+@layer components {
+  :is([data-slot="mapa-esquematico"], [data-slot="mapa-de-calor"], [data-slot="cronograma"], [data-slot="checklist"], [data-slot="capacidade"], [data-slot="item-group"], [data-slot="formulario-em-etapas"], [data-slot="controle-do-simulador"], [data-slot="ao-vivo"], [data-slot="anotacao-sobre-imagem"]):not(.border, .ring-1, [class*="bg-card"]):not(:is([data-slot="card"], [data-slot="cartao-operacional"], [role="dialog"], [role="alertdialog"], [data-slot="sheet-content"], [data-slot="drawer-content"], [data-slot="popover-content"], [data-slot="secao"], [data-slot="item"], [data-exemplo], .border, .ring-1, [class*="bg-card"], [class*="bg-muted"]) *) {
+    border-radius: var(--radius-xl);
+    background-color: var(--card);
+    color: var(--card-foreground);
+    box-shadow: 0 0 0 1px var(--anel-cartao), var(--sombra-cartao);
+    padding: calc(var(--spacing) * 4);
+  }
+}
+
+/* Caráter dos títulos (Marca.titulos → data-titulos no <html>): o que antes vinha de uma fonte de título vem do peso, do
+   espaçamento e da altura de linha da própria Inter. Fora de @layer para valer sobre o peso que a tela pôs no título.
+   Rótulo de seção em caixa alta (.uppercase) é rótulo, não título: fica como está. */
+[data-titulos="editorial"] :is(h1, h2):not(.uppercase) {
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+[data-titulos="editorial"] :is(h3:not(.uppercase), [data-slot="cartao-titulo"], [data-slot="card-title"]) {
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+[data-titulos="forte"] :is(h1, h2):not(.uppercase) {
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+[data-titulos="forte"] :is(h3:not(.uppercase), [data-slot="cartao-titulo"], [data-slot="card-title"]) {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Personalização (menu da conta → Plano de fundo e Personalizar…; lib/skins, docs/skins.md "Personalização"). A pessoa
+   escolhe por atributos e variáveis na raiz, postos antes da pintura pelo script do <head>:
+   - data-fundo (tipo), data-fundo-desenho, data-fundo-grao (1 a 5), data-fundo-movimento="lento" e as variáveis
+     --p-fundo-cor-1..3 (o matiz, de um token), --p-fundo-intensidade, --p-fundo-escala, --p-fundo-veu, --p-fundo-imagem;
+   - --p-vidro-* (lidas pela skin vidro, pela barra .vidro e pelo VidroLiquido da coleção);
+   - data-texto (escala do texto), data-movimento="reduzido".
+   O plano de fundo é uma camada fixa atrás de tudo (body::before; o grão em body::after), sem eventos nem nome
+   acessível (pseudo-elemento), e não existe sem data-fundo. Contraste: só o matiz é da pessoa; a luminosidade e a
+   saturação (--fundo-l, --fundo-c) são do tema, e o texto secundário desce (claro) ou sobe (escuro) um pouco sobre o
+   fundo. Extremos conferidos em ferramentas/testes/personalizacao.test.mjs.
+   --------------------------------------------------------------------------------------------------------------- */
+:root {
+  --fundo-l: 0.88;
+  --fundo-dl: 0.06;
+  --fundo-c: 0.1;
+  --fundo-filtro-imagem: saturate(1.2) contrast(0.2) brightness(1.98);
+  --fundo-traco: color-mix(in oklch, var(--foreground) 12%, transparent);
+  --muted-original: var(--muted-foreground);
+}
+.dark {
+  --fundo-l: 0.3;
+  --fundo-dl: -0.1;
+  --fundo-c: 0.11;
+  --fundo-filtro-imagem: saturate(1.2) contrast(0.3) brightness(0.36);
+}
+/* Sobre o fundo, o texto secundário fica no máximo em L 0,45 no claro e no mínimo em 0,78 no escuro (4,5:1). */
+html[data-fundo]:not(.dark) body {
+  --muted-foreground: oklch(from var(--muted-original) min(l, 0.45) c h);
+}
+html.dark[data-fundo] body {
+  --muted-foreground: oklch(from var(--muted-original) max(l, 0.78) c h);
+}
+
+html[data-fundo],
+[data-amostra-de-fundo] {
+  --fundo-i: var(--p-fundo-intensidade, 0.8);
+  --fundo-e: calc(var(--fundo-u, 1vmax) * var(--p-fundo-escala, 1));
+  --fundo-passo: calc(var(--fundo-px, 1px) * 22 * var(--p-fundo-escala, 1));
+  --f1: oklch(from var(--p-fundo-cor-1, var(--chart-1)) var(--fundo-l) calc(var(--fundo-c) * var(--fundo-i)) h);
+  --f2: oklch(from var(--p-fundo-cor-2, var(--chart-4)) var(--fundo-l) calc(var(--fundo-c) * var(--fundo-i)) h);
+  --f3: oklch(from var(--p-fundo-cor-3, var(--chart-3)) var(--fundo-l) calc(var(--fundo-c) * var(--fundo-i)) h);
+  /* Variantes do lado seguro (mais claras no claro, mais escuras no escuro), para dar profundidade. */
+  --f1c: oklch(from var(--p-fundo-cor-1, var(--chart-1)) calc(var(--fundo-l) + var(--fundo-dl)) calc(var(--fundo-c) * var(--fundo-i) * 0.6) h);
+  --f2c: oklch(from var(--p-fundo-cor-2, var(--chart-4)) calc(var(--fundo-l) + var(--fundo-dl)) calc(var(--fundo-c) * var(--fundo-i) * 0.6) h);
+  --f3c: oklch(from var(--p-fundo-cor-3, var(--chart-3)) calc(var(--fundo-l) + var(--fundo-dl)) calc(var(--fundo-c) * var(--fundo-i) * 0.6) h);
+  --fundo-veu-cor: color-mix(in oklch, var(--background) calc(var(--p-fundo-veu, 0.15) * 100%), transparent);
+  --fundo-desenho: radial-gradient(var(--fundo-traco) 1.2px, transparent 1.7px) 0 0 / var(--fundo-passo) var(--fundo-passo);
+}
+html[data-fundo-desenho="grade"],
+[data-amostra-de-fundo][data-desenho="grade"] {
+  --fundo-desenho:
+    linear-gradient(var(--fundo-traco) 1px, transparent 1px) 0 0 / var(--fundo-passo) var(--fundo-passo),
+    linear-gradient(90deg, var(--fundo-traco) 1px, transparent 1px) 0 0 / var(--fundo-passo) var(--fundo-passo);
+}
+html[data-fundo-desenho="linhas"],
+[data-amostra-de-fundo][data-desenho="linhas"] {
+  --fundo-desenho: repeating-linear-gradient(45deg, var(--fundo-traco) 0 1px, transparent 1px calc(var(--fundo-passo) / 2));
+}
+
+html[data-fundo="malha"],
+[data-amostra-de-fundo="malha"] {
+  --fundo-camadas:
+    radial-gradient(calc(var(--fundo-e) * 62) calc(var(--fundo-e) * 50) at 6% 8%, var(--f1), transparent 70%),
+    radial-gradient(calc(var(--fundo-e) * 55) calc(var(--fundo-e) * 46) at 96% 14%, var(--f2), transparent 70%),
+    radial-gradient(calc(var(--fundo-e) * 70) calc(var(--fundo-e) * 52) at 30% 100%, var(--f3), transparent 70%),
+    radial-gradient(calc(var(--fundo-e) * 48) calc(var(--fundo-e) * 40) at 88% 88%, var(--f1c), transparent 70%),
+    linear-gradient(var(--f2c) 0 0);
+}
+html[data-fundo="aurora"],
+[data-amostra-de-fundo="aurora"] {
+  --fundo-camadas:
+    linear-gradient(to bottom, transparent 15%, var(--background) 88%),
+    repeating-linear-gradient(
+      100deg,
+      var(--f1) 0,
+      var(--f2) calc(var(--fundo-e) * 9),
+      var(--f1c) calc(var(--fundo-e) * 15),
+      var(--f3) calc(var(--fundo-e) * 22),
+      var(--f2c) calc(var(--fundo-e) * 29),
+      var(--f1) calc(var(--fundo-e) * 36)
+    ),
+    linear-gradient(var(--background) 0 0);
+}
+html[data-fundo="granulado"],
+[data-amostra-de-fundo="granulado"] {
+  --fundo-camadas:
+    radial-gradient(calc(var(--fundo-e) * 60) calc(var(--fundo-e) * 55) at 18% 22%, var(--f1), transparent 72%),
+    radial-gradient(calc(var(--fundo-e) * 55) calc(var(--fundo-e) * 50) at 82% 30%, var(--f2), transparent 72%),
+    radial-gradient(calc(var(--fundo-e) * 70) calc(var(--fundo-e) * 55) at 50% 96%, var(--f3), transparent 72%),
+    linear-gradient(var(--f3c) 0 0);
+}
+html[data-fundo="filme"],
+[data-amostra-de-fundo="filme"] {
+  --fundo-camadas: linear-gradient(135deg, var(--f1), var(--f2) 55%, var(--f3));
+}
+html[data-fundo="padrao"],
+[data-amostra-de-fundo="padrao"] {
+  --fundo-camadas:
+    var(--fundo-desenho),
+    radial-gradient(calc(var(--fundo-e) * 60) calc(var(--fundo-e) * 45) at 10% 0%, var(--f1), transparent 70%),
+    radial-gradient(calc(var(--fundo-e) * 55) calc(var(--fundo-e) * 45) at 100% 100%, var(--f2), transparent 70%),
+    linear-gradient(var(--f3c) 0 0);
+}
+html[data-fundo="papel"],
+[data-amostra-de-fundo="papel"] {
+  --fundo-camadas:
+    radial-gradient(circle calc(var(--fundo-e) * 30) at 14% 18%, var(--f1c), var(--f1) 55%, transparent 72%),
+    radial-gradient(circle calc(var(--fundo-e) * 24) at 80% 24%, var(--f2c), var(--f2) 55%, transparent 72%),
+    radial-gradient(circle calc(var(--fundo-e) * 34) at 34% 84%, var(--f3c), var(--f3) 55%, transparent 72%),
+    radial-gradient(circle calc(var(--fundo-e) * 20) at 92% 80%, var(--f1c), var(--f1) 55%, transparent 72%),
+    linear-gradient(160deg, var(--f2c), var(--f3c));
+}
+html[data-fundo="imagem"],
+[data-amostra-de-fundo="imagem"] {
+  --fundo-camadas: var(--p-fundo-imagem, none) /* starter: a imagem padrão do MIFT não vem junto; passe --p-fundo-imagem com url() pelo helper url() */ center / cover no-repeat;
+}
+
+/* A camada: fixa, atrás de tudo, maior que a janela (o movimento lento não mostra a borda). Véu do tema por cima. */
+html[data-fundo] body::before {
+  content: "";
+  position: fixed;
+  inset: -6vmax;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(var(--fundo-veu-cor) 0 0), var(--fundo-camadas);
+  background-color: var(--background);
+}
+/* "Nenhum": a amostra não herda as camadas do fundo da página. */
+[data-amostra-de-fundo=""] {
+  --fundo-camadas: linear-gradient(var(--background) 0 0);
+}
+/* A amostra (miniatura) não diz a posição: quem usa a põe (absolute inset-0 dentro de uma moldura). */
+[data-amostra-de-fundo] {
+  --fundo-u: 1.6px;
+  --fundo-px: 0.5px;
+  overflow: hidden;
+  background: linear-gradient(var(--fundo-veu-cor) 0 0), var(--fundo-camadas, linear-gradient(var(--background) 0 0));
+  background-color: var(--background);
+}
+/* A foto vira luz: o filtro comprime o brilho para uma faixa onde o texto passa de 4,5:1 (nos dois temas). */
+html[data-fundo="imagem"] body::before {
+  filter: blur(28px) var(--fundo-filtro-imagem);
+}
+[data-amostra-de-fundo="imagem"] {
+  filter: blur(1.5px) var(--fundo-filtro-imagem);
+}
+
+/* Grão: ruído fixo por cima do fundo (luz suave), de 8% a 40%. No "filme", o grão tem cor. */
+html[data-fundo] {
+  --fundo-ruido: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+}
+html[data-fundo="filme"] {
+  --fundo-ruido: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+}
+html[data-fundo-grao="1"] {
+  --fundo-grao: 0.08;
+}
+html[data-fundo-grao="2"] {
+  --fundo-grao: 0.16;
+}
+html[data-fundo-grao="3"] {
+  --fundo-grao: 0.24;
+}
+html[data-fundo-grao="4"] {
+  --fundo-grao: 0.32;
+}
+html[data-fundo-grao="5"] {
+  --fundo-grao: 0.4;
+}
+html[data-fundo][data-fundo-grao] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--fundo-ruido) 0 0 / calc(200px * var(--p-fundo-escala, 1));
+  mix-blend-mode: soft-light;
+  opacity: var(--fundo-grao, 0);
+}
+
+/* Movimento lento: a camada inteira deriva (só transform, no compositor). Parada com menos movimento. */
+@keyframes mift-fundo-deriva {
+  from {
+    transform: translate3d(-2.5vmax, -1.5vmax, 0) scale(1.02);
+  }
+  to {
+    transform: translate3d(2.5vmax, 2vmax, 0) scale(1.07);
+  }
+}
+html[data-fundo-movimento="lento"]:not([data-movimento="reduzido"]) body::before {
+  animation: mift-fundo-deriva 48s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-fundo-movimento] body::before {
+    animation: none;
+  }
+}
+
+/* A casca deixa o fundo aparecer: o corpo (que pinta acima de uma camada de z-index negativo quando o <html> tem fundo)
+   e a área do conteúdo ficam transparentes, e o menu lateral, translúcido. Cartões e camadas seguem com a superfície da
+   skin. */
+/* O corpo vira um contexto de empilhamento (isolation): a camada de z-index negativo fica entre o fundo dele e o
+   conteúdo. Assim o corpo mantém a cor da página, que é de onde a camada parte (a luz dela é presa à do tema) e o que
+   quem mede o contraste pelos ancestrais (o auditor) encontra; o <html> também, para a área fora do corpo. */
+html[data-fundo] {
+  background-color: var(--background);
+}
+html[data-fundo] body {
+  isolation: isolate;
+  background-color: var(--background);
+  background-image: none;
+}
+html[data-fundo] :is([data-slot="sidebar-wrapper"], [data-slot="sidebar-inset"]) {
+  background-color: transparent;
+}
+html[data-fundo] [data-slot="sidebar-container"] [data-slot="sidebar-inner"] {
+  background-color: color-mix(in oklch, var(--sidebar) 55%, transparent);
+}
+
+/* Menos transparência pedida pelo sistema: sem plano de fundo e a casca opaca de novo. */
+@media (prefers-reduced-transparency: reduce) {
+  html[data-fundo] body::before,
+  html[data-fundo] body::after {
+    display: none;
+  }
+  html[data-fundo] body,
+  html[data-fundo] [data-slot="sidebar-inset"] {
+    background-color: var(--background);
+  }
+  html[data-fundo] [data-slot="sidebar-wrapper"] {
+    background-color: var(--sidebar);
+  }
+  html[data-fundo] [data-slot="sidebar-container"] [data-slot="sidebar-inner"] {
+    background-color: var(--sidebar);
+  }
+}
+
+/* Tamanho do texto: a escala da página inteira (o rem), sem trocar a fonte; os espaços acompanham. */
+html[data-texto="pequeno"] {
+  font-size: 93.75%;
+}
+html[data-texto="grande"] {
+  font-size: 106.25%;
+}
+
+/* Texto grande no celular: como no Dynamic Type do iOS, a grade de indicadores vira uma coluna (o rótulo cabe inteiro). */
+@container main (max-width: 30rem) {
+  html[data-texto="grande"] .grade-indicadores {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Menos movimento pedido no painel (vale mesmo sem o pedido do sistema): nada anima nem desliza. */
+html[data-movimento="reduzido"] *,
+html[data-movimento="reduzido"] *::before,
+html[data-movimento="reduzido"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Materiais por superfície (Personalização → Materiais): data-material-barra (cabeçalho), -inferior (barra inferior do
+   celular), -menus (menus e popovers) e -cartoes (cartões e molduras). "solido": opaco; "vidro": translúcido com o
+   desfoque da pessoa (--p-vidro-*); "liquido": o MaterialLiquido (components/mift/blocos/personalizacao/liquido.tsx)
+   marca cada elemento com data-liquido="refrata" (filtro SVG de refração no backdrop-filter, só no Chromium e até um
+   limite de elementos) ou "desfoque" (os outros navegadores, o que passou do limite, menos movimento ou menos
+   transparência). A barra e os menus nunca ficam abaixo de 62% e 78% de tinta: o conteúdo passa por baixo deles. */
+html[data-material-barra="solido"] header.vidro,
+html[data-material-inferior="solido"] .vidro.fixed {
+  background: var(--background);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+html[data-material-menus="solido"] :is([data-slot="popover-content"], [data-slot="dropdown-menu-content"], [data-slot="dropdown-menu-sub-content"]) {
+  background-color: var(--card);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+html[data-material-menus="vidro"] :is([data-slot="popover-content"], [data-slot="dropdown-menu-content"], [data-slot="dropdown-menu-sub-content"]) {
+  background-color: color-mix(in oklch, var(--card) 80%, transparent);
+  -webkit-backdrop-filter: blur(max(12px, var(--p-vidro-desfoque, 20px))) saturate(var(--p-vidro-saturacao, 170%));
+  backdrop-filter: blur(max(12px, var(--p-vidro-desfoque, 20px))) saturate(var(--p-vidro-saturacao, 170%));
+}
+html[data-material-cartoes="solido"] :is(.bg-card, .superficie):where(:not(td, th)) {
+  background-color: var(--card);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+html[data-material-cartoes="vidro"] :is(.bg-card, .superficie):where(:not(td, th)) {
+  background-color: color-mix(in oklch, var(--card) calc(var(--p-vidro-opacidade, 0.6) * 100%), transparent);
+  -webkit-backdrop-filter: blur(var(--p-vidro-desfoque, 20px)) saturate(var(--p-vidro-saturacao, 170%));
+  backdrop-filter: blur(var(--p-vidro-desfoque, 20px)) saturate(var(--p-vidro-saturacao, 170%));
+}
+/* Vidro líquido: a tinta do tema (contraste), o aro de luz e o volume por sombras internas; a refração vem do filtro
+   que o MaterialLiquido põe no estilo do elemento. Brancos físicos por light-dark (mais fracos no escuro). */
+html [data-liquido] {
+  --liquido-esp: var(--p-liquido-espessura, 1);
+  --liquido-luz: var(--p-liquido-brilho, 1);
+  background-color: color-mix(in oklch, var(--background) var(--p-liquido-tinta, 60%), transparent) !important;
+  box-shadow:
+    inset 0 calc(1px * var(--liquido-esp)) 0 0 light-dark(color-mix(in oklch, white calc(80% * var(--liquido-luz)), transparent), color-mix(in oklch, white calc(32% * var(--liquido-luz)), transparent)),
+    inset 0 calc(-1px * var(--liquido-esp)) calc(2px * var(--liquido-esp)) 0 light-dark(color-mix(in oklch, white calc(30% * var(--liquido-luz)), transparent), color-mix(in oklch, white calc(10% * var(--liquido-luz)), transparent)),
+    inset 0 0 calc(14px * var(--liquido-esp)) 0 light-dark(color-mix(in oklch, white calc(16% * var(--liquido-luz)), transparent), color-mix(in oklch, white calc(6% * var(--liquido-luz)), transparent)),
+    0 calc(8px * var(--liquido-esp)) calc(24px * var(--liquido-esp)) calc(-10px * var(--liquido-esp)) color-mix(in oklch, black 28%, transparent) !important;
+  border-color: light-dark(color-mix(in oklch, white calc(55% * var(--liquido-luz)), transparent), color-mix(in oklch, white calc(16% * var(--liquido-luz)), transparent)) !important;
+}
+html [data-liquido][data-liquido-superficie="barra"],
+html [data-liquido][data-liquido-superficie="inferior"] {
+  background-color: color-mix(in oklch, var(--background) max(62%, var(--p-liquido-tinta, 60%)), transparent) !important;
+}
+html [data-liquido][data-liquido-superficie="menus"] {
+  background-color: color-mix(in oklch, var(--popover) max(78%, var(--p-liquido-tinta, 60%)), transparent) !important;
+}
+html [data-liquido="desfoque"] {
+  -webkit-backdrop-filter: blur(max(10px, var(--p-vidro-desfoque, 20px))) saturate(var(--p-vidro-saturacao, 170%)) !important;
+  backdrop-filter: blur(max(10px, var(--p-vidro-desfoque, 20px))) saturate(var(--p-vidro-saturacao, 170%)) !important;
+}
+@media (prefers-reduced-transparency: reduce) {
+  html [data-liquido] {
+    background-color: var(--card) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+/* Cantos por tipo de peça (Formas → Mais ajustes): valem só quando a pessoa escolheu (a variável está no estilo da raiz). */
+html[style*="--p-raio-controles"]
+  :is(
+    [data-slot="button"],
+    [data-slot="toggle"],
+    [data-slot="toggle-group-item"],
+    [data-slot="input"],
+    [data-slot="textarea"],
+    [data-slot="input-group"],
+    [data-slot="select-trigger"],
+    [data-slot="tabs-list"],
+    [data-slot="tabs-trigger"],
+    [data-segmentado]
+  ):not([data-slot="button-group"] > *, [data-slot="toggle-group"][data-spacing="0"] > *) {
+  border-radius: var(--p-raio-controles);
+}
+html[style*="--p-raio-cartoes"] :is([data-slot="card"], [data-slot="cartao-operacional"], [data-slot="indicador"], .superficie) {
+  border-radius: var(--p-raio-cartoes);
+}
+html[style*="--p-raio-menus"] :is([data-slot="popover-content"], [data-slot="dropdown-menu-content"], [data-slot="dropdown-menu-sub-content"]) {
+  border-radius: var(--p-raio-menus);
+}
+/* As camadas grandes (Painel e Dialogo) também abrem por cima: seguem os cantos dos menus, na proporção da skin
+   (rounded-3xl = 2,2 × o raio, contra rounded-lg = 1 × do menu). O Painel de baixo (celular) só arredonda em cima. */
+html[style*="--p-raio-menus"] :is([data-slot="painel"], [data-slot="dialogo"]) {
+  border-radius: calc(var(--p-raio-menus) * 2.2);
+}
+html[style*="--p-raio-menus"] [data-slot="painel"][data-lado="baixo"] {
+  border-radius: calc(var(--p-raio-menus) * 2.2) calc(var(--p-raio-menus) * 2.2) 0 0;
+}
+/* Sombra das superfícies: altura (distância e força) e suavidade (espalhamento), na cor do texto do tema. */
+html[style*="--p-sombra-altura"],
+html[style*="--p-sombra-suavidade"] {
+  --sombra-cartao: 0 calc(1px + 7px * var(--p-sombra-altura, 1)) calc(2px + 22px * var(--p-sombra-suavidade, 1)) calc(-6px * var(--p-sombra-altura, 1))
+    color-mix(in oklch, var(--foreground) calc(5% + 9% * var(--p-sombra-altura, 1)), transparent);
+}
+
+/* Tons (Cores): a página e as superfícies ganham um toque de um tom da casa (no máximo 8%: o texto segue com 4,5:1);
+   o texto secundário pode ficar mais forte. Redefinidos no corpo a partir dos valores da raiz (sem ciclo). */
+:root {
+  --card-original: var(--card);
+  --popover-original: var(--popover);
+  --background-original: var(--background);
+  --sidebar-original: var(--sidebar);
+}
+html[style*="--p-tom-superficie"] body {
+  --card: color-mix(in oklch, var(--card-original) 92%, oklch(from var(--p-tom-superficie) 0.7 0.14 h));
+  --popover: color-mix(in oklch, var(--popover-original) 92%, oklch(from var(--p-tom-superficie) 0.7 0.14 h));
+}
+html[style*="--p-tom-pagina"] body {
+  --background: color-mix(in oklch, var(--background-original) 92%, oklch(from var(--p-tom-pagina) 0.7 0.14 h));
+  --sidebar: color-mix(in oklch, var(--sidebar-original) 92%, oklch(from var(--p-tom-pagina) 0.7 0.14 h));
+}
+html[style*="--p-tom-pagina"]:not([data-fundo]) body {
+  background-color: var(--background);
+}
+html[data-texto-secundario="forte"]:not(.dark) body {
+  --muted-foreground: oklch(from var(--muted-original) min(l, 0.42) c h);
+}
+html.dark[data-texto-secundario="forte"] body {
+  --muted-foreground: oklch(from var(--muted-original) max(l, 0.82) c h);
+}
+
+/* =====================================================================================================================
+   STARTER: o que o protótipo acrescenta à base do MIFT UI (0x21m/mift-ui, commit 4387a95).
+   Eixos na raiz (src/proto/aparencia): .dark, data-vidro, data-skin, data-raio, data-borda, data-destaque,
+   data-densidade, data-profundidade e, em style, --fonte-texto, --fonte-titulo, --p-vidro-opacidade,
+   --p-vidro-desfoque e (destaque personalizado) --primary e companhia.
+   ===================================================================================================================== */
+@custom-variant vidro (&:is([data-vidro="on"] *));
+
+@theme inline {
+  --color-sucesso: var(--positive);
+  --color-aviso: var(--texto-alerta);
+}
+
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --lateral: 15rem;
+  --topo: 3.5rem;
+  --abas: 5.75rem; /* ilha de abas (60 px) + 12 px da borda + folga */
+}
+html[data-lateral="recolhida"] { --lateral: 4.25rem; }
+
+/* Profundidade: plana tira a sombra dos cards; funda dobra a distância. "padrao" deixa a skin e a borda decidirem. */
+[data-profundidade="plana"] { --sombra-cartao: 0 0 #0000; }
+[data-profundidade="funda"] {
+  --sombra-cartao: 0 1px 2px 0 oklch(0.25 0.02 260 / 0.08), 0 18px 40px -12px oklch(0.25 0.02 260 / 0.28);
+}
+:where(.dark)[data-profundidade="funda"] { --sombra-cartao: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 24px 48px -16px oklch(0 0 0 / 0.75); }
+
+/* Barras da moldura no vidro: a mesma superfície translúcida dos cards. */
+[data-vidro="on"] [data-superficie] {
+  background-color: var(--superficie-vidro);
+  -webkit-backdrop-filter: var(--desfoque);
+  backdrop-filter: var(--desfoque);
+}
+
+/* Barra de controle do protótipo (PRO-24): oculta, F alterna, ?controles=1 abre */
+[data-prototipo-controle] { display: none !important; }
+html[data-prototipo-controles] [data-prototipo-controle] { display: flex !important; }
+
+/* Tela de carregamento do app: só aparece se passar de ~300 ms (TOK-26) */
+#carregamento-app { display: none; }
+html[data-carregando] #carregamento-app { display: grid; animation: carregamento-entra 200ms var(--ease-out) 300ms both; }
+@keyframes carregamento-entra { from { opacity: 0; } to { opacity: 1; } }
+@keyframes carregamento-barra { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+.carregamento-barra { animation: carregamento-barra 1.2s var(--ease-out) infinite; }
+
+/* Abertura: cobre a home até a ilha da abertura assumir (o script do layout liga) */
+/* (a capa da abertura agora é a camada #abertura do layout; ver sistema.css) */
+
+/* Transição de página: crossfade curto do conteúdo, moldura parada (MOV-26) */
+::view-transition-old(conteudo) { animation: 120ms ease-out both vt-sai; }
+::view-transition-new(conteudo) { animation: 180ms var(--ease-out) both vt-entra; }
+@keyframes vt-sai { to { opacity: 0; } }
+@keyframes vt-entra { from { opacity: 0; transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* Pulso ao vivo: ~3 ciclos e para */
+@keyframes pulso-anel { from { transform: scale(1); opacity: 0.6; } to { transform: scale(2.6); opacity: 0; } }

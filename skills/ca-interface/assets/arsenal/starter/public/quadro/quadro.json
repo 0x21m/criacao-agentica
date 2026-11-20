@@ -1,0 +1,275 @@
+{
+ "geradoEm": "2026-11-16T23:23:46.417Z",
+ "aparencia": {
+  "preset": "noite",
+  "tema": "escuro",
+  "vidro": "1"
+ },
+ "fluxos": [
+  {
+   "id": "inicio",
+   "modulo": "inicio",
+   "ponta": "Operador · do início à OS atrasada",
+   "telas": [
+    {
+     "arquivo": "inicio-1.jpg",
+     "legenda": "1. Visão geral: o banner resume o dia; toca numa OS atrasada da atenção do dia",
+     "rect": {
+      "x": 288,
+      "y": 358.890625,
+      "width": 316.65625,
+      "height": 75.5
+     },
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    },
+    {
+     "arquivo": "inicio-2.jpg",
+     "legenda": "2. Pedidos abre com a OS na folha lateral; toca no próximo passo",
+     "rect": {
+      "x": 1138.625,
+      "y": 720,
+      "width": 211.375,
+      "height": 32
+     },
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    },
+    {
+     "arquivo": "inicio-3.jpg",
+     "legenda": "3. A etapa avança e a folha oferece Desfazer",
+     "rect": null,
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    }
+   ]
+  },
+  {
+   "id": "pedidos",
+   "modulo": "pedidos",
+   "ponta": "Operador · filtrar e abrir uma OS",
+   "telas": [
+    {
+     "arquivo": "pedidos-1.jpg",
+     "legenda": "1. Busca “split” na barra de filtros de vidro",
+     "rect": {
+      "x": 316,
+      "y": 345.515625,
+      "width": 59.484375,
+      "height": 17
+     },
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    },
+    {
+     "arquivo": "pedidos-2.jpg",
+     "legenda": "2. A OS abre na folha: eixos, o que o cliente lê, itens e linha do tempo",
+     "rect": null,
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    }
+   ]
+  },
+  {
+   "id": "quadro",
+   "modulo": "pedidos",
+   "ponta": "Operador · o quadro de OS",
+   "telas": [
+    {
+     "arquivo": "quadro-1.jpg",
+     "legenda": "1. Quadro de OS: arrastar com mouse, toque ou teclado; soltar em Aguardando cliente ou Prontas abre a sheet da ação (pessimista)",
+     "rect": null,
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    }
+   ]
+  },
+  {
+   "id": "novo",
+   "modulo": "pedidos/novo/",
+   "ponta": "Operador · criar uma OS",
+   "telas": [
+    {
+     "arquivo": "novo-1.jpg",
+     "legenda": "1. Preenche o essencial; o resumo ao lado acompanha",
+     "rect": {
+      "x": 818,
+      "y": 642.796875,
+      "width": 152,
+      "height": 32
+     },
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    },
+    {
+     "arquivo": "novo-2.jpg",
+     "legenda": "2. Depois da resposta (pessimista), a OS entra na lista e abre na folha",
+     "rect": null,
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    }
+   ]
+  },
+  {
+   "id": "novo-erro",
+   "modulo": "pedidos/novo/",
+   "ponta": "Ramo · criar sem os campos obrigatórios",
+   "telas": [
+    {
+     "arquivo": "novo-erro-1.jpg",
+     "legenda": "1. Toca em Criar OS com o formulário vazio",
+     "rect": {
+      "x": 818,
+      "y": 642.796875,
+      "width": 152,
+      "height": 32
+     },
+     "ramo": true,
+     "w": 1366,
+     "h": 768
+    },
+    {
+     "arquivo": "novo-erro-2.jpg",
+     "legenda": "2. Cada campo diz o que falta; o foco vai para o primeiro",
+     "rect": null,
+     "ramo": true,
+     "w": 1366,
+     "h": 768
+    }
+   ]
+  },
+  {
+   "id": "agenda",
+   "modulo": "agenda",
+   "ponta": "Operador · a agenda do dia por recurso",
+   "telas": [
+    {
+     "arquivo": "agenda-1.jpg",
+     "legenda": "1. Dia por recurso com a linha do agora e o conflito AG-3315 × AG-3316 destacado",
+     "rect": null,
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    }
+   ]
+  },
+  {
+   "id": "clientes",
+   "modulo": "clientes",
+   "ponta": "Operador · editar um cliente",
+   "telas": [
+    {
+     "arquivo": "clientes-1.jpg",
+     "legenda": "1. Escolhe o cliente na lista",
+     "rect": {
+      "x": 270,
+      "y": 249.796875,
+      "width": 308,
+      "height": 56
+     },
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    },
+    {
+     "arquivo": "clientes-2.jpg",
+     "legenda": "2. O detalhe mostra a identidade e o resumo; toca em Editar",
+     "rect": {
+      "x": 1126.734375,
+      "y": 308.59375,
+      "width": 83.1875,
+      "height": 32
+     },
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    },
+    {
+     "arquivo": "clientes-3.jpg",
+     "legenda": "3. Diálogo de edição em vidro flutuante",
+     "rect": null,
+     "ramo": false,
+     "w": 1366,
+     "h": 768
+    }
+   ]
+  },
+  {
+   "id": "celular",
+   "modulo": "pedidos",
+   "ponta": "Celular · ver uma OS",
+   "telas": [
+    {
+     "arquivo": "celular-1.jpg",
+     "legenda": "1. Início no celular; toca em Pedidos na ilha de abas",
+     "rect": {
+      "x": 87.59375,
+      "y": 768,
+      "width": 71.59375,
+      "height": 60
+     },
+     "ramo": false,
+     "w": 390,
+     "h": 844
+    },
+    {
+     "arquivo": "celular-2.jpg",
+     "legenda": "2. Lista em cartões; toca na primeira atrasada",
+     "rect": {
+      "x": 16,
+      "y": 513.375,
+      "width": 358,
+      "height": 126.53125
+     },
+     "ramo": false,
+     "w": 390,
+     "h": 844
+    },
+    {
+     "arquivo": "celular-3.jpg",
+     "legenda": "3. Detalhe em folha inferior com a ação principal",
+     "rect": null,
+     "ramo": false,
+     "w": 390,
+     "h": 844
+    }
+   ]
+  },
+  {
+   "id": "celular-vazio",
+   "modulo": "pedidos",
+   "ponta": "Ramo · filtro sem resultado no celular",
+   "telas": [
+    {
+     "arquivo": "celular-vazio-1.jpg",
+     "legenda": "1. Busca um termo que não existe",
+     "rect": {
+      "x": 130.859375,
+      "y": 672.0625,
+      "width": 128.28125,
+      "height": 40
+     },
+     "ramo": true,
+     "w": 390,
+     "h": 844
+    },
+    {
+     "arquivo": "celular-vazio-2.jpg",
+     "legenda": "2. Limpar filtros devolve a lista",
+     "rect": null,
+     "ramo": true,
+     "w": 390,
+     "h": 844
+    }
+   ]
+  }
+ ]
+}
