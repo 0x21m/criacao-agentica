@@ -70,6 +70,37 @@ A metodologia funciona sozinha: quando uma peça falta, ela tem um caminho alter
   ```
 - **git**, com o seu nome e e-mail configurados. A metodologia usa o git para desfazer, revisar por diff, construir em cópia isolada e registrar evidência.
 
+### Para a ca-interface
+
+A `ca-interface` chama estas skills como lentes "obrigatórias se instaladas" (`skills/ca-interface/references/lentes-e-ferramentas.md`). Sem elas, cai no caminho alternativo e o acabamento piora:
+
+- **[taste-skill](https://github.com/Leonxlnx/taste-skill)**, com a `design-taste-frontend` (landing, site e a checagem de consistência visual de todo protótipo):
+  ```bash
+  npx skills add Leonxlnx/taste-skill
+  ```
+- **[Impeccable](https://github.com/pbakaus/impeccable)**, para as passadas `critique` e `polish`:
+  ```
+  /plugin marketplace add pbakaus/impeccable
+  ```
+  ```
+  /plugin install impeccable@impeccable
+  ```
+- **[Skills do Jakub Krehel](https://github.com/jakubkrehel/skills)**, com a `better-layout` (composição da tela-chave) e as outras `better-*`:
+  ```bash
+  npx skills add jakubkrehel/skills
+  ```
+- **[Skills do Emil Kowalski](https://github.com/emilkowalski/skills)**, com a `break-ui` (dados de pior caso antes de mostrar) e as de movimento:
+  ```bash
+  npx skills add emilkowalski/skills
+  ```
+
+Fora as skills:
+
+- **Node 22 ou mais novo** e **Chrome ou Edge** instalados. O starter do arsenal (`skills/ca-interface/assets/arsenal/starter/`) roda com `npm install` e `npm run dev`, e os scripts de verificação (`navegar`, `medir`, `lab-interativos`) abrem o navegador da máquina.
+- **MCPs de referência** (Mobbin, Refero, 21st.dev), opcionais. A skill só os usa se já estiverem conectados; sem eles, pede 2 ou 3 links ou navega no navegador embutido.
+
+Depois de instalar tudo, reinicie o Claude Code.
+
 ## Como começar
 
 Abra o Claude Code **dentro da pasta do projeto** e diga o que quer:
