@@ -49,7 +49,7 @@ O registro depende do projeto:
 - **Com `docs/`:** o bug vira uma TAR (ou entra na TAR que o causou) com CA do comportamento correto, e passa pela revisão do Executar conforme o risco. Se passou por uma TAR concluída, entra em "Já escapou" no `REVIEW.md`, com o teste de regressão.
 - **Sem `docs/`:** o registro é o teste de regressão mais o commit com a hipótese confirmada. Ofereça o Adotar em uma linha; não imponha.
 
-"Não há costura correta para o teste" é um achado: vira LAC para `improve-codebase-architecture`. Sem a skill: `references/falhas.md`.
+"Não há costura correta para o teste" é um achado: vira LAC para `improve-codebase-architecture`. Se a skill faltar, avise e peça a instalação (`motor.md`); `references/falhas.md` só se a pessoa mandar seguir sem ela.
 
 ## Próxima
 

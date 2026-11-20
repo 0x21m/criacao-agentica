@@ -103,7 +103,7 @@ Diga como cada coisa foi verificada: "rodei o teste", "conferi na tela", "é jul
 | Arquivo | Leia quando |
 |---|---|
 | `references/modos.md` | sempre, ao escolher o modo: o procedimento de cada um |
-| `references/motor.md` | for chamar uma skill do Matt Pocock ou um agente `ca-*`, algo não estiver instalado ou falhar, ou houver conflito entre uma skill e esta |
+| `references/motor.md` | for chamar uma skill do Matt Pocock ou um agente `ca-*`, faltar uma skill obrigatória, algo falhar ou houver conflito entre uma skill e esta |
 | `references/profundidade.md` | escolher o nível do projeto e quais documentos ele exige |
 | `references/criterios.md` | escrever critérios de aceite e seus verificadores |
 | `references/auditoria.md` | auditar consistência antes de implementar |

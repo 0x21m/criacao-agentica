@@ -1,33 +1,33 @@
 # Lentes e ferramentas do ambiente
 
-A skill funciona sozinha: nenhuma lente e nenhuma ferramenta daqui é pré-requisito. Quando uma lente está instalada, porém, as passadas marcadas como obrigatórias abaixo **não são opcionais**: elas rodam. Quando a lente falta, vale a regra própria indicada como fallback, e o trabalho segue.
+Toda lente citada aqui é de instalação obrigatória (seção "Instalar" do README do plugin), e as passadas marcadas como obrigatórias abaixo **não são opcionais**: elas rodam. O navegador e os MCPs seguem opcionais. Se uma lente faltar, não siga em silêncio: diga em uma linha qual falta e o comando para instalar, e só aplique a regra própria indicada como fallback se a pessoa mandar seguir sem ela, registrando isso no relatório.
 
 ## Passadas com lentes
 
 A ca-interface é a dona do fluxo e chama outras skills como lentes, em passadas definidas. Para não estourar tempo e tokens:
 
 - cada lente roda num **subagente de contexto limpo** (briefing da seção "Agentes delegados" do `SKILL.md`), que recebe a URL local, a rota e o critério, e **devolve só os achados**, já na escala e nos selos desta skill; o agente principal não carrega a saída inteira da lente;
-- **na v1, as lentes obrigatórias quando instaladas**: `break-ui`, `better-layout`, o verificador de consistência da `design-taste-frontend` e, do Impeccable, `critique` e `polish`; as demais entram por necessidade da tela;
+- **na v1, as lentes obrigatórias**: `break-ui`, `better-layout`, o verificador de consistência da `design-taste-frontend` e, do Impeccable, `critique` e `polish`; as demais entram por necessidade da tela;
 - as outras ficam para a revisão (modo 3) ou para a v2.
 
 | Passada | Lente | Quando | Fallback na skill |
 | --- | --- | --- | --- |
-| Dados de pior caso | `break-ui` | **Obrigatória se instalada**, sempre antes de mostrar: v1, tela nova e revisão | VER-32, VER-16, LIS-28, VER-33 |
-| Composição e hierarquia | `better-layout` | **Obrigatória se instalada**, sempre na tela-chave: v1, tela nova e revisão | NAV-40, NAV-41, PON |
+| Dados de pior caso | `break-ui` | **Obrigatória**, sempre antes de mostrar: v1, tela nova e revisão | VER-32, VER-16, LIS-28, VER-33 |
+| Composição e hierarquia | `better-layout` | **Obrigatória**, sempre na tela-chave: v1, tela nova e revisão | NAV-40, NAV-41, PON |
 | Superfícies, ícones, sombras | `better-ui` | refinamento da v2 e revisão | TOK-34, TOK-42, EXP-39 a EXP-46 |
 | Tipografia | `better-typography` | revisão e v2 | TOK-33, PER-18 |
 | Acessibilidade | `better-accessibility` | revisão e v2 | ACE |
 | Movimento que falta ou que sobra | `find-animation-opportunities`, `review-animations` | v2 | MOV, MOV-35 |
 | Gráficos | `dataviz` | quando a tela tem gráfico | IND |
 | Segunda opinião geral | `better-interface` | só no modo revisar | VER |
-| Landing, site e páginas públicas do cliente | `design-taste-frontend` (inteira: hero, seções, fotos, movimento e o `gate.mjs` dela) | **Obrigatória se instalada** quando o sistema tem site ou landing (CLI-42) | CLI-42, EXP, MOV |
-| Um sistema só (consistência visual) | `design-taste-frontend` (`scripts/consistency.mjs`, só as checagens de sistema: botões, cards, raio, links, aninhamento, escala de títulos, contraste, toque, colisão, foco, hover, movimento reduzido) | **Obrigatória se instalada**, em todo protótipo antes de mostrar | VER-33, VER-34, conformidade visual |
+| Landing, site e páginas públicas do cliente | `design-taste-frontend` (inteira: hero, seções, fotos, movimento e o `gate.mjs` dela) | **Obrigatória** quando o sistema tem site ou landing (CLI-42) | CLI-42, EXP, MOV |
+| Um sistema só (consistência visual) | `design-taste-frontend` (`scripts/consistency.mjs`, só as checagens de sistema: botões, cards, raio, links, aninhamento, escala de títulos, contraste, toque, colisão, foco, hover, movimento reduzido) | **Obrigatória**, em todo protótipo antes de mostrar | VER-33, VER-34, conformidade visual |
 
 ### Passada de refinamento completa (ordem)
 
-Depois de montar as telas e antes de cada rodada de aprovação, o refinamento roda **nesta ordem**, cada etapa num subagente que devolve achados ou um diff contido. Uma etapa só começa com a anterior aplicada; a lente ausente cai no fallback.
+Depois de montar as telas e antes de cada rodada de aprovação, o refinamento roda **nesta ordem**, cada etapa num subagente que devolve achados ou um diff contido. Uma etapa só começa com a anterior aplicada; a lente que falta segue a regra do início deste arquivo.
 
-| # | Etapa | Lentes (as instaladas) | Regras |
+| # | Etapa | Lentes | Regras |
 | --- | --- | --- | --- |
 | 1 | Estrutura e hierarquia: nada solto, grupos, 3 níveis, grade horizontal | `better-layout`, Impeccable `layout` | NAV-42, NAV-40, NAV-41, EXP-61 |
 | 2 | Tipografia e quebra de linha | `better-typography`, Impeccable `typeset` | TOK-45, TOK-33, escala compacta |
@@ -48,7 +48,7 @@ O plugin `impeccable` (4.9.2 ou mais nova) tem um playbook por tipo de trabalho.
 
 | Passada da ca-interface | Comando do Impeccable | Quando | Regras nossas que ele reforça |
 | --- | --- | --- | --- |
-| Crítica com nota (rubrica de 10/10) | `critique` | **Obrigatória se instalado**, antes de mostrar a v1 e no modo revisar; a nota entra na legenda da rodada | VER, EXP-61, rubrica do starter |
+| Crítica com nota (rubrica de 10/10) | `critique` | **Obrigatória**, antes de mostrar a v1 e no modo revisar; a nota entra na legenda da rodada | VER, EXP-61, rubrica do starter |
 | Auditoria técnica (acessibilidade, desempenho, responsivo) | `audit` | revisão e antes de promover para construção | ACE, VER-33, DIS |
 | Composição, ritmo e hierarquia | `layout` | junto com `better-layout` na tela-chave | NAV-40, NAV-41, TOK-05 |
 | Celular, tablet e telas diferentes | `adapt` | sempre que a tela tem uso no celular; operador no celular | DIS-22, CLI |
@@ -60,7 +60,7 @@ O plugin `impeccable` (4.9.2 ou mais nova) tem um playbook por tipo de trabalho.
 | Primeiro uso e vazios | `onboard` | abertura, primeiro acesso e estados vazios | EXP-60, EST-49 |
 | Microcopy | `clarify` | textos, rótulos e erros em pt-BR | TXT |
 | Desempenho da interface | `optimize` | WebGL, canvas e listas longas | ARS-07, STK |
-| Acabamento final | `polish` | **Obrigatória se instalado**, última passada antes de cada rodada de aprovação | conformidade visual, EXP-61 |
+| Acabamento final | `polish` | **Obrigatória**, última passada antes de cada rodada de aprovação | conformidade visual, EXP-61 |
 | Alternativas de um elemento para escolher | `generate` e `live` | quando o dono quer comparar variações no navegador | PRO (rodada de aprovação) |
 | DESIGN.md a partir do protótipo aprovado | agente `impeccable-documenter` | depois da aprovação, antes de construir | DOC, PRO-19 |
 | Revisão final contra a direção | agente `impeccable-finish-reviewer` | junto com o `ca-verificador-ui` | VER-34 |
@@ -74,7 +74,7 @@ Cuidados:
 
 As regras de site da `design-taste-frontend` (hero na primeira tela, uma seção por tela, fotos guiando) valem na landing e nas páginas públicas, **não** nas telas de trabalho do operador; nelas, só o verificador de consistência e a camada de movimento (hover que sobe 2 px, botão que afunda, entrada única). `high-end-visual-design` e `gpt-taste` seguem só para gerar direções (`direcao-e-personalidade.md`, seção 8).
 
-Como saber se está instalada: a lista de skills disponíveis na sessão. Ausente, diga em uma linha no relatório ("break-ui não instalada; passada por VER-32") e aplique o fallback.
+Como saber se está instalada: a lista de skills disponíveis na sessão. Ausente, pare a passada e diga em uma linha qual falta e como instalar ("break-ui não instalada; instale pela seção Instalar do README do plugin"). O fallback só entra se a pessoa mandar seguir sem ela, e vai para o relatório ("break-ui ausente; passada por VER-32, a pedido").
 
 ## Outras skills como lentes
 

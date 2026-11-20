@@ -31,11 +31,11 @@ Parte das skills dele é **só-usuário** (`disable-model-invocation: true`): a 
 | Só-usuário, procedimento | `to-tickets`, `implement`, `to-questionnaire`, `wait-what` | Leia `~/.claude/skills/<nome>/SKILL.md` e siga o procedimento, dizendo à pessoa que está seguindo |
 | Só-usuário, sessão própria | `implement-spec`, `wayfinder`, `retro`, `improve-codebase-architecture`, `handoff` | Ofereça à pessoa o comando `/<nome>`, com o motivo. São fluxos longos, que orquestram subagentes ou olham a sessão inteira |
 
-O que fazer quando uma skill não está instalada está na última coluna da tabela abaixo.
+Toda skill citada aqui é de instalação obrigatória (seção "Instalar" do README do plugin). Se uma faltar, não siga em silêncio: diga em uma linha qual falta e o comando para instalar, e espere. A última coluna da tabela abaixo é o caminho só para quando a pessoa mandar seguir sem ela; registre isso no relatório.
 
 ## Por modo
 
-| Modo | Skill | Para quê | Sem a skill |
+| Modo | Skill | Para quê | Se a pessoa mandar seguir sem a skill |
 |---|---|---|---|
 | Iniciar | `grill-with-docs` (= `grilling` + `domain-modeling`) | Entrevista por fronteira de decisões, gravando glossário e ADR enquanto avança | Rodadas curtas com recomendação; atualize `GLOSSARY.md` à mão |
 | Iniciar (esforço grande, com névoa) | `wayfinder` | Mapa de tickets de decisão em `docs/mapas/` até o caminho ficar claro; produz decisões, não entregas | Liste as LAC por tipo de resolução e resolva uma por sessão |
