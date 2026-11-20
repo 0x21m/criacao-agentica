@@ -62,10 +62,10 @@ Valem em todos os modos e têm precedência sobre o resto deste arquivo e das re
 | 9 | Controles do protótipo ocultos, tecla F | PRO-24 |
 | 10 | Kit de movimento: transição, mola ou líquido, odômetro, gráfico que se desenha, texto de destaque, cards escalonados, pulso | MOV-35 |
 | 11 | 2 ou 3 momentos-assinatura do domínio, rodando | EXP-02, EXP-56 |
-| 12 | Passada de pior caso sem quebra aberta (`break-ui`, se instalada) | VER-32 |
+| 12 | Passada de pior caso sem quebra aberta (`break-ui`) | VER-32 |
 | 13 | Nada do brief perdido pela estética | EXP-59 |
 
-**QUANDO, também bloqueiam:** visão geral, painel e detalhe no desktop em grade de 12 colunas, mestre-detalhe ou painel lateral, até 2,5 telas, sem rolagem interna (NAV-40; lente `better-layout`, se instalada); cabeçalho compacto em tela de operação (NAV-41); tabela robusta (LIS-28); nenhum corte nem sobreposição em 1280, 1366 e 1440 (VER-33); operador no celular com layout próprio (DIS-22); direções que diferem em densidade, layout, par tipográfico e material (PER-19). Continuam: protótipo aprovado, referências, estados, pt-BR, contraste e acessibilidade básica.
+**QUANDO, também bloqueiam:** visão geral, painel e detalhe no desktop em grade de 12 colunas, mestre-detalhe ou painel lateral, até 2,5 telas, sem rolagem interna (NAV-40; lente `better-layout`); cabeçalho compacto em tela de operação (NAV-41); tabela robusta (LIS-28); nenhum corte nem sobreposição em 1280, 1366 e 1440 (VER-33); operador no celular com layout próprio (DIS-22); direções que diferem em densidade, layout, par tipográfico e material (PER-19). Continuam: protótipo aprovado, referências, estados, pt-BR, contraste e acessibilidade básica.
 
 ### Recomendado: dica, não bloqueia
 
@@ -196,5 +196,5 @@ Leia só o que o modo pede. Na revisão, siga esta ordem, para que falha de base
 | `references/starter-erp.md` | (sem IDs) | ao copiar o starter ou criar módulo: módulos, APIs (`acao`, `colecao`, relógio, permissões, projeção), peças de base, scripts e metas |
 | `references/catalogo-de-fontes.md` | (sem IDs) | fonte de referência ou família tipográfica livre (PER-18) |
 | `references/verificacao.md` | VER | antes de entregar: severidade, evidência, vereditos, pior caso, corte e sobreposição, presença, navegador |
-| `references/lentes-e-ferramentas.md` | (sem IDs) | modos 1, 2 e 3: passadas com lentes obrigatórias se instaladas (`break-ui`, `better-layout`, consistência da `design-taste-frontend`, `critique` e `polish` do Impeccable) e os demais comandos do Impeccable por passada, navegador, MCP |
+| `references/lentes-e-ferramentas.md` | (sem IDs) | modos 1, 2 e 3: passadas com lentes obrigatórias (`break-ui`, `better-layout`, consistência da `design-taste-frontend`, `critique` e `polish` do Impeccable) e os demais comandos do Impeccable por passada, navegador, MCP |
 | `references/checklist.md` | todos | índice único dos IDs; roteiro da revisão e da autoverificação |

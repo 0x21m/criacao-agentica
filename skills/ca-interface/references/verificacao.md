@@ -120,7 +120,7 @@ Princípio: evidência, não gosto. Densidade, raio ou voz de que se discorda n�
 | Estados | Carregando, erro, parcial, desatualizado, sem permissão, o próprio usuário na lista, otimista pendente, falha revertida, sessão expirada |
 | Contêiner | Largura mínima, coluna estreita de painel, espremido por irmão, tela muito larga, altura mínima de reflow em conteúdo com rolagem horizontal (`fundamentos-e-tokens.md`) |
 
-- **VER-32** · [N casa] · P1 · SEMPRE. **Passada de pior caso antes de mostrar.** Na v1, na tela nova e na revisão, antes de qualquer rodada ou veredito, rode a passada de pior caso sobre a tela-chave e as listas: nome enorme, e-mail sem quebra, valor gigante, zero itens e mil itens, mais os eixos da tabela acima que a tela renderiza. Com a skill `break-ui` instalada, ela é a lente desta passada, num subagente de contexto limpo que devolve só os achados (`lentes-e-ferramentas.md`); sem ela, esta seção, LIS-28 e VER-33 são o critério. **Qualquer quebra é achado P1**: coluna que muda de largura, linha que dobra, texto que vaza ou corta sem reticências, ação que some ou é empurrada, número cortado. *Por quê:* na iteração 3, colunas cortaram em 1366 px e um botão principal saiu truncado; o pior caso só aparece quando é injetado. *Verificar:* o relatório da passada lista os eixos usados, o antes e depois de cada quebra corrigida e nenhuma quebra aberta.
+- **VER-32** · [N casa] · P1 · SEMPRE. **Passada de pior caso antes de mostrar.** Na v1, na tela nova e na revisão, antes de qualquer rodada ou veredito, rode a passada de pior caso sobre a tela-chave e as listas: nome enorme, e-mail sem quebra, valor gigante, zero itens e mil itens, mais os eixos da tabela acima que a tela renderiza. A skill `break-ui`, obrigatória, é a lente desta passada, num subagente de contexto limpo que devolve só os achados (`lentes-e-ferramentas.md`); se a pessoa mandar seguir sem ela, esta seção, LIS-28 e VER-33 são o critério. **Qualquer quebra é achado P1**: coluna que muda de largura, linha que dobra, texto que vaza ou corta sem reticências, ação que some ou é empurrada, número cortado. *Por quê:* na iteração 3, colunas cortaram em 1366 px e um botão principal saiu truncado; o pior caso só aparece quando é injetado. *Verificar:* o relatório da passada lista os eixos usados, o antes e depois de cada quebra corrigida e nenhuma quebra aberta.
 
 ## 8. Verificação estática (lista A)
 
@@ -322,7 +322,7 @@ Resultado: passou / falhou (evidência: captura, rota, estado) / não verificado
 | Protótipo só no claro; emoji em selo; ilha Astro que não responde | B18, B20, B19 |
 | Revisão que só aponta excesso e deixa passar a tela fria | Os dois lados da seção 15 (VER-31) |
 | Protótipo testado só na raiz do servidor | Build com `base` de subpasta (B29) |
-| Pior caso não injetado antes da rodada | Passada de pior caso, com `break-ui` se instalada (VER-32) |
+| Pior caso não injetado antes da rodada | Passada de pior caso, com `break-ui` (VER-32) |
 | Corte e sobreposição avaliados por captura | Medir no navegador em 1280, 1366 e 1440 (VER-33, B32) |
 | App criado do zero sem a tabela de presença | Checklist de presença (VER-34) |
 

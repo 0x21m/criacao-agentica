@@ -868,7 +868,7 @@ Arquivo: `references/verificacao.md`.
 | VER-29 | Checagem visual repetida vira verificador do projeto, com saída impressa, no loop | [N casa] | QUANDO | processo | checagem refeita à mão a cada rodada |
 | VER-30 | Prova do projeto rodada antes do veredito de build; vermelha impede aprovar | [N casa] | QUANDO | P1 | veredito sem a saída do `Rodar:` |
 | VER-31 | Revisão aponta falta e excesso: tela plana, moldura, transição, resposta, reconhecimento, informação sumida, presença, composição, clichê, enfeite frequente | [N casa] | QUANDO | processo | tabelas da seção 15 de `verificacao.md` |
-| VER-32 | Passada de pior caso antes de mostrar (`break-ui` se instalada); qualquer quebra é P1 | [N casa] | SEMPRE | P1 | relatório da passada sem quebra aberta |
+| VER-32 | Passada de pior caso antes de mostrar (`break-ui`); qualquer quebra é P1 | [N casa] | SEMPRE | P1 | relatório da passada sem quebra aberta |
 | VER-33 | Corte e sobreposição medidos em 1280, 1366 e 1440 e no celular: ação truncada, coluna cortada, fixo cobrindo conteúdo | [N casa] | SEMPRE | P1 | B32 |
 | VER-34 | Checklist de presença do app criado do zero conferido item por item, com a saída dos scripts do starter como evidência; falta é P1 | [N casa] | SEMPRE | P1 | tabela de presença no relatório |
 | VER-35 | QA de uso real com toque (dispositivos emulados, tap, gesto, arrasto, teclado, personas; no starter, "Ver como", outra ponta e duas abas) por quem não fez, antes de cada rodada | [N casa] | SEMPRE | P1 | rodada sem relatório de uso real |

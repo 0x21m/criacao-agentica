@@ -285,7 +285,7 @@ Use o termo exato no achado.
 - **Carregamento:** skeleton (estrutura) × spinner (indeterminado) × barra (determinada); shimmer e pulse.
 - **Desempenho:** jank, dropped frame, compositing, layout thrashing, `will-change`.
 
-Pares a desambiguar: crossfade × shared element × layout animation; pop in × scale in; clip-path × mask. A skill `animation-vocabulary`, se instalada, faz a busca reversa.
+Pares a desambiguar: crossfade × shared element × layout animation; pop in × scale in; clip-path × mask. A skill `animation-vocabulary` faz a busca reversa.
 
 ## 12. Padrão detectável → correção
 

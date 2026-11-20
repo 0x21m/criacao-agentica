@@ -34,7 +34,7 @@ Num sistema construído por agentes de IA, quem escreve no banco não passa só 
 2. **Escolha o mecanismo pelo catálogo**, o mais simples que garante a regra. Se o catálogo não cobre o caso, registre como `[DESCONHECIDO]` e pesquise na documentação oficial antes de inventar.
 3. **Decisões que são da pessoa** viram pergunta, não suposição: modelo de tenancy, unidade monetária e moedas, retenção de dados, quem pode usar cada bypass.
 4. **Escreva a migração** e os testes adversariais juntos. Rode os testes com o papel real (não como `postgres`).
-5. **Use as skills oficiais quando existirem:** `supabase-postgres-best-practices` e `supabase` (instale com `npx skills add supabase/agent-skills`). Esta skill decide o que garantir; elas decidem como fazer bem em Postgres e Supabase.
+5. **Projeto em Supabase usa as skills oficiais, obrigatórias:** `supabase-postgres-best-practices` e `supabase` (instale com `npx skills add supabase/agent-skills`). Se faltarem, diga qual e o comando de instalação, e só siga sem elas se a pessoa mandar, registrando no relatório. Esta skill decide o que garantir; elas decidem como fazer bem em Postgres e Supabase.
 
 ## Família
 

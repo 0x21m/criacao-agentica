@@ -38,6 +38,10 @@ O agente transforma decisões em software. Quando falta uma decisão, ele a reco
 
 ## Instalar
 
+Tudo nesta seção é obrigatório: as skills que o plugin cita fazem parte do método. Quando uma falta, o agente para, diz qual é e o comando para instalar.
+
+### 1. O plugin
+
 No Claude Code, como dois comandos separados:
 
 ```
@@ -47,59 +51,66 @@ No Claude Code, como dois comandos separados:
 /plugin install criacao-agentica@criacao-agentica
 ```
 
-Só a skill, sem os agentes:
+### 2. As skills que ele usa
 
-```bash
-npx skills add 0x21m/criacao-agentica
+| Pacote | O que o plugin usa dele |
+|---|---|
+| [ponytail](https://github.com/DietrichGebert/ponytail) | `ponytail` e `ponytail-review`: a menor mudança completa e a revisão de toda TAR |
+| [Skills do Matt Pocock](https://github.com/mattpocock/skills) | o motor do processo: `grilling`, `domain-modeling`, `tdd`, `diagnosing-bugs`, `to-tickets`, `implement`, `improve-codebase-architecture`, `prototype` e outras |
+| [taste-skill](https://github.com/Leonxlnx/taste-skill) | `design-taste-frontend`: landing, site e a checagem de consistência visual de todo protótipo |
+| [Impeccable](https://github.com/pbakaus/impeccable) | `critique` e `polish`, antes de cada rodada de aprovação |
+| [Skills do Jakub Krehel](https://github.com/jakubkrehel/skills) | `better-layout` e as outras `better-*`, `state-machine`, `variant` |
+| [Skills do Emil Kowalski](https://github.com/emilkowalski/skills) | `break-ui` (dados de pior caso) e as de movimento |
+| [Skills da Anthropic](https://github.com/anthropics/skills) | `frontend-design` e `webapp-testing` |
+| [Skills do Supabase](https://github.com/supabase/agent-skills) | `supabase` e `supabase-postgres-best-practices`, usadas pela `ca-dados` |
+
+Os plugins, no Claude Code, um comando por vez:
+
+```
+/plugin marketplace add DietrichGebert/ponytail
+```
+```
+/plugin install ponytail@ponytail
+```
+```
+/plugin marketplace add pbakaus/impeccable
+```
+```
+/plugin install impeccable@impeccable
 ```
 
-## Dependências recomendadas
+As skills, no terminal:
 
-A metodologia funciona sozinha: quando uma peça falta, ela tem um caminho alternativo escrito em `references/motor.md`. Com estas peças, ela fica bem melhor:
+```bash
+npx skills add mattpocock/skills
+```
+```bash
+npx skills add Leonxlnx/taste-skill
+```
+```bash
+npx skills add jakubkrehel/skills
+```
+```bash
+npx skills add emilkowalski/skills
+```
+```bash
+npx skills add anthropics/skills
+```
+```bash
+npx skills add supabase/agent-skills
+```
 
-- **[ponytail](https://github.com/DietrichGebert/ponytail)**, a filosofia de construção (a menor mudança completa e o que nunca se corta):
-  ```
-  /plugin marketplace add DietrichGebert/ponytail
-  ```
-  ```
-  /plugin install ponytail@ponytail
-  ```
-- **[Skills do Matt Pocock](https://github.com/mattpocock/skills)**, o motor do processo (`grilling`, `domain-modeling`, `tdd`, `diagnosing-bugs`, `to-tickets`, `implement` e outras):
-  ```bash
-  npx skills add mattpocock/skills
-  ```
-- **git**, com o seu nome e e-mail configurados. A metodologia usa o git para desfazer, revisar por diff, construir em cópia isolada e registrar evidência.
+### 3. A máquina
 
-### Para a ca-interface
-
-A `ca-interface` chama estas skills como lentes "obrigatórias se instaladas" (`skills/ca-interface/references/lentes-e-ferramentas.md`). Sem elas, cai no caminho alternativo e o acabamento piora:
-
-- **[taste-skill](https://github.com/Leonxlnx/taste-skill)**, com a `design-taste-frontend` (landing, site e a checagem de consistência visual de todo protótipo):
-  ```bash
-  npx skills add Leonxlnx/taste-skill
-  ```
-- **[Impeccable](https://github.com/pbakaus/impeccable)**, para as passadas `critique` e `polish`:
-  ```
-  /plugin marketplace add pbakaus/impeccable
-  ```
-  ```
-  /plugin install impeccable@impeccable
-  ```
-- **[Skills do Jakub Krehel](https://github.com/jakubkrehel/skills)**, com a `better-layout` (composição da tela-chave) e as outras `better-*`:
-  ```bash
-  npx skills add jakubkrehel/skills
-  ```
-- **[Skills do Emil Kowalski](https://github.com/emilkowalski/skills)**, com a `break-ui` (dados de pior caso antes de mostrar) e as de movimento:
-  ```bash
-  npx skills add emilkowalski/skills
-  ```
-
-Fora as skills:
-
-- **Node 22 ou mais novo** e **Chrome ou Edge** instalados. O starter do arsenal (`skills/ca-interface/assets/arsenal/starter/`) roda com `npm install` e `npm run dev`, e os scripts de verificação (`navegar`, `medir`, `lab-interativos`) abrem o navegador da máquina.
-- **MCPs de referência** (Mobbin, Refero, 21st.dev), opcionais. A skill só os usa se já estiverem conectados; sem eles, pede 2 ou 3 links ou navega no navegador embutido.
+- **git**, com o seu nome e e-mail configurados. O método usa o git para desfazer, revisar por diff, construir em cópia isolada e registrar evidência.
+- **Node 22 ou mais novo** e **Chrome ou Edge**. O starter do arsenal (`skills/ca-interface/assets/arsenal/starter/`) roda com `npm install` e `npm run dev`, e os scripts de verificação (`navegar`, `medir`, `lab-interativos`) abrem o navegador da máquina.
 
 Depois de instalar tudo, reinicie o Claude Code.
+
+### Opcional
+
+- **MCPs de referência** (Mobbin, Refero, 21st.dev, shadcn, Playwright). A `ca-interface` só os usa se já estiverem conectados; sem eles, pede 2 ou 3 links ou navega no navegador embutido.
+- **Só a skill principal, sem os agentes**, para outro agente que não o Claude Code: `npx skills add 0x21m/criacao-agentica`.
 
 ## Como começar
 

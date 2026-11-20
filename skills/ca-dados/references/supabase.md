@@ -1,6 +1,6 @@
 # Supabase: o que é próprio da plataforma
 
-Use junto com as skills oficiais `supabase` e `supabase-postgres-best-practices` (`npx skills add supabase/agent-skills`). Fonte: documentação oficial em supabase.com/docs, lida em 04/11/2026; números e prazos mudam, confira antes de prometer.
+Use junto com as skills oficiais, obrigatórias em projeto Supabase, `supabase` e `supabase-postgres-best-practices` (`npx skills add supabase/agent-skills`). Fonte: documentação oficial em supabase.com/docs, lida em 04/11/2026; números e prazos mudam, confira antes de prometer.
 
 ## Checklist para todo agente que mexe em schema
 
